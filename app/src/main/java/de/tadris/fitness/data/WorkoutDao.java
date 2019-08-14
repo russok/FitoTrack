@@ -28,4 +28,7 @@ public interface WorkoutDao {
     @Query("SELECT * FROM workout_sample WHERE workout_id = :workout_id")
     WorkoutSample[] getAllSamplesOfWorkout(long workout_id);
 
+    @Query("SELECT * FROM workout")
+    Workout[] getWorkouts();
+
 }

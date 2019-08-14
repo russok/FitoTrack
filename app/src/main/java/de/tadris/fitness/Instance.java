@@ -31,7 +31,7 @@ public class Instance {
 
     private static Instance instance;
 
-    public Instance getInstance(Context context){
+    public static Instance getInstance(Context context){
         if(instance == null){
             instance= new Instance(context);
         }

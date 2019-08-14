@@ -21,14 +21,37 @@ package de.tadris.fitness;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import de.tadris.fitness.data.Workout;
 
 public class ListWorkoutsActivity extends Activity {
+
+    private RecyclerView listView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    Workout[] workouts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_workouts);
 
+        listView= findViewById(R.id.workoutList);
+        listView.setHasFixedSize(true);
 
+        layoutManager= new LinearLayoutManager(this);
+        listView.setLayoutManager(layoutManager);
+
+        Instance.getInstance(this).db.workoutDao().getWorkouts();
+        listView.setAdapter(new WorkoutAdapter());
     }
+
 }
