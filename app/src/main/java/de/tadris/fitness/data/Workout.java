@@ -38,5 +38,9 @@ public class Workout{
     public double avgPace;
     public String workoutType;
 
+    public long getTime(){
+        return end - start;
+    }
+
 
 }

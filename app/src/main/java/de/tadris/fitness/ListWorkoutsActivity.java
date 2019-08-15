@@ -31,7 +31,7 @@ import java.util.List;
 
 import de.tadris.fitness.data.Workout;
 
-public class ListWorkoutsActivity extends Activity {
+public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
 
     private RecyclerView listView;
     private RecyclerView.Adapter mAdapter;
@@ -50,8 +50,12 @@ public class ListWorkoutsActivity extends Activity {
         layoutManager= new LinearLayoutManager(this);
         listView.setLayoutManager(layoutManager);
 
-        Instance.getInstance(this).db.workoutDao().getWorkouts();
-        listView.setAdapter(new WorkoutAdapter());
+        workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
+        listView.setAdapter(new WorkoutAdapter(workouts, this));
     }
 
+    @Override
+    public void onItemClick(Workout workout) {
+        // TODO: open detail View
+    }
 }
