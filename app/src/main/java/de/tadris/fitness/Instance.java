@@ -41,6 +41,6 @@ public class Instance {
     public AppDatabase db;
 
     private Instance(Context context) {
-        db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME).build();
+        db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME).allowMainThreadQueries().build();
     }
 }
