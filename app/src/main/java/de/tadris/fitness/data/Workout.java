@@ -33,11 +33,28 @@ public class Workout{
 
     public long start;
     public long end;
-    public double length;
+
+    /**
+     * Length of workout in meters
+     */
+    public int length;
+
+    /**
+     * Average speed of workout in m/s
+     */
     public double avgSpeed;
+
+    /**
+     * Average pace of workout in km/min
+     */
     public double avgPace;
+
     public String workoutType;
 
+    /**
+     * Gets time of workout
+     * @return time in milliseconds
+     */
     public long getTime(){
         return end - start;
     }

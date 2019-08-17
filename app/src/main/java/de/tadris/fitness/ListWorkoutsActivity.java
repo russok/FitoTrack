@@ -20,21 +20,20 @@
 package de.tadris.fitness;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
 
 import de.tadris.fitness.data.Workout;
 
 public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
 
     private RecyclerView listView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     Workout[] workouts;
 
@@ -50,12 +49,38 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         layoutManager= new LinearLayoutManager(this);
         listView.setLayoutManager(layoutManager);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
-        listView.setAdapter(new WorkoutAdapter(workouts, this));
+        adapter= new WorkoutAdapter(workouts, this);
+        listView.setAdapter(adapter);
     }
 
     @Override
     public void onItemClick(Workout workout) {
         // TODO: open detail View
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.list_workout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_workout_add){
+            startActivity(new Intent(this, RecordWorkoutActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

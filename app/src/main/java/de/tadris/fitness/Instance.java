@@ -24,6 +24,7 @@ import android.content.Context;
 import androidx.room.Room;
 
 import de.tadris.fitness.data.AppDatabase;
+import de.tadris.fitness.location.LocationListener;
 
 public class Instance {
 
@@ -39,8 +40,12 @@ public class Instance {
     }
 
     public AppDatabase db;
+    public LocationListener locationListener;
 
     private Instance(Context context) {
-        db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME).allowMainThreadQueries().build();
+        db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
+        locationListener= new LocationListener(context);
     }
 }

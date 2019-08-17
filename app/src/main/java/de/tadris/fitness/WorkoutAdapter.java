@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ *
+ * This file is part of FitoTrack
+ *
+ * FitoTrack is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     FitoTrack is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.tadris.fitness;
 
 import android.view.LayoutInflater;
@@ -45,7 +64,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, final int position) {
-        holder.lengthText.setText(workouts[position].length + "km");
+        holder.lengthText.setText(UnitUtils.getDistance(workouts[position].length));
         holder.timeText.setText(UnitUtils.getHourMinuteTime(workouts[position].getTime()));
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,6 +24,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import org.mapsforge.core.model.LatLong;
+
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "workout_sample",
@@ -47,6 +49,10 @@ public class WorkoutSample{
     public double lon;
 
     public double speed;
+
+    public LatLong toLatLong(){
+        return new LatLong(lat, lon);
+    }
 
 
 }
