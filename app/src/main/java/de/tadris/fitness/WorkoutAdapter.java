@@ -65,7 +65,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, final int position) {
         holder.lengthText.setText(UnitUtils.getDistance(workouts[position].length));
-        holder.timeText.setText(UnitUtils.getHourMinuteTime(workouts[position].getTime()));
+        holder.timeText.setText(UnitUtils.getHourMinuteTime(workouts[position].getDuration()));
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         return workouts.length;
     }
 
-    interface WorkoutAdapterListener{
+    public interface WorkoutAdapterListener{
         void onItemClick(Workout workout);
     }
 

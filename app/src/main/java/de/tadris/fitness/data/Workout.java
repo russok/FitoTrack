@@ -26,6 +26,8 @@ import androidx.room.PrimaryKey;
 public class Workout{
 
     public static final String WORKOUT_TYPE_RUNNING= "running";
+    public static final String WORKOUT_TYPE_WALKING= "running";
+    public static final String WORKOUT_TYPE_HIKING=  "hiking";
     public static final String WORKOUT_TYPE_CYCLING= "cycling";
 
     @PrimaryKey
@@ -45,17 +47,20 @@ public class Workout{
     public double avgSpeed;
 
     /**
+     * Top speed in m/s
+     */
+    public double topSpeed;
+
+    /**
      * Average pace of workout in km/min
      */
     public double avgPace;
 
     public String workoutType;
 
-    /**
-     * Gets time of workout
-     * @return time in milliseconds
-     */
-    public long getTime(){
+    public int calorie;
+
+    public long getDuration(){
         return end - start;
     }
 

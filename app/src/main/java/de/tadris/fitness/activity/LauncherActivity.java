@@ -17,12 +17,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.data;
+package de.tadris.fitness.activity;
 
-import androidx.room.Database;
-import androidx.room.RoomDatabase;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
-@Database(version = 3, entities = {Workout.class,  WorkoutSample.class})
-public abstract class AppDatabase extends RoomDatabase {
-    public abstract WorkoutDao workoutDao();
+import de.tadris.fitness.R;
+
+public class LauncherActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(this, ListWorkoutsActivity.class));
+    }
 }

@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness;
+package de.tadris.fitness.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +28,9 @@ import android.view.MenuItem;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import de.tadris.fitness.Instance;
+import de.tadris.fitness.R;
+import de.tadris.fitness.WorkoutAdapter;
 import de.tadris.fitness.data.Workout;
 
 public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
@@ -62,7 +65,8 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
     @Override
     public void onItemClick(Workout workout) {
-        // TODO: open detail View
+        ShowWorkoutActivity.selectedWorkout= workout;
+        startActivity(new Intent(this, ShowWorkoutActivity.class));
     }
 
     @Override

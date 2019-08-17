@@ -22,13 +22,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordWorkoutActivity">
+    tools:context=".activity.RecordWorkoutActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/recordInfoRoot">
 
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/location_marker" />
 
         <LinearLayout
             android:id="@+id/recordMapViewrRoot"

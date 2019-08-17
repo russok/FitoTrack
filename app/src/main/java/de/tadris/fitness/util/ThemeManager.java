@@ -17,12 +17,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.data;
+package de.tadris.fitness.util;
 
-import androidx.room.Database;
-import androidx.room.RoomDatabase;
+import android.content.Context;
 
-@Database(version = 3, entities = {Workout.class,  WorkoutSample.class})
-public abstract class AppDatabase extends RoomDatabase {
-    public abstract WorkoutDao workoutDao();
+import de.tadris.fitness.R;
+import de.tadris.fitness.data.Workout;
+
+public class ThemeManager {
+
+
+    public static int getThemeByWorkout(Workout workout, Context context){
+        switch (workout.workoutType){
+            case Workout.WORKOUT_TYPE_RUNNING: return R.style.Running;
+            case Workout.WORKOUT_TYPE_CYCLING: return R.style.Bicycling;
+            default: return R.style.AppTheme;
+        }
+    }
+
 }
+

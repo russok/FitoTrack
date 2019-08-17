@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+  ~
+  ~ This file is part of FitoTrack
+  ~
+  ~ FitoTrack is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     FitoTrack is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#FB8C00</color>
+    <color name="colorPrimaryDark">#EF6C00</color>
+
+    <color name="colorPrimaryRunning">#43A047</color>
+    <color name="colorPrimaryDarkRunning">#2E7D32</color>
+
+    <color name="colorPrimaryBicycling">#523220</color>
+    <color name="colorPrimaryDarkBicycling">#462A1D</color>
+
+    <color name="colorAccent">#4CAF50</color>
     <color name="textLighterBlack">#C8000000</color>
+    <color name="textColorLight">#C8414141</color>
 </resources>

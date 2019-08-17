@@ -19,13 +19,19 @@
 
 package de.tadris.fitness.data;
 
+import android.content.Context;
+
 import java.util.List;
 
 import de.tadris.fitness.Instance;
+import de.tadris.fitness.util.CalorieCalculator;
 
 public class WorkoutManager {
 
-    public static void insertWorkout(Instance instance, Workout workout, List<WorkoutSample> samples){
+    public static void insertWorkout(Context context, Workout workout, List<WorkoutSample> samples){
+        AppDatabase db= Instance.getInstance(context).db;
+
+
         workout.id= System.currentTimeMillis();
 
         // Calculating values
@@ -34,19 +40,28 @@ public class WorkoutManager {
             length+= samples.get(i - 1).toLatLong().sphericalDistance(samples.get(i).toLatLong());
         }
         workout.length= (int)length;
-        workout.avgSpeed= ((double) workout.length / 1000) / ((double) workout.getTime() / 1000);
-        workout.avgPace= (double)(workout.getTime() / 1000 / 60) / ((double) workout.length / 1000);
+        workout.avgSpeed= ((double) workout.length) / ((double) workout.getDuration() / 1000);
+        workout.avgPace= (double)(workout.getDuration() / 1000 / 60) / ((double) workout.length / 1000);
+        workout.calorie= CalorieCalculator.calculateCalories(workout, 80);
+        // TODO: use user weight
 
         // Setting workoutId in the samples
         int i= 0;
+        double topSpeed= 0;
         for(WorkoutSample sample : samples){
             i++;
             sample.id= workout.id + i;
             sample.workoutId= workout.id;
+            if(sample.speed > topSpeed){
+                topSpeed= sample.speed;
+            }
         }
 
+        workout.topSpeed= topSpeed;
+
+
         // Saving workout and samples
-        instance.db.workoutDao().insertWorkoutAndSamples(workout, samples.toArray(new WorkoutSample[0]));
+        db.workoutDao().insertWorkoutAndSamples(workout, samples.toArray(new WorkoutSample[0]));
 
     }
 

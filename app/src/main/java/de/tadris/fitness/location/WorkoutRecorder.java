@@ -88,7 +88,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         if(state != RecordingState.STOPPED){
             throw new IllegalStateException("Cannot save recording, recorder was not stopped. state = " + state);
         }
-        WorkoutManager.insertWorkout(Instance.getInstance(context), workout, samples);
+        WorkoutManager.insertWorkout(context, workout, samples);
     }
 
     public int getSampleCount(){

@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness;
+package de.tadris.fitness.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,23 +30,20 @@ import android.view.ViewGroup;
 
 import androidx.core.app.ActivityCompat;
 
-import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.android.util.AndroidUtil;
 import org.mapsforge.map.android.view.MapView;
-import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 
+import de.tadris.fitness.Instance;
+import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.location.LocationListener;
-import de.tadris.fitness.location.MyLocationOverlay;
 import de.tadris.fitness.location.WorkoutRecorder;
-import de.tadris.fitness.map.HumanitarianTileSource;
+import de.tadris.fitness.map.MapManager;
 
 public class RecordWorkoutActivity extends Activity implements LocationListener.LocationChangeListener {
 
     MapView mapView;
-    MyLocationOverlay locationOverlay;
     TileDownloadLayer downloadLayer;
     WorkoutRecorder recorder;
 
@@ -57,24 +54,7 @@ public class RecordWorkoutActivity extends Activity implements LocationListener.
 
         this.mapView= new MapView(this);
 
-        mapView.setZoomLevelMin((byte) 18);
-        mapView.setZoomLevelMax((byte) 18);
-        mapView.setBuiltInZoomControls(false);
-
-        TileCache tileCache = AndroidUtil.createTileCache(this, "mapcache", mapView.getModel().displayModel.getTileSize(), 1f, this.mapView.getModel().frameBufferModel.getOverdrawFactor(), true);
-
-        HumanitarianTileSource tileSource = HumanitarianTileSource.INSTANCE;
-        tileSource.setUserAgent("mapsforge-android");
-        downloadLayer = new TileDownloadLayer(tileCache, mapView.getModel().mapViewPosition, tileSource, AndroidGraphicFactory.INSTANCE);
-
-        mapView.getLayerManager().getLayers().add(downloadLayer);
-
-        locationOverlay= new MyLocationOverlay(Instance.getInstance(this).locationListener, getDrawable(R.drawable.location_marker));
-
-        mapView.getLayerManager().redrawLayers();
-
-        mapView.setZoomLevel((byte) 18);
-        mapView.setCenter(new LatLong(52, 13));
+        downloadLayer= MapManager.setupMap(mapView);
 
         ((ViewGroup)findViewById(R.id.recordMapViewrRoot)).addView(mapView);
 
@@ -113,7 +93,6 @@ public class RecordWorkoutActivity extends Activity implements LocationListener.
     @Override
     public void onLocationChange(Location location) {
         mapView.getModel().mapViewPosition.animateTo(LocationListener.locationToLatLong(location));
-        locationOverlay.setPosition(location.getLatitude(), location.getLongitude(), location.getAccuracy());
     }
 
     @Override

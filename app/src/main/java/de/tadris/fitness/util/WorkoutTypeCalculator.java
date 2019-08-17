@@ -17,19 +17,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness;
+package de.tadris.fitness.util;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
+import de.tadris.fitness.data.Workout;
 
-public class LauncherActivity extends Activity {
+public class WorkoutTypeCalculator {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        startActivity(new Intent(this, ListWorkoutsActivity.class));
+    public static String getType(Workout workout){
+        // TODO: use localisation
+        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING)){
+            if(workout.avgSpeed < 7){
+                return "Walking";
+            }else if(workout.avgSpeed < 9.6){
+                return "Jogging";
+            }else{
+                return "Running";
+            }
+        }
+        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_CYCLING)){
+            return "Cycling";
+        }
+        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
+            return "Hiking";
+        }
+        return "Unknown";
     }
+
 }

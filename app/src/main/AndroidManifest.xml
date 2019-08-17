@@ -32,9 +32,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecordWorkoutActivity"></activity>
-        <activity android:name=".ListWorkoutsActivity" />
-        <activity android:name=".LauncherActivity">
+        <activity android:name=".activity.ShowWorkoutActivity"></activity>
+        <activity android:name=".activity.RecordWorkoutActivity" />
+        <activity android:name=".activity.ListWorkoutsActivity" />
+        <activity android:name=".activity.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

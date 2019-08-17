@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
   ~
@@ -17,9 +18,10 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <string name="app_name">FitoTrack</string>
-    <string name="workout_add">Add</string>
-    <string name="workoutStopRecording">Stop</string>
-    <string name="deleteWorkout">Delete</string>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/actionDeleteWorkout"
+        android:showAsAction="ifRoom"
+        android:title="@string/deleteWorkout" />
+</menu>

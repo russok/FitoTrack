@@ -28,9 +28,9 @@ public class UnitUtils {
         int remainingMinutes= (int)mins % 60;
 
         if(hours > 0){
-            return hours + "h " + remainingMinutes + "m";
+            return hours + " h " + remainingMinutes + " m";
         }else{
-            return remainingMinutes + "min";
+            return remainingMinutes + " min";
         }
     }
 
@@ -40,6 +40,7 @@ public class UnitUtils {
      * @return String in preferred unit
      */
     public static String getDistance(int distance){
+        // TODO: use preferred unit by user
         if(distance >= 1000){
             return getDistanceInKilometers((double)distance);
         }else{
@@ -47,16 +48,26 @@ public class UnitUtils {
         }
     }
 
+    /**
+     *
+     * @param speed speed in m/s
+     * @return speed in km/h
+     */
+    public static String getSpeed(double speed){
+        // TODO: use preferred unit by user
+        return round(speed*3.6, 1) + " km/h";
+    }
+
     public static String getDistanceInMeters(int distance){
-        return distance + "m";
+        return distance + " m";
     }
 
     public static String getDistanceInKilometers(double distance){
-        return round(distance / 1000, 1) + "km";
+        return round(distance / 1000, 1) + " km";
     }
 
     public static double round(double d, int count){
-        return (double)Math.round(d * Math.pow(10, count)) / count;
+        return (double)Math.round(d * Math.pow(10, count)) / Math.pow(10, count);
     }
 
 
