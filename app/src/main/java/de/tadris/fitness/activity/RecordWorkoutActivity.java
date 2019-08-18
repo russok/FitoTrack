@@ -51,6 +51,7 @@ import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.UnitUtils;
+import de.tadris.fitness.util.WorkoutTypeCalculator;
 
 public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener {
 
@@ -72,6 +73,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         super.onCreate(savedInstanceState);
         setTheme(ThemeManager.getThemeByWorkoutType(ACTIVITY));
         setContentView(R.layout.activity_record_workout);
+
+        setTitle(R.string.recordWorkout);
 
         setupMap();
 
@@ -124,7 +127,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                 while (recorder.isActive()){
                     Thread.sleep(1000);
                     if(isResumed){
-                        mHandler.post(() -> updateDescription());
+                        mHandler.post(this::updateDescription);
                     }
                 }
             }catch (InterruptedException e){

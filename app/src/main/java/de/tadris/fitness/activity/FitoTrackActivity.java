@@ -22,7 +22,7 @@ package de.tadris.fitness.activity;
 import android.app.Activity;
 import android.util.TypedValue;
 
-public class FitoTrackActivity extends Activity {
+abstract public class FitoTrackActivity extends Activity {
 
 
 

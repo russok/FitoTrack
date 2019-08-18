@@ -39,6 +39,15 @@
     <string name="workoutTotalEnergy">Total Energy</string>
     <string name="workoutEnergyConsumption">Energy Consumption</string>
 
+    <string name="workoutTypeRunning">Running</string>
+    <string name="workoutTypeWalking">Walking</string>
+    <string name="workoutTypeJogging">Jogging</string>
+    <string name="workoutTypeCycling">Cycling</string>
+    <string name="workoutTypeHiking">Hiking</string>
+    <string name="workoutTypeUnknown">Unknown</string>
+
+    <string name="recordWorkout">Record Workout</string>
+
     <string name="deleteWorkout">Delete Workout</string>
     <string name="deleteWorkoutMessage">Do you really want to delete the workout?</string>
 
