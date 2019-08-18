@@ -20,7 +20,6 @@
 package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -114,7 +113,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
         addTitle(getString(R.string.workoutBurnedEnergy));
         addKeyValue(getString(R.string.workoutTotalEnergy), workout.calorie + " kcal",
-                getString(R.string.workoutEnergyConsumption), UnitUtils.getPace((double)workout.calorie / workout.length / 1000));
+                getString(R.string.workoutEnergyConsumption), UnitUtils.getRelativeEnergyConsumption((double)workout.calorie / ((double)workout.length / 1000)));
 
 
     }
@@ -224,13 +223,10 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         map.addLayer(workoutLayer);
 
         final BoundingBox bounds= new BoundingBox(workoutLayer.getLatLongs()).extendMeters(50);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                map.getModel().mapViewPosition.setMapPosition(new MapPosition(bounds.getCenterPoint(),
-                        (byte)(LatLongUtils.zoomForBounds(map.getDimension(), bounds, map.getModel().displayModel.getTileSize()))));
-                map.animate().alpha(1f).setDuration(1000).start();
-            }
+        new Handler().postDelayed(() -> {
+            map.getModel().mapViewPosition.setMapPosition(new MapPosition(bounds.getCenterPoint(),
+                    (byte)(LatLongUtils.zoomForBounds(map.getDimension(), bounds, map.getModel().displayModel.getTileSize()))));
+            map.animate().alpha(1f).setDuration(1000).start();
         }, 1000);
 
         map.getModel().mapViewPosition.setMapLimit(bounds);
@@ -282,12 +278,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         new AlertDialog.Builder(this).setTitle(R.string.deleteWorkout)
                 .setMessage(R.string.deleteWorkoutMessage)
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteWorkout();
-                    }
-                })
+                .setPositiveButton(R.string.delete, (dialog, which) -> deleteWorkout())
                 .create().show();
     }
 

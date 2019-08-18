@@ -26,7 +26,6 @@ import androidx.room.PrimaryKey;
 public class Workout{
 
     public static final String WORKOUT_TYPE_RUNNING= "running";
-    public static final String WORKOUT_TYPE_WALKING= "running";
     public static final String WORKOUT_TYPE_HIKING=  "hiking";
     public static final String WORKOUT_TYPE_CYCLING= "cycling";
 

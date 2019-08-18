@@ -210,9 +210,15 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         return (int)distance;
     }
 
+    private int maxCalories= 0;
     public int getCalories(){
         workout.avgSpeed= getAvgSpeed();
-        return CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
+        workout.duration= getDuration();
+        int calories= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
+        if(calories > maxCalories){
+            maxCalories= calories;
+        }
+        return maxCalories;
     }
 
     /**

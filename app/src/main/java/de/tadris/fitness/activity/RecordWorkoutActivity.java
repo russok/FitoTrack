@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     TextView timeView, gpsStatusView;
     boolean isResumed= false;
     private Handler mHandler= new Handler();
+    PowerManager.WakeLock wakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,15 +82,22 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         recorder= new WorkoutRecorder(this, ACTIVITY);
         recorder.start();
 
-        infoViews[0]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo1Title), (TextView) findViewById(R.id.recordInfo1Value));
-        infoViews[1]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo2Title), (TextView) findViewById(R.id.recordInfo2Value));
-        infoViews[2]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo3Title), (TextView) findViewById(R.id.recordInfo3Value));
-        infoViews[3]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo4Title), (TextView) findViewById(R.id.recordInfo4Value));
+        infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
+        infoViews[1]= new InfoViewHolder(findViewById(R.id.recordInfo2Title), findViewById(R.id.recordInfo2Value));
+        infoViews[2]= new InfoViewHolder(findViewById(R.id.recordInfo3Title), findViewById(R.id.recordInfo3Value));
+        infoViews[3]= new InfoViewHolder(findViewById(R.id.recordInfo4Title), findViewById(R.id.recordInfo4Value));
         timeView= findViewById(R.id.recordTime);
 
         updateDescription();
 
         startUpdater();
+        acquireWakelock();
+    }
+
+    private void acquireWakelock(){
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
+        wakeLock.acquire(1000*60*120);
     }
 
     private void setupMap(){
@@ -110,24 +119,16 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     }
 
     private void startUpdater(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    while (recorder.isActive()){
-                        Thread.sleep(1000);
-                        if(isResumed){
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateDescription();
-                                }
-                            });
-                        }
+        new Thread(() -> {
+            try{
+                while (recorder.isActive()){
+                    Thread.sleep(1000);
+                    if(isResumed){
+                        mHandler.post(() -> updateDescription());
                     }
-                }catch (InterruptedException e){
-                    e.printStackTrace();
                 }
+            }catch (InterruptedException e){
+                e.printStackTrace();
             }
         }).start();
     }
@@ -136,7 +137,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         timeView.setText(UnitUtils.getHourMinuteSecondTime(recorder.getDuration()));
         infoViews[0].setText(getString(R.string.workoutDistance), UnitUtils.getDistance(recorder.getDistance()));
         infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
-        infoViews[2].setText(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(recorder.getAvgSpeed()));
+        infoViews[2].setText(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed())));
         infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
     }
 
@@ -180,6 +181,9 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
         super.onDestroy();
+        if(wakeLock.isHeld()){
+            wakeLock.release();
+        }
     }
 
     @Override

@@ -25,6 +25,8 @@ public class CalorieCalculator {
 
     /**
      *
+     * workoutType, duration and avgSpeed of workout have to be set
+     *
      * @param workout the workout
      * @param weight the weight of the person in kilogram
      * @return calories burned
