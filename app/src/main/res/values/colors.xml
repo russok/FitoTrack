@@ -29,6 +29,11 @@
     <color name="colorPrimaryDarkBicycling">#462A1D</color>
 
     <color name="colorAccent">#4CAF50</color>
+    <color name="colorAccentDark">#2E7D32</color>
+
+    <color name="colorPrimaryHiking">#009688</color>
+    <color name="colorPrimaryDarkHiking">#007267</color>
+
     <color name="textLighterBlack">#C8000000</color>
     <color name="textColorLight">#C8414141</color>
 </resources>

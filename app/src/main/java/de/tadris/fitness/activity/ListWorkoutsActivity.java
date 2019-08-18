@@ -24,9 +24,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
@@ -38,6 +42,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     private RecyclerView listView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private FloatingActionMenu menu;
     Workout[] workouts;
 
 
@@ -52,6 +57,17 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         layoutManager= new LinearLayoutManager(this);
         listView.setLayoutManager(layoutManager);
 
+        menu= findViewById(R.id.workoutListMenu);
+
+        findViewById(R.id.workoutListRecordRunning).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_RUNNING));
+        findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
+        findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_CYCLING));
+
+    }
+
+    public void startRecording(String activity){
+        RecordWorkoutActivity.ACTIVITY= activity;
+        startActivity(new Intent(this, RecordWorkoutActivity.class));
     }
 
     @Override
@@ -79,10 +95,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_workout_add){
-            startActivity(new Intent(this, RecordWorkoutActivity.class));
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
