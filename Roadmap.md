@@ -2,6 +2,7 @@
 
 ## First release
 
+- design of ListWorkoutActivty
 - set title in ActionBar according to activity
 - choose workout type
 - user defined workout titles, description
