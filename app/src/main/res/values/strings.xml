@@ -21,5 +21,26 @@
     <string name="app_name">FitoTrack</string>
     <string name="workout_add">Add</string>
     <string name="workoutStopRecording">Stop</string>
-    <string name="deleteWorkout">Delete</string>
+    <string name="delete">Delete</string>
+
+    <string name="workoutTime">Time</string>
+    <string name="workoutDate">Date</string>
+    <string name="workoutDuration">Duration</string>
+    <string name="workoutPauseDuration">Pause Duration</string>
+    <string name="workoutStartTime">Start Time</string>
+    <string name="workoutEndTime">End Time</string>
+    <string name="workoutDistance">Distance</string>
+    <string name="workoutPace">Pace</string>
+    <string name="workoutRoute">Route</string>
+    <string name="workoutSpeed">Speed</string>
+    <string name="workoutAvgSpeed">Avg. Speed</string>
+    <string name="workoutTopSpeed">Top Speed</string>
+    <string name="workoutBurnedEnergy">Burned Energy</string>
+    <string name="workoutTotalEnergy">Total Energy</string>
+    <string name="workoutEnergyConsumption">Energy Consumption</string>
+
+    <string name="deleteWorkout">Delete Workout</string>
+    <string name="deleteWorkoutMessage">Do you really want to delete the workout?</string>
+
+    <string name="cancel">Cancel</string>
 </resources>

@@ -34,13 +34,44 @@ public class UnitUtils {
         }
     }
 
+    public static String getHourMinuteSecondTime(long time){
+        long totalSeks= time / 1000;
+        long totalMins= totalSeks / 60;
+        long hours= totalMins / 60;
+        long mins= totalMins % 60;
+        long seks= totalSeks % 60;
+        String minStr= (mins < 10 ? "0" : "") + mins;
+        String sekStr= (seks < 10 ? "0" : "") + seks;
+        return hours + ":" + minStr + ":" + sekStr;
+    }
+
+    /**
+     *
+     * @param pace Pace in min/km
+     * @return Pace
+     */
+    public static String getPace(double pace){
+        // TODO: use preferred unit chosen by user
+        return round(pace, 1) + " min/km";
+    }
+
+    /**
+     *
+     * @param consumption consumption in kcal/km
+     * @return
+     */
+    public static String getRelativeEnergyConsumption(double consumption){
+        // TODO: use preferred unit chosen by user
+        return round(consumption, 2) + " kcal/km";
+    }
+
     /**
      *
      * @param distance Distance in meters
      * @return String in preferred unit
      */
     public static String getDistance(int distance){
-        // TODO: use preferred unit by user
+        // TODO: use preferred unit chosen by user
         if(distance >= 1000){
             return getDistanceInKilometers((double)distance);
         }else{
@@ -54,7 +85,7 @@ public class UnitUtils {
      * @return speed in km/h
      */
     public static String getSpeed(double speed){
-        // TODO: use preferred unit by user
+        // TODO: use preferred unit chosen by user
         return round(speed*3.6, 1) + " km/h";
     }
 

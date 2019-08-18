@@ -124,7 +124,7 @@ public class LocationListener implements android.location.LocationListener {
 
         boolean result = false;
         for (String provider : this.locationManager.getProviders(true)) {
-            if (LocationManager.GPS_PROVIDER.equals(provider) || LocationManager.NETWORK_PROVIDER.equals(provider)) {
+            if (LocationManager.GPS_PROVIDER.equals(provider)) {
                 result = true;
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;

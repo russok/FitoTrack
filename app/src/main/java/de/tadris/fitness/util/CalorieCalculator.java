@@ -30,12 +30,14 @@ public class CalorieCalculator {
      * @return calories burned
      */
     public static int calculateCalories(Workout workout, double weight){
-        int mins= (int)(workout.getDuration() / 1000 / 60);
+        double mins= (double)(workout.duration / 1000) / 60;
         return (int)(mins * (getMET(workout) * 3.5 * weight) / 200);
     }
 
     /**
      * calorie calculation based on @link { https://www.topendsports.com/weight-loss/energy-met.htm }
+     *
+     * workoutType and avgSpeed of workout have to be set
      *
      * @param workout
      * @return MET

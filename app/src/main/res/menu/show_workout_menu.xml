@@ -23,5 +23,5 @@
     <item
         android:id="@+id/actionDeleteWorkout"
         android:showAsAction="ifRoom"
-        android:title="@string/deleteWorkout" />
+        android:title="@string/delete" />
 </menu>

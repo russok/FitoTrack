@@ -19,8 +19,10 @@
 
 package de.tadris.fitness.activity;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,14 +33,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+
+import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.MapPosition;
 import org.mapsforge.core.util.LatLongUtils;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
+import org.mapsforge.map.layer.overlay.FixedPixelCircle;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,13 +59,14 @@ import java.util.List;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.WorkoutLayer;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.UnitUtils;
 
-public class ShowWorkoutActivity extends Activity {
+public class ShowWorkoutActivity extends FitoTrackActivity {
     static Workout selectedWorkout;
 
     List<WorkoutSample> samples;
@@ -61,6 +75,7 @@ public class ShowWorkoutActivity extends Activity {
     Resources.Theme theme;
     MapView map;
     TileDownloadLayer downloadLayer;
+    FixedPixelCircle highlightingCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +83,7 @@ public class ShowWorkoutActivity extends Activity {
 
         workout= selectedWorkout;
         samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
-        setTheme(ThemeManager.getThemeByWorkout(workout, this));
+        setTheme(ThemeManager.getThemeByWorkout(workout));
         setContentView(R.layout.activity_show_workout);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,27 +92,30 @@ public class ShowWorkoutActivity extends Activity {
 
         root= findViewById(R.id.showWorkoutRoot);
 
-        addTitle("Zeit");
-        addKeyValue("Datum", getDate(), "Dauer", UnitUtils.getHourMinuteTime(workout.getDuration()));
-        addKeyValue("Startzeit", SimpleDateFormat.getTimeInstance().format(new Date(workout.start)),
-                "Endzeit", SimpleDateFormat.getTimeInstance().format(new Date(workout.end)));
+        addTitle(getString(R.string.workoutTime));
+        addKeyValue(getString(R.string.workoutDate), getDate());
+        addKeyValue(getString(R.string.workoutDuration), UnitUtils.getHourMinuteSecondTime(workout.duration),
+                getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(workout.pauseDuration));
+        addKeyValue(getString(R.string.workoutStartTime), SimpleDateFormat.getTimeInstance().format(new Date(workout.start)),
+                getString(R.string.workoutEndTime), SimpleDateFormat.getTimeInstance().format(new Date(workout.end)));
 
-        addKeyValue("Distanz", UnitUtils.getDistance(workout.length), "Pace", UnitUtils.round(workout.avgPace, 1) + " min/km");
+        addKeyValue(getString(R.string.workoutDistance), UnitUtils.getDistance(workout.length), getString(R.string.workoutPace), UnitUtils.getPace(workout.avgPace));
 
-        addTitle("Geschwindigkeit");
-
-        addKeyValue("Durchschnittsgeschw.", UnitUtils.getSpeed(workout.avgSpeed),
-                "Top Geschw.", UnitUtils.round(workout.topSpeed, 1) + " km/h");
-
-        // TODO: add speed diagram
-
-        addTitle("Verbrauchte Energie");
-        addKeyValue("Gesamtverbrauch", workout.calorie + " kcal",
-                "Relativverbrauch", UnitUtils.round(((double)workout.calorie / workout.length / 1000), 2) + " kcal/km");
-
-        addTitle("Route");
+        addTitle(getString(R.string.workoutRoute));
 
         addMap();
+
+        addTitle(getString(R.string.workoutSpeed));
+
+        addKeyValue(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(workout.avgSpeed),
+                getString(R.string.workoutTopSpeed), UnitUtils.getSpeed(workout.topSpeed));
+
+        addSpeedDiagram();
+
+        addTitle(getString(R.string.workoutBurnedEnergy));
+        addKeyValue(getString(R.string.workoutTotalEnergy), workout.calorie + " kcal",
+                getString(R.string.workoutEnergyConsumption), UnitUtils.getPace((double)workout.calorie / workout.length / 1000));
+
 
     }
 
@@ -113,6 +131,7 @@ public class ShowWorkoutActivity extends Activity {
         textView.setTextColor(getThemePrimaryColor());
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setAllCaps(true);
+        textView.setPadding(0, 20, 0, 0);
 
         root.addView(textView);
     }
@@ -137,8 +156,62 @@ public class ShowWorkoutActivity extends Activity {
         root.addView(v);
     }
 
-    void addDiagram(){
+    void addSpeedDiagram(){
+        LineChart chart= new LineChart(this);
 
+        WorkoutManager.roundSpeedValues(samples);
+
+        List<Entry> entries = new ArrayList<>();
+        for (WorkoutSample sample : samples) {
+            // turn your data into Entry objects
+            Entry e= new Entry((float)(sample.relativeTime) / 1000f / 60f, (float)sample.tmpRoundedSpeed*3.6f);
+            entries.add(e);
+            sample.tmpEntry= e;
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Speed"); // add entries to dataset // TODO: localisatoin
+        dataSet.setColor(getThemePrimaryColor());
+        dataSet.setValueTextColor(getThemePrimaryColor());
+        dataSet.setDrawCircles(false);
+        dataSet.setLineWidth(4);
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        Description description= new Description();
+        description.setText("min - km/h");
+
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.setScaleEnabled(false);
+        chart.setDescription(description);
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                onNothingSelected();
+                Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
+                p.setColor(Color.BLUE);
+                highlightingCircle= new FixedPixelCircle(getSamplebyTime(e).toLatLong(), 10, p, null);
+                map.addLayer(highlightingCircle);
+            }
+
+            @Override
+            public void onNothingSelected() {
+                if(highlightingCircle != null){
+                    map.getLayerManager().getLayers().remove(highlightingCircle);
+                }
+            }
+        });
+        chart.invalidate();
+
+        root.addView(chart, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
+    }
+
+    WorkoutSample getSamplebyTime(Entry entry){
+        for(WorkoutSample sample : samples){
+            if(sample.tmpEntry.equalTo(entry)){
+                return sample;
+            }
+        }
+        return null;
     }
 
     void addMap(){
@@ -165,12 +238,14 @@ public class ShowWorkoutActivity extends Activity {
 
         root.addView(map, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
         map.setAlpha(0);
-    }
 
-    private int getThemePrimaryColor() {
-        final TypedValue value = new TypedValue ();
-        getTheme().resolveAttribute (android.R.attr.colorPrimary, value, true);
-        return value.data;
+
+        Paint pGreen= AndroidGraphicFactory.INSTANCE.createPaint();
+        pGreen.setColor(Color.GREEN);
+        map.addLayer(new FixedPixelCircle(samples.get(0).toLatLong(), 20, pGreen, null));
+        Paint pRed= AndroidGraphicFactory.INSTANCE.createPaint();
+        pRed.setColor(Color.RED);
+        map.addLayer(new FixedPixelCircle(samples.get(samples.size()-1).toLatLong(), 20, pRed, null));
     }
 
     @Override
@@ -198,11 +273,29 @@ public class ShowWorkoutActivity extends Activity {
         return true;
     }
 
+    private void deleteWorkout(){
+        Instance.getInstance(this).db.workoutDao().deleteWorkout(workout);
+        finish();
+    }
+
+    private void showDeleteDialog(){
+        new AlertDialog.Builder(this).setTitle(R.string.deleteWorkout)
+                .setMessage(R.string.deleteWorkoutMessage)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteWorkout();
+                    }
+                })
+                .create().show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.actionDeleteWorkout){
-            // TODO: delete workout
+            showDeleteDialog();
             return true;
         }else if(id == android.R.id.home){
             finish();
@@ -210,19 +303,5 @@ public class ShowWorkoutActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*private int zoomToBounds(BoundingBox boundingBox) {
-        int TILE_SIZE= map.getModel().displayModel.getTileSize();
-        Dimension mapViewDimension = map.getModel().mapViewDimension.getDimension();
-        if(mapViewDimension == null)
-            return 0;
-        double dxMax = longitudeToPixelX(boundingBox.maxLongitude, (byte) 0) / TILE_SIZE;
-        double dxMin = longitudeToPixelX(boundingBox.minLongitude, (byte) 0) / TILE_SIZE;
-        double zoomX = floor(-log(3.8) * log(abs(dxMax-dxMin)) + mapViewDimension.width / TILE_SIZE);
-        double dyMax = latitudeToPixelY(boundingBox.maxLatitude, (byte) 0) / TILE_SIZE;
-        double dyMin = latitudeToPixelY(boundingBox.minLatitude, (byte) 0) / TILE_SIZE;
-        double zoomY = floor(-log(3.8) * log(abs(dyMax-dyMin)) + mapViewDimension.height / TILE_SIZE);
-        return Double.valueOf(min(zoomX, zoomY)).intValue();
-    }*/
 
 }

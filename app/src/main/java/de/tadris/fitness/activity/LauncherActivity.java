@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 
 public class LauncherActivity extends Activity {
@@ -31,7 +32,21 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        init();
+    }
+
+    void init(){
+        Instance.getInstance(this);
+        start();
+    }
+
+    void start(){
         startActivity(new Intent(this, ListWorkoutsActivity.class));
+        finish();
     }
 }

@@ -17,24 +17,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.util;
+package de.tadris.fitness;
 
-import de.tadris.fitness.R;
-import de.tadris.fitness.data.Workout;
+public class UserPreferences {
 
-public class ThemeManager {
-
-    public static int getThemeByWorkoutType(String type){
-        switch (type){
-            case Workout.WORKOUT_TYPE_RUNNING: return R.style.Running;
-            case Workout.WORKOUT_TYPE_CYCLING: return R.style.Bicycling;
-            default: return R.style.AppTheme;
-        }
-    }
-
-    public static int getThemeByWorkout(Workout workout){
-        return getThemeByWorkoutType(workout.workoutType);
-    }
+    /**
+     * Weight in kg
+     */
+    public float weight= 80;
 
 }
-

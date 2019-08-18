@@ -20,8 +20,10 @@
 package de.tadris.fitness.data;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 @Dao
 public interface WorkoutDao {
@@ -29,7 +31,7 @@ public interface WorkoutDao {
     @Query("SELECT * FROM workout_sample WHERE workout_id = :workout_id")
     WorkoutSample[] getAllSamplesOfWorkout(long workout_id);
 
-    @Query("SELECT * FROM workout")
+    @Query("SELECT * FROM workout ORDER BY start DESC")
     Workout[] getWorkouts();
 
     @Insert
@@ -38,7 +40,11 @@ public interface WorkoutDao {
     @Insert
     void insertWorkout(Workout workout);
 
-    @Query("SELECT * FROM workout ORDER BY start DESC LIMIT 1")
-    Workout findLastWorkout();
+    @Delete
+    void deleteWorkout(Workout workout);
+
+    @Update
+    void updateWorkout(Workout workout);
+
 
 }

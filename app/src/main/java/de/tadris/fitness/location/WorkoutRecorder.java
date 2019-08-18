@@ -32,17 +32,33 @@ import de.tadris.fitness.Instance;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
+import de.tadris.fitness.util.CalorieCalculator;
 
 public class WorkoutRecorder implements LocationListener.LocationChangeListener {
 
-    private static final int MIN_DISTANCE= 5;
+    private static int getMinDistance(String workoutType){
+        switch (workoutType){
+            case Workout.WORKOUT_TYPE_HIKING:
+            case Workout.WORKOUT_TYPE_RUNNING:
+                return 8;
+            case Workout.WORKOUT_TYPE_CYCLING:
+                return 15;
+            default: return 10;
+        }
+    }
+
+    private static final int PAUSE_TIME= 10000;
 
     private Context context;
     private Workout workout;
     private RecordingState state;
-    private List<WorkoutSample> samples= new ArrayList<>();
+    private final List<WorkoutSample> samples= new ArrayList<>();
     private long time= 0;
+    private long pauseTime= 0;
     private long lastResume;
+    private long lastPause= 0;
+    private long lastSampleTime= 0;
+    private double distance= 0;
 
     public WorkoutRecorder(Context context, String workoutType) {
         this.context= context;
@@ -54,9 +70,11 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     public void start(){
         if(state == RecordingState.IDLE){
-            Log.i("Recorder", "");
+            Log.i("Recorder", "Start");
             workout.start= System.currentTimeMillis();
             resume();
+            Instance.getInstance(context).locationListener.registerLocationChangeListeners(this);
+            startWatchdog();
         }else if(state == RecordingState.PAUSED){
             resume();
         }else if(state != RecordingState.RUNNING){
@@ -64,52 +82,160 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
     }
 
+    public boolean isActive(){
+        return state == RecordingState.RUNNING || state == RecordingState.PAUSED;
+    }
+
+    private void startWatchdog(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (isActive()){
+                        synchronized (samples){
+                            if(samples.size() > 2){
+                                WorkoutSample lastSample= samples.get(samples.size()-1);
+                                if(System.currentTimeMillis() - lastSampleTime > PAUSE_TIME){
+                                    if(state == RecordingState.RUNNING){
+                                        pause();
+                                    }
+                                }else{
+                                    if(state == RecordingState.PAUSED){
+                                        resume();
+                                    }
+                                }
+                            }
+                        }
+                        Thread.sleep(5000);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     private void resume(){
+        Log.i("Recorder", "Resume");
         state= RecordingState.RUNNING;
         lastResume= System.currentTimeMillis();
-        Instance.getInstance(context).locationListener.registerLocationChangeListeners(this);
+        if(lastPause != 0){
+            pauseTime+= System.currentTimeMillis() - lastPause;
+        }
     }
 
     public void pause(){
         if(state == RecordingState.RUNNING){
+            Log.i("Recorder", "Pause");
             state= RecordingState.PAUSED;
             time+= System.currentTimeMillis() - lastResume;
-            Instance.getInstance(context).locationListener.unregisterLocationChangeListeners(this);
+            lastPause= System.currentTimeMillis();
         }
     }
 
     public void stop(){
+        Log.i("Recorder", "Stop");
+        if(state == RecordingState.PAUSED){
+            resume();
+        }
         pause();
         workout.end= System.currentTimeMillis();
+        workout.duration= time;
+        workout.pauseDuration= pauseTime;
         state= RecordingState.STOPPED;
+        Instance.getInstance(context).locationListener.unregisterLocationChangeListeners(this);
     }
 
     public void save(){
         if(state != RecordingState.STOPPED){
             throw new IllegalStateException("Cannot save recording, recorder was not stopped. state = " + state);
         }
-        WorkoutManager.insertWorkout(context, workout, samples);
+        Log.i("Recorder", "Save");
+        synchronized (samples){
+            WorkoutManager.insertWorkout(context, workout, samples);
+        }
     }
 
     public int getSampleCount(){
-        return samples.size();
+        synchronized (samples){
+            return samples.size();
+        }
     }
 
     @Override
     public void onLocationChange(Location location) {
-        if(state == RecordingState.RUNNING){
+        if(isActive()){
+            double distance= 0;
             if(getSampleCount() > 0){
-                WorkoutSample lastSample= samples.get(samples.size() - 1);
-                if(LocationListener.locationToLatLong(location).sphericalDistance(new LatLong(lastSample.lat, lastSample.lon)) < MIN_DISTANCE){
-                    return;
+                synchronized (samples){
+                    WorkoutSample lastSample= samples.get(samples.size() - 1);
+                    distance= LocationListener.locationToLatLong(location).sphericalDistance(new LatLong(lastSample.lat, lastSample.lon));
+                    long timediff= lastSample.absoluteTime - location.getTime();
+                    if(distance < getMinDistance(workout.workoutType) && timediff < 500){
+                        return;
+                    }
                 }
             }
-            WorkoutSample sample= new WorkoutSample();
-            sample.lat= location.getLatitude();
-            sample.lon= location.getLongitude();
-            sample.speed= location.getSpeed();
-            sample.time= location.getTime();
-            samples.add(sample);
+            lastSampleTime= System.currentTimeMillis();
+            if(state == RecordingState.RUNNING && location.getTime() > workout.start){
+                if(samples.size() == 2){
+                    lastResume= System.currentTimeMillis();
+                    workout.start= System.currentTimeMillis();
+                    lastPause= 0;
+                    time= 0;
+                    pauseTime= 0;
+                    this.distance= 0;
+                }
+                this.distance+= distance;
+                WorkoutSample sample= new WorkoutSample();
+                sample.lat= location.getLatitude();
+                sample.lon= location.getLongitude();
+                sample.elevation= location.getAltitude();
+                sample.relativeElevation= 0.0;
+                sample.speed= location.getSpeed();
+                sample.relativeTime= location.getTime() - workout.start - pauseTime;
+                sample.absoluteTime= location.getTime();
+                synchronized (samples){
+                    samples.add(sample);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Returns the distance in meters
+     */
+    public int getDistance(){
+        return (int)distance;
+    }
+
+    public int getCalories(){
+        workout.avgSpeed= getAvgSpeed();
+        return CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
+    }
+
+    /**
+     *
+     * @return avgSpeed in m/s
+     */
+    public double getAvgSpeed(){
+        return distance / (double)(getDuration() / 1000);
+    }
+
+    public long getPauseDuration(){
+        if(state == RecordingState.PAUSED){
+            return pauseTime + (System.currentTimeMillis() - lastPause);
+        }else{
+            return pauseTime;
+        }
+    }
+
+    public long getDuration(){
+        if(state == RecordingState.RUNNING){
+            return time + (System.currentTimeMillis() - lastResume);
+        }else{
+            return time;
         }
     }
 

@@ -22,7 +22,10 @@ package de.tadris.fitness.data;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.github.mikephil.charting.data.Entry;
 
 import org.mapsforge.core.model.LatLong;
 
@@ -42,13 +45,25 @@ public class WorkoutSample{
     @ColumnInfo(name = "workout_id")
     public long workoutId;
 
-    public long time;
+    public long absoluteTime;
+
+    public long relativeTime;
 
     public double lat;
 
     public double lon;
 
+    public double elevation;
+
+    public double relativeElevation;
+
     public double speed;
+
+    @Ignore
+    public Entry tmpEntry;
+
+    @Ignore
+    public double tmpRoundedSpeed;
 
     public LatLong toLatLong(){
         return new LatLong(lat, lon);

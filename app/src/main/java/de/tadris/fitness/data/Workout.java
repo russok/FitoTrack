@@ -36,6 +36,10 @@ public class Workout{
     public long start;
     public long end;
 
+    public long duration;
+
+    public long pauseDuration;
+
     /**
      * Length of workout in meters
      */
@@ -59,10 +63,6 @@ public class Workout{
     public String workoutType;
 
     public int calorie;
-
-    public long getDuration(){
-        return end - start;
-    }
 
 
 }

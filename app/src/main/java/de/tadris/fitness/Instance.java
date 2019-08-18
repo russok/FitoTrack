@@ -21,10 +21,7 @@ package de.tadris.fitness;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Room;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import de.tadris.fitness.data.AppDatabase;
 import de.tadris.fitness.location.LocationListener;
@@ -44,17 +41,13 @@ public class Instance {
 
     public AppDatabase db;
     public LocationListener locationListener;
+    public UserPreferences userPreferences;
 
     private Instance(Context context) {
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 .allowMainThreadQueries()
-                .addMigrations(new Migration(2, 3) {
-                    @Override
-                    public void migrate(@NonNull SupportSQLiteDatabase database) {
-                        database.execSQL("ALTER TABLE workout add topSpeed DOUBLE not null default 0.0");
-                    }
-                })
                 .build();
         locationListener= new LocationListener(context);
+        userPreferences= new UserPreferences();
     }
 }

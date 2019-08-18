@@ -17,24 +17,20 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.util;
+package de.tadris.fitness.activity;
 
-import de.tadris.fitness.R;
-import de.tadris.fitness.data.Workout;
+import android.app.Activity;
+import android.util.TypedValue;
 
-public class ThemeManager {
+public class FitoTrackActivity extends Activity {
 
-    public static int getThemeByWorkoutType(String type){
-        switch (type){
-            case Workout.WORKOUT_TYPE_RUNNING: return R.style.Running;
-            case Workout.WORKOUT_TYPE_CYCLING: return R.style.Bicycling;
-            default: return R.style.AppTheme;
-        }
+
+
+    protected int getThemePrimaryColor() {
+        final TypedValue value = new TypedValue ();
+        getTheme().resolveAttribute (android.R.attr.colorPrimary, value, true);
+        return value.data;
     }
 
-    public static int getThemeByWorkout(Workout workout){
-        return getThemeByWorkoutType(workout.workoutType);
-    }
 
 }
-

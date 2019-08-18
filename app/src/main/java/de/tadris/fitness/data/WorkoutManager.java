@@ -37,13 +37,15 @@ public class WorkoutManager {
         // Calculating values
         double length= 0;
         for(int i= 1; i < samples.size(); i++){
-            length+= samples.get(i - 1).toLatLong().sphericalDistance(samples.get(i).toLatLong());
+            double sampleLength= samples.get(i - 1).toLatLong().sphericalDistance(samples.get(i).toLatLong());
+            long timeDiff= (samples.get(i).relativeTime - samples.get(i - 1).relativeTime) / 1000;
+            length+= sampleLength;
+            samples.get(i).speed= Math.abs(sampleLength / timeDiff);
         }
         workout.length= (int)length;
-        workout.avgSpeed= ((double) workout.length) / ((double) workout.getDuration() / 1000);
-        workout.avgPace= (double)(workout.getDuration() / 1000 / 60) / ((double) workout.length / 1000);
-        workout.calorie= CalorieCalculator.calculateCalories(workout, 80);
-        // TODO: use user weight
+        workout.avgSpeed= ((double) workout.length) / ((double) workout.duration / 1000);
+        workout.avgPace= ((double)workout.duration / 1000 / 60) / ((double) workout.length / 1000);
+        workout.calorie= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
 
         // Setting workoutId in the samples
         int i= 0;
@@ -63,6 +65,19 @@ public class WorkoutManager {
         // Saving workout and samples
         db.workoutDao().insertWorkoutAndSamples(workout, samples.toArray(new WorkoutSample[0]));
 
+    }
+
+    public static void roundSpeedValues(List<WorkoutSample> samples){
+        for(int i= 0; i < samples.size(); i++){
+            WorkoutSample sample= samples.get(i);
+            if(i == 0){
+                sample.tmpRoundedSpeed= (sample.speed+samples.get(i+1).speed) / 2;
+            }else if(i == samples.size()-1){
+                sample.tmpRoundedSpeed= (sample.speed+samples.get(i-1).speed) / 2;
+            }else{
+                sample.tmpRoundedSpeed= (sample.speed+samples.get(i-1).speed+samples.get(i+1).speed) / 3;
+            }
+        }
     }
 
 }

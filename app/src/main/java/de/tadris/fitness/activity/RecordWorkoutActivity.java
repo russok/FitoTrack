@@ -20,19 +20,27 @@
 package de.tadris.fitness.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import org.mapsforge.core.graphics.Paint;
+import org.mapsforge.core.graphics.Style;
+import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
+import org.mapsforge.map.layer.overlay.Polyline;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
@@ -40,28 +48,96 @@ import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.location.LocationListener;
 import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
+import de.tadris.fitness.util.ThemeManager;
+import de.tadris.fitness.util.UnitUtils;
 
-public class RecordWorkoutActivity extends Activity implements LocationListener.LocationChangeListener {
+public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener {
+
+    public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
 
     MapView mapView;
     TileDownloadLayer downloadLayer;
     WorkoutRecorder recorder;
+    Polyline polyline;
+    List<LatLong> latLongList= new ArrayList<>();
+    InfoViewHolder[] infoViews= new InfoViewHolder[4];
+    TextView timeView, gpsStatusView;
+    boolean isResumed= false;
+    private Handler mHandler= new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(ThemeManager.getThemeByWorkoutType(ACTIVITY));
         setContentView(R.layout.activity_record_workout);
 
-        this.mapView= new MapView(this);
-
-        downloadLayer= MapManager.setupMap(mapView);
+        setupMap();
 
         ((ViewGroup)findViewById(R.id.recordMapViewrRoot)).addView(mapView);
 
         checkPermissions();
 
-        recorder= new WorkoutRecorder(this, Workout.WORKOUT_TYPE_RUNNING);
+        recorder= new WorkoutRecorder(this, ACTIVITY);
         recorder.start();
+
+        infoViews[0]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo1Title), (TextView) findViewById(R.id.recordInfo1Value));
+        infoViews[1]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo2Title), (TextView) findViewById(R.id.recordInfo2Value));
+        infoViews[2]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo3Title), (TextView) findViewById(R.id.recordInfo3Value));
+        infoViews[3]= new InfoViewHolder((TextView) findViewById(R.id.recordInfo4Title), (TextView) findViewById(R.id.recordInfo4Value));
+        timeView= findViewById(R.id.recordTime);
+
+        updateDescription();
+
+        startUpdater();
+    }
+
+    private void setupMap(){
+        this.mapView= new MapView(this);
+        downloadLayer= MapManager.setupMap(mapView);
+    }
+
+    private void updateLine(){
+        if(polyline != null){
+            mapView.getLayerManager().getLayers().remove(polyline);
+        }
+        Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
+        p.setColor(getThemePrimaryColor());
+        p.setStrokeWidth(20);
+        p.setStyle(Style.STROKE);
+        polyline= new Polyline(p, AndroidGraphicFactory.INSTANCE);
+        polyline.setPoints(latLongList);
+        mapView.addLayer(polyline);
+    }
+
+    private void startUpdater(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    while (recorder.isActive()){
+                        Thread.sleep(1000);
+                        if(isResumed){
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDescription();
+                                }
+                            });
+                        }
+                    }
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void updateDescription(){
+        timeView.setText(UnitUtils.getHourMinuteSecondTime(recorder.getDuration()));
+        infoViews[0].setText(getString(R.string.workoutDistance), UnitUtils.getDistance(recorder.getDistance()));
+        infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
+        infoViews[2].setText(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(recorder.getAvgSpeed()));
+        infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
     }
 
     private void stopAndSave(){
@@ -92,7 +168,10 @@ public class RecordWorkoutActivity extends Activity implements LocationListener.
 
     @Override
     public void onLocationChange(Location location) {
-        mapView.getModel().mapViewPosition.animateTo(LocationListener.locationToLatLong(location));
+        LatLong latLong= LocationListener.locationToLatLong(location);
+        mapView.getModel().mapViewPosition.animateTo(latLong);
+        latLongList.add(latLong);
+        updateLine();
     }
 
     @Override
@@ -108,12 +187,14 @@ public class RecordWorkoutActivity extends Activity implements LocationListener.
         super.onPause();
         downloadLayer.onPause();
         Instance.getInstance(this).locationListener.unregisterLocationChangeListeners(this);
+        isResumed= false;
     }
 
     public void onResume(){
         super.onResume();
         downloadLayer.onResume();
         Instance.getInstance(this).locationListener.registerLocationChangeListeners(this);
+        isResumed= true;
     }
 
     @Override
@@ -131,6 +212,20 @@ public class RecordWorkoutActivity extends Activity implements LocationListener.
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class InfoViewHolder{
+        TextView titleView, valueView;
+
+        public InfoViewHolder(TextView titleView, TextView valueView) {
+            this.titleView = titleView;
+            this.valueView = valueView;
+        }
+
+        void setText(String title, String value){
+            this.titleView.setText(title);
+            this.valueView.setText(value);
+        }
     }
 
 
