@@ -10,10 +10,10 @@
 
 - upload workouts as GPX to dropbox
 - upload workouts as GPS trace to OpenStreetMap
+- voice feedback e.g. speaking every 10-30 minutes the general data
 
 ## Considered features
 
-- voice feedback e.g. speaking every 5/10 minutes the general data
 - running "against" other workouts
 - offline maps
-- something like a comparision to your friends (would be really cool from my pov)
+- something like a comparision to your friends
