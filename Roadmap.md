@@ -11,6 +11,7 @@
 - upload workouts as GPX to dropbox
 - upload workouts as GPS trace to OpenStreetMap
 - voice feedback e.g. speaking every 10-30 minutes the general data
+- support fitnessbands
 
 ## Considered features
 
