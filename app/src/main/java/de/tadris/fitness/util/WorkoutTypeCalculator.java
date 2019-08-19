@@ -19,28 +19,28 @@
 
 package de.tadris.fitness.util;
 
+import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
 
 public class WorkoutTypeCalculator {
 
-    public static String getType(Workout workout){
-        // TODO: use localisation
+    public static int getType(Workout workout){
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING)){
             if(workout.avgSpeed < 7){
-                return "Walking";
+                return R.string.workoutTypeWalking;
             }else if(workout.avgSpeed < 9.6){
-                return "Jogging";
+                return R.string.workoutTypeJogging;
             }else{
-                return "Running";
+                return R.string.workoutTypeRunning;
             }
         }
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_CYCLING)){
-            return "Cycling";
+            return R.string.workoutTypeCycling;
         }
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
-            return "Hiking";
+            return R.string.workoutTypeHiking;
         }
-        return "Unknown";
+        return R.string.workoutTypeUnknown;
     }
 
 }

@@ -28,6 +28,7 @@ public class ThemeManager {
         switch (type){
             case Workout.WORKOUT_TYPE_RUNNING: return R.style.Running;
             case Workout.WORKOUT_TYPE_CYCLING: return R.style.Bicycling;
+            case Workout.WORKOUT_TYPE_HIKING:  return R.style.Hiking;
             default: return R.style.AppTheme;
         }
     }
