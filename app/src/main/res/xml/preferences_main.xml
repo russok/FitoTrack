@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:entries="@array/pref_unit_systems"
+        android:entryValues="@array/pref_unit_system_values"
+        android:key="unitSystem"
+        android:title="@string/pref_unit_system" />
+
+    <Preference
+        android:key="weight"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/pref_weight_summary"
+        android:title="@string/pref_weight" />
+
+
+</PreferenceScreen>

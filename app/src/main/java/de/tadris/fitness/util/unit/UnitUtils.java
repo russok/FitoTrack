@@ -17,9 +17,35 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.util;
+package de.tadris.fitness.util.unit;
+
+import android.content.Context;
+import android.preference.PreferenceManager;
 
 public class UnitUtils {
+
+    public static final Unit UNITS_METRIC= new Metric();
+    public static final Unit UNITS_METRIC_PHYSICAL= new MetricPhysical();
+    public static final Unit UNITS_IMPERIAL_YARDS= new Imperial();
+    public static final Unit UNITS_IMPERIAL_METERS= new ImperialWithMeters();
+    public static final Unit[] supportedUnits= new Unit[] {
+            UNITS_METRIC, UNITS_METRIC_PHYSICAL, UNITS_IMPERIAL_YARDS, UNITS_IMPERIAL_METERS
+    };
+
+    public static Unit CHOSEN_SYSTEM= UNITS_METRIC;
+
+    public static void setUnit(Context context){
+        PreferenceManager.getDefaultSharedPreferences(context).getInt("unitSystem", UnitUtils.UNITS_METRIC.getId());
+    }
+
+    public static void setUnit(int id){
+        CHOSEN_SYSTEM= UNITS_METRIC;
+        for(Unit unit : supportedUnits){
+            if(id == unit.getId()){
+                CHOSEN_SYSTEM= unit;
+            }
+        }
+    }
 
     public static String getHourMinuteTime(long time){
         long seks= time / 1000;
@@ -51,18 +77,18 @@ public class UnitUtils {
      * @return Pace
      */
     public static String getPace(double pace){
-        // TODO: use preferred unit chosen by user
-        return round(pace, 1) + " min/km";
+        double one= CHOSEN_SYSTEM.getDistanceFromKilometers(1);
+        return round(pace / one, 1) + " min/" + CHOSEN_SYSTEM.getLongDistanceUnit();
     }
 
     /**
-     *
+     *CHOSEN_SYSTEM.getLongDistanceUnit()
      * @param consumption consumption in kcal/km
      * @return
      */
     public static String getRelativeEnergyConsumption(double consumption){
-        // TODO: use preferred unit chosen by user
-        return round(consumption, 2) + " kcal/km";
+        double one= CHOSEN_SYSTEM.getDistanceFromKilometers(1);
+        return round(consumption / one, 2) + " kcal/" + CHOSEN_SYSTEM.getLongDistanceUnit();
     }
 
     /**
@@ -71,11 +97,11 @@ public class UnitUtils {
      * @return String in preferred unit
      */
     public static String getDistance(int distance){
-        // TODO: use preferred unit chosen by user
-        if(distance >= 1000){
-            return getDistanceInKilometers((double)distance);
+        double units= CHOSEN_SYSTEM.getDistanceFromMeters(distance);
+        if(units >= 1000){
+            return round(units / 1000, 1) + " " + CHOSEN_SYSTEM.getLongDistanceUnit();
         }else{
-            return getDistanceInMeters(distance);
+            return (int)units + " " + CHOSEN_SYSTEM.getShortDistanceUnit();
         }
     }
 
@@ -85,16 +111,7 @@ public class UnitUtils {
      * @return speed in km/h
      */
     public static String getSpeed(double speed){
-        // TODO: use preferred unit chosen by user
-        return round(speed*3.6, 1) + " km/h";
-    }
-
-    public static String getDistanceInMeters(int distance){
-        return distance + " m";
-    }
-
-    public static String getDistanceInKilometers(double distance){
-        return round(distance / 1000, 1) + " km";
+        return round(CHOSEN_SYSTEM.getSpeedFromMeterPerSecond(speed), 1) + " " + CHOSEN_SYSTEM.getSpeedUnit();
     }
 
     public static double round(double d, int count){

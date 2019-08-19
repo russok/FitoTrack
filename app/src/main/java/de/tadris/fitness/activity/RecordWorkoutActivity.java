@@ -50,8 +50,7 @@ import de.tadris.fitness.location.LocationListener;
 import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.util.ThemeManager;
-import de.tadris.fitness.util.UnitUtils;
-import de.tadris.fitness.util.WorkoutTypeCalculator;
+import de.tadris.fitness.util.unit.UnitUtils;
 
 public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener {
 

@@ -28,7 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.tadris.fitness.data.Workout;
-import de.tadris.fitness.util.UnitUtils;
+import de.tadris.fitness.util.unit.UnitUtils;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>{
 

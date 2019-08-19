@@ -23,6 +23,8 @@
     <string name="workoutStopRecording">Stop</string>
     <string name="delete">Delete</string>
 
+    <string name="pref_ringtone_silent">Silent</string>
+
     <string name="workoutTime">Time</string>
     <string name="workoutDate">Date</string>
     <string name="workoutDuration">Duration</string>
@@ -52,4 +54,7 @@
     <string name="deleteWorkoutMessage">Do you really want to delete the workout?</string>
 
     <string name="cancel">Cancel</string>
+    <string name="pref_weight">Your Weight</string>
+    <string name="pref_weight_summary">Your weight is needed to calculate the burned calories</string>
+    <string name="pref_unit_system">Preferred system of units</string>
 </resources>

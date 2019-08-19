@@ -63,7 +63,7 @@ import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.WorkoutLayer;
 import de.tadris.fitness.util.ThemeManager;
-import de.tadris.fitness.util.UnitUtils;
+import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.util.WorkoutTypeCalculator;
 
 public class ShowWorkoutActivity extends FitoTrackActivity {
