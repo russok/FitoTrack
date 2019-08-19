@@ -48,6 +48,16 @@
 
     <string name="recordWorkout">Record Workout</string>
 
+    <string name="comment">Comment</string>
+    <string name="enterComment">Enter Comment</string>
+    <string name="okay">Okay</string>
+
+    <string name="stopRecordingQuestion">Stop Recording?</string>
+    <string name="stopRecordingQuestionMessage">Do you really want to stop the recording?</string>
+
+    <!-- leave the underscore because "continue" is a java command -->
+    <string name="continue_">Continue</string>
+
     <string name="deleteWorkout">Delete Workout</string>
     <string name="deleteWorkoutMessage">Do you really want to delete the workout?</string>
 

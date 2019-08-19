@@ -20,6 +20,7 @@
 package de.tadris.fitness.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -30,6 +31,7 @@ import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -53,7 +55,6 @@ import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.UnitUtils;
-import de.tadris.fitness.util.WorkoutTypeCalculator;
 
 public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener {
 
@@ -152,12 +153,38 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
     }
 
-    private void stopAndSave(){
+    private void stop(){
         recorder.stop();
+        if(recorder.getSampleCount() > 3){
+            showEnterDescriptionDialog();
+        }else{
+            finish();
+        }
+    }
+
+    private void saveAndClose(){
         if(recorder.getSampleCount() > 3){
             recorder.save();
         }
         finish();
+    }
+
+    private void showEnterDescriptionDialog(){
+        final EditText editText= new EditText(this);
+        new AlertDialog.Builder(this).setTitle(R.string.enterComment).setPositiveButton(R.string.okay, (dialog, which) -> {
+            dialog.cancel();
+            recorder.setComment(editText.getText().toString());
+            saveAndClose();
+        }).setView(editText).setCancelable(false).create().show();
+    }
+
+    private void showAreYouSureToStopDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.stopRecordingQuestion)
+                .setMessage(R.string.stopRecordingQuestionMessage)
+                .setPositiveButton(R.string.okay, (dialog, which) -> stop())
+                .setNegativeButton(R.string.continue_, null)
+                .create().show();
     }
 
     void checkPermissions(){
@@ -240,10 +267,19 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.actionRecordingStop){
-            stopAndSave();
+            stop();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(recorder.getSampleCount() > 3){
+            showAreYouSureToStopDialog();
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public static class InfoViewHolder{

@@ -245,6 +245,10 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
     }
 
+    public void setComment(String comment){
+        workout.comment= comment;
+    }
+
 
     enum RecordingState{
         IDLE, RUNNING, PAUSED, STOPPED

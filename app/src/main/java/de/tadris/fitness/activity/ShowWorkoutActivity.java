@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -93,6 +94,11 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
         root= findViewById(R.id.showWorkoutRoot);
 
+        addText(getString(R.string.comment) + ": " + workout.comment).setOnClickListener(v -> {
+            TextView textView= (TextView)v;
+            openEditCommentDialog(textView);
+        });
+
         addTitle(getString(R.string.workoutTime));
         addKeyValue(getString(R.string.workoutDate), getDate());
         addKeyValue(getString(R.string.workoutDuration), UnitUtils.getHourMinuteSecondTime(workout.duration),
@@ -120,6 +126,21 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
     }
 
+    void openEditCommentDialog(final TextView change){
+        final EditText editText= new EditText(this);
+        editText.setText(workout.comment);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.enterComment)
+                .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString(), change))
+                .setView(editText).create().show();
+    }
+
+    void changeComment(String comment, TextView onChange){
+        workout.comment= comment;
+        Instance.getInstance(this).db.workoutDao().updateWorkout(workout);
+        onChange.setText(getString(R.string.comment) + ": " + workout.comment);
+    }
+
     String getDate(){
         return SimpleDateFormat.getDateInstance().format(new Date(workout.start));
     }
@@ -135,6 +156,18 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         textView.setPadding(0, 20, 0, 0);
 
         root.addView(textView);
+    }
+
+    TextView addText(String text){
+        TextView textView= new TextView(this);
+        textView.setText(text);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        textView.setTextColor(getThemePrimaryColor());
+        textView.setPadding(0, 20, 0, 0);
+
+        root.addView(textView);
+
+        return textView;
     }
 
     void addKeyValue(String key1, String value1){
