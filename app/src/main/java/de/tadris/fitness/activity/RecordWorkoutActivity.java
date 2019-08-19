@@ -20,8 +20,10 @@
 package de.tadris.fitness.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -66,6 +68,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     boolean isResumed= false;
     private Handler mHandler= new Handler();
     PowerManager.WakeLock wakeLock;
+    Intent locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +95,16 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         startUpdater();
         acquireWakelock();
+
+        Instance.getInstance(this).locationChangeListeners.add(this);
+
+        startListener();
+
     }
 
     private void acquireWakelock(){
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
         wakeLock.acquire(1000*60*120);
     }
 
@@ -163,7 +171,24 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (hasPermission()) {
-            Instance.getInstance(this).locationListener.enableMyLocation();
+            startListener();
+        }
+    }
+
+    public void stopListener(){
+        stopService(locationListener);
+    }
+
+    public void startListener(){
+        if(locationListener == null){
+            locationListener= new Intent(this, LocationListener.class);
+        }else{
+            stopListener();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(locationListener);
+        }else{
+            startService(locationListener);
         }
     }
 
@@ -184,20 +209,20 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         if(wakeLock.isHeld()){
             wakeLock.release();
         }
+        Instance.getInstance(this).locationChangeListeners.remove(this);
+        stopListener();
     }
 
     @Override
     public void onPause(){
         super.onPause();
         downloadLayer.onPause();
-        Instance.getInstance(this).locationListener.unregisterLocationChangeListeners(this);
         isResumed= false;
     }
 
     public void onResume(){
         super.onResume();
         downloadLayer.onResume();
-        Instance.getInstance(this).locationListener.registerLocationChangeListeners(this);
         isResumed= true;
     }
 

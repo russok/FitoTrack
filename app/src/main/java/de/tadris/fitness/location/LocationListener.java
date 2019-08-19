@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
  *
@@ -19,23 +20,23 @@
 
 package de.tadris.fitness.location;
 
-import android.Manifest;
+import android.app.Notification;
+import android.app.Service;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
+import android.os.IBinder;
+import android.util.Log;
 
 import org.mapsforge.core.model.LatLong;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tadris.fitness.Instance;
+import de.tadris.fitness.R;
+import de.tadris.fitness.util.NotificationHelper;
 
-public class LocationListener implements android.location.LocationListener {
-
-    public static LatLong static_lastLocation;
+public class LocationListener extends Service {
 
     /**
      * @param location the location whose geographical coordinates should be converted.
@@ -45,113 +46,95 @@ public class LocationListener implements android.location.LocationListener {
         return new LatLong(location.getLatitude(), location.getLongitude());
     }
 
-    private Context activity;
-    private Location lastLocation;
-    private final LocationManager locationManager;
-    private boolean myLocationEnabled;
+    private static final String TAG = "LocationListener";
+    private LocationManager mLocationManager = null;
+    private static final int LOCATION_INTERVAL = 1000;
 
-    public LocationListener(Context context) {
-        super();
-        this.activity= context;
-        this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    }
+    private class LocationChangedListener implements android.location.LocationListener {
+        Location mLastLocation;
 
-
-    /**
-     * Stops the receiving of location updates. Has no effect if location updates are already disabled.
-     */
-    public synchronized void disableMyLocation() {
-        if (this.myLocationEnabled) {
-            this.myLocationEnabled = false;
-            try {
-                this.locationManager.removeUpdates(this);
-            } catch (RuntimeException runtimeException) {
-                // do we need to catch security exceptions for this call on Android 6?
-            }
+        public LocationChangedListener(String provider) {
+            Log.i(TAG, "LocationListener " + provider);
+            mLastLocation = new Location(provider);
         }
-    }
 
-    public synchronized void enableMyLocation() {
-        enableBestAvailableProvider();
-    }
-
-    /**
-     * @return the most-recently received location fix (might be null).
-     */
-    public synchronized Location getLastLocation() {
-        return this.lastLocation;
-    }
-
-    /**
-     * @return true if the receiving of location updates is currently enabled, false otherwise.
-     */
-    public synchronized boolean isMyLocationEnabled() {
-        return this.myLocationEnabled;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        synchronized (this) {
-            this.lastLocation = location;
-
-            LatLong latLong = locationToLatLong(location);
-            static_lastLocation= latLong;
-
-            for(LocationChangeListener listener : this.locationChangeListeners){
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.i(TAG, "onLocationChanged: " + location);
+            mLastLocation.set(location);
+            for(LocationChangeListener listener : Instance.getInstance(getBaseContext()).locationChangeListeners){
                 listener.onLocationChange(location);
             }
         }
-    }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-        enableBestAvailableProvider();
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        enableBestAvailableProvider();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // do nothing
-    }
-
-    private void enableBestAvailableProvider() {
-        disableMyLocation();
-
-        boolean result = false;
-        for (String provider : this.locationManager.getProviders(true)) {
-            if (LocationManager.GPS_PROVIDER.equals(provider)) {
-                result = true;
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                this.locationManager.requestLocationUpdates(provider, 0, 0, this);
-                Location location= this.locationManager.getLastKnownLocation(provider);
-                if(location != null){
-                    onLocationChanged(location);
-                }
-            }
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.i(TAG, "onProviderDisabled: " + provider);
         }
-        this.myLocationEnabled = result;
-    }
 
-    private List<LocationChangeListener> locationChangeListeners= new ArrayList<>();
-
-    public void registerLocationChangeListeners(LocationChangeListener listener){
-        if(locationChangeListeners.size() == 0){
-            enableMyLocation();
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.i(TAG, "onProviderEnabled: " + provider);
         }
-        locationChangeListeners.add(listener);
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.i(TAG, "onStatusChanged: " + provider);
+        }
     }
 
-    public void unregisterLocationChangeListeners(LocationChangeListener listener){
-        locationChangeListeners.remove(listener);
-        if(locationChangeListeners.size() == 0){
-            disableMyLocation();
+    LocationChangedListener gpsListener= new LocationChangedListener(LocationManager.GPS_PROVIDER);
+
+    @Override
+    public IBinder onBind(Intent arg0) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "onStartCommand");
+        super.onStartCommand(intent, flags, startId);
+
+        Notification.Builder builder = new Notification.Builder(this)
+                .setContentTitle(getText(R.string.trackerRunning))
+                .setContentText(getText(R.string.trackerRunningMessage));
+              //.setSmallIcon(R.drawable.icon)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationHelper.createChannels(this);
+            builder.setChannelId(NotificationHelper.CHANNEL_WORKOUT);
+        }
+
+        startForeground(10, builder.build());
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        Log.i(TAG, "onCreate");
+        initializeLocationManager();
+        try {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, 0, gpsListener);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(TAG, "gps provider does not exist " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy");
+        super.onDestroy();
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(gpsListener);
+        }
+    }
+
+    private void initializeLocationManager() {
+        Log.i(TAG, "initializeLocationManager");
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
 
