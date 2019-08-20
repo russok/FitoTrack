@@ -52,23 +52,33 @@ android {
 }
 
 dependencies {
-    def room_version = "2.2.0-alpha02"
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // Maps provider
     implementation 'org.mapsforge:mapsforge-core:0.11.0'
     implementation 'org.mapsforge:mapsforge-map:0.11.0'
     implementation 'org.mapsforge:mapsforge-map-reader:0.11.0'
     implementation 'org.mapsforge:mapsforge-themes:0.11.0'
     implementation 'org.mapsforge:mapsforge-map-android:0.11.0'
     implementation 'com.caverock:androidsvg:1.3'
+
     implementation 'net.sf.kxml:kxml2:2.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.clans:fab:1.6.4'
+
+    implementation 'stax:stax-api:1.0.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8'
+
+    // Android Room
+    def room_version = "2.2.0-alpha02"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation "androidx.room:room-runtime:$room_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

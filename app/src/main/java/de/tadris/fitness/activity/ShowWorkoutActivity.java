@@ -19,12 +19,18 @@
 
 package de.tadris.fitness.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -50,6 +59,9 @@ import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 import org.mapsforge.map.layer.overlay.FixedPixelCircle;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,9 +75,11 @@ import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.WorkoutLayer;
+import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.util.WorkoutTypeCalculator;
+import de.tadris.fitness.view.ProgressDialogController;
 
 public class ShowWorkoutActivity extends FitoTrackActivity {
     static Workout selectedWorkout;
@@ -77,6 +91,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
     MapView map;
     TileDownloadLayer downloadLayer;
     FixedPixelCircle highlightingCircle;
+    Handler mHandler= new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +274,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         map.addLayer(workoutLayer);
 
         final BoundingBox bounds= new BoundingBox(workoutLayer.getLatLongs()).extendMeters(50);
-        new Handler().postDelayed(() -> {
+        mHandler.postDelayed(() -> {
             map.getModel().mapViewPosition.setMapPosition(new MapPosition(bounds.getCenterPoint(),
                     (byte)(LatLongUtils.zoomForBounds(map.getDimension(), bounds, map.getModel().displayModel.getTileSize()))));
             map.animate().alpha(1f).setDuration(1000).start();
@@ -318,15 +333,74 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
                 .create().show();
     }
 
+    private void exportToGpx(){
+        ProgressDialogController dialogController= new ProgressDialogController(this, getString(R.string.exporting));
+        dialogController.setIndeterminate(true);
+        dialogController.show();
+        new Thread(() -> {
+            try{
+                String file= getFilesDir().getAbsolutePath() + "/shared/workout.gpx";
+                new File(file).getParentFile().mkdirs();
+                Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
+
+                GpxExporter.exportWorkout(getBaseContext(), workout, new File(file));
+                dialogController.cancel();
+                mHandler.post(() -> shareFile(uri));
+            }catch (Exception e){
+                mHandler.post(() -> showErrorDialog(e));
+            }
+        }).start();
+    }
+
+    private void shareFile(Uri uri){
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
+        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
+
+        Log.d("Export", uri.toString());
+        Log.d("Export", getContentResolver().getType(uri));
+        try {
+            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
+        } catch (FileNotFoundException e) {
+
+        }
+    }
+
+    /*void requestPermissions(){
+        if (!hasPermission()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
+        }
+    }
+
+    public boolean hasPermission(){
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }*/
+
+
+    private void showErrorDialog(Exception e){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.error)
+                .setMessage(getString(R.string.errorGpxExportFailed) + "\n\n" + e.getMessage())
+                .setPositiveButton(R.string.okay, null)
+                .create().show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.actionDeleteWorkout){
-            showDeleteDialog();
-            return true;
-        }else if(id == android.R.id.home){
-            finish();
-            return true;
+        switch(id){
+            case R.id.actionDeleteWorkout:
+                showDeleteDialog();
+                return true;
+            case R.id.actionExportGpx:
+                exportToGpx();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

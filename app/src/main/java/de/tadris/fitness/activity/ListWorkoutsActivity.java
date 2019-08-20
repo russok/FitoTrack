@@ -33,7 +33,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
-import de.tadris.fitness.WorkoutAdapter;
+import de.tadris.fitness.view.WorkoutAdapter;
 import de.tadris.fitness.data.Workout;
 
 public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {

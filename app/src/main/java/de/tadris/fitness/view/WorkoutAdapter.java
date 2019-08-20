@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness;
+package de.tadris.fitness.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.util.WorkoutTypeCalculator;
