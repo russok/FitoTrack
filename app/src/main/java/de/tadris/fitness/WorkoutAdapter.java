@@ -27,8 +27,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.util.unit.UnitUtils;
+import de.tadris.fitness.util.WorkoutTypeCalculator;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>{
 
@@ -36,13 +40,16 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder{
 
         View root;
-        TextView lengthText, timeText;
+        TextView lengthText, timeText, dateText, typeText, commentText;
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
             this.root= itemView;
             lengthText= itemView.findViewById(R.id.workoutLength);
             timeText=   itemView.findViewById(R.id.workoutTime);
+            dateText=   itemView.findViewById(R.id.workoutDate);
+            typeText=   itemView.findViewById(R.id.workoutType);
+            commentText=itemView.findViewById(R.id.workoutComment);
         }
     }
 
@@ -64,14 +71,17 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, final int position) {
-        holder.lengthText.setText(UnitUtils.getDistance(workouts[position].length));
-        holder.timeText.setText(UnitUtils.getHourMinuteTime(workouts[position].duration));
-        holder.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(workouts[position]);
-            }
-        });
+        Workout workout= workouts[position];
+        holder.dateText.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(workout.start)));
+        holder.typeText.setText(WorkoutTypeCalculator.getType(workout));
+        if(workout.comment.length() > 33){
+            holder.commentText.setText(workout.comment.substring(0, 30) + "...");
+        }else{
+            holder.commentText.setText(workout.comment);
+        }
+        holder.lengthText.setText(UnitUtils.getDistance(workout.length));
+        holder.timeText.setText(UnitUtils.getHourMinuteTime(workout.duration));
+        holder.root.setOnClickListener(v -> listener.onItemClick(workout));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

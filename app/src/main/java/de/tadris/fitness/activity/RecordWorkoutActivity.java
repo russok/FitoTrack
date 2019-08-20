@@ -171,6 +171,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     private void showEnterDescriptionDialog(){
         final EditText editText= new EditText(this);
+        editText.setSingleLine(true);
         new AlertDialog.Builder(this).setTitle(R.string.enterComment).setPositiveButton(R.string.okay, (dialog, which) -> {
             dialog.cancel();
             recorder.setComment(editText.getText().toString());
