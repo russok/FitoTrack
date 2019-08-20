@@ -22,14 +22,13 @@ package de.tadris.fitness.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import de.tadris.fitness.Instance;
@@ -66,8 +65,10 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     }
 
     public void startRecording(String activity){
+        menu.close(true);
         RecordWorkoutActivity.ACTIVITY= activity;
-        startActivity(new Intent(this, RecordWorkoutActivity.class));
+        final Intent intent= new Intent(this, RecordWorkoutActivity.class);
+        new Handler().postDelayed(() -> startActivity(intent), 300);
     }
 
     @Override

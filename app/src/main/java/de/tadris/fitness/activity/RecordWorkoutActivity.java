@@ -6,7 +6,7 @@
  * FitoTrack is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *     (at your option) any later velocationListener= new LocationListener(context);rsion.
  *
  *     FitoTrack is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,14 +20,18 @@
 package de.tadris.fitness.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -66,6 +70,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     boolean isResumed= false;
     private Handler mHandler= new Handler();
     PowerManager.WakeLock wakeLock;
+    Intent locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +99,16 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         startUpdater();
         acquireWakelock();
+
+        Instance.getInstance(this).locationChangeListeners.add(this);
+
+        startListener();
+
     }
 
     private void acquireWakelock(){
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
         wakeLock.acquire(1000*60*120);
     }
 
@@ -143,12 +153,38 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
     }
 
-    private void stopAndSave(){
+    private void stop(){
         recorder.stop();
+        if(recorder.getSampleCount() > 3){
+            showEnterDescriptionDialog();
+        }else{
+            finish();
+        }
+    }
+
+    private void saveAndClose(){
         if(recorder.getSampleCount() > 3){
             recorder.save();
         }
         finish();
+    }
+
+    private void showEnterDescriptionDialog(){
+        final EditText editText= new EditText(this);
+        new AlertDialog.Builder(this).setTitle(R.string.enterComment).setPositiveButton(R.string.okay, (dialog, which) -> {
+            dialog.cancel();
+            recorder.setComment(editText.getText().toString());
+            saveAndClose();
+        }).setView(editText).setCancelable(false).create().show();
+    }
+
+    private void showAreYouSureToStopDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.stopRecordingQuestion)
+                .setMessage(R.string.stopRecordingQuestionMessage)
+                .setPositiveButton(R.string.okay, (dialog, which) -> stop())
+                .setNegativeButton(R.string.continue_, null)
+                .create().show();
     }
 
     void checkPermissions(){
@@ -165,7 +201,24 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (hasPermission()) {
-            Instance.getInstance(this).locationListener.enableMyLocation();
+            startListener();
+        }
+    }
+
+    public void stopListener(){
+        stopService(locationListener);
+    }
+
+    public void startListener(){
+        if(locationListener == null){
+            locationListener= new Intent(this, LocationListener.class);
+        }else{
+            stopListener();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(locationListener);
+        }else{
+            startService(locationListener);
         }
     }
 
@@ -186,20 +239,20 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         if(wakeLock.isHeld()){
             wakeLock.release();
         }
+        Instance.getInstance(this).locationChangeListeners.remove(this);
+        stopListener();
     }
 
     @Override
     public void onPause(){
         super.onPause();
         downloadLayer.onPause();
-        Instance.getInstance(this).locationListener.unregisterLocationChangeListeners(this);
         isResumed= false;
     }
 
     public void onResume(){
         super.onResume();
         downloadLayer.onResume();
-        Instance.getInstance(this).locationListener.registerLocationChangeListeners(this);
         isResumed= true;
     }
 
@@ -214,10 +267,19 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.actionRecordingStop){
-            stopAndSave();
+            stop();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(recorder.getSampleCount() > 3){
+            showAreYouSureToStopDialog();
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public static class InfoViewHolder{

@@ -20,6 +20,7 @@
 package de.tadris.fitness.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -33,6 +34,16 @@ public class WorkoutManager {
 
 
         workout.id= System.currentTimeMillis();
+
+        // Delete Samples with same time
+        for(int i= samples.size()-2; i >= 0; i--){
+            WorkoutSample sample= samples.get(i);
+            WorkoutSample lastSample= samples.get(i+1);
+            if(sample.absoluteTime == lastSample.absoluteTime){
+                samples.remove(lastSample);
+                Log.i("WorkoutManager", "Removed samples at " + sample.absoluteTime + " rel: " + sample.relativeTime + "; " + lastSample.relativeTime);
+            }
+        }
 
         // Calculating values
         double length= 0;

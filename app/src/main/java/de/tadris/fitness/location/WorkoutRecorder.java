@@ -73,7 +73,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
             Log.i("Recorder", "Start");
             workout.start= System.currentTimeMillis();
             resume();
-            Instance.getInstance(context).locationListener.registerLocationChangeListeners(this);
+            Instance.getInstance(context).locationChangeListeners.add(this);
             startWatchdog();
         }else if(state == RecordingState.PAUSED){
             resume();
@@ -143,7 +143,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         workout.duration= time;
         workout.pauseDuration= pauseTime;
         state= RecordingState.STOPPED;
-        Instance.getInstance(context).locationListener.unregisterLocationChangeListeners(this);
+        Instance.getInstance(context).locationChangeListeners.remove(this);
     }
 
     public void save(){
@@ -243,6 +243,10 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }else{
             return time;
         }
+    }
+
+    public void setComment(String comment){
+        workout.comment= comment;
     }
 
 

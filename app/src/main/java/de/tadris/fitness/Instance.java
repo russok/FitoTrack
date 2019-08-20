@@ -25,6 +25,9 @@ import android.preference.PreferenceManager;
 
 import androidx.room.Room;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.tadris.fitness.data.AppDatabase;
 import de.tadris.fitness.location.LocationListener;
 import de.tadris.fitness.util.unit.UnitUtils;
@@ -43,13 +46,12 @@ public class Instance {
     }
 
     public AppDatabase db;
-    public LocationListener locationListener;
+    public List<LocationListener.LocationChangeListener> locationChangeListeners= new ArrayList<>();
 
     private Instance(Context context) {
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 .allowMainThreadQueries()
                 .build();
-        locationListener= new LocationListener(context);
         UnitUtils.setUnit(context);
     }
 }

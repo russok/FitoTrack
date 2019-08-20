@@ -1,21 +1,20 @@
 # Roadmap
 
-## First release
-
-- design of ListWorkoutActivty
-- set title in ActionBar according to activity
-- choose workout type
-- user defined workout titles, description
-- rating of workout
-- change units
-- change weight of user
-- export to gpx file
-
-## Planned features
+## Coming features
 
 - measurement of height using pressure data
 - height data in diagram
 - measurement of steps using sensor data
-- upload workouts to dropbox
-- offline maps?
 
+## Planned features
+
+- upload workouts as GPX to dropbox
+- upload workouts as GPS trace to OpenStreetMap
+- voice feedback e.g. speaking every 10-30 minutes the general data
+- support fitnessbands
+
+## Considered features
+
+- running "against" other workouts
+- offline maps
+- something like a comparision to your friends

@@ -39,6 +39,8 @@ public class Workout{
 
     public long pauseDuration;
 
+    public String comment;
+
     /**
      * Length of workout in meters
      */
