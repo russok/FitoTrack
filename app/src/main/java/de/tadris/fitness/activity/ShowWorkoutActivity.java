@@ -144,6 +144,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
     void openEditCommentDialog(final TextView change){
         final EditText editText= new EditText(this);
         editText.setText(workout.comment);
+        editText.setSingleLine(true);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.enterComment)
                 .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString(), change))
