@@ -182,7 +182,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         new AlertDialog.Builder(this)
                 .setTitle(R.string.stopRecordingQuestion)
                 .setMessage(R.string.stopRecordingQuestionMessage)
-                .setPositiveButton(R.string.okay, (dialog, which) -> stop())
+                .setPositiveButton(R.string.stop, (dialog, which) -> stop())
                 .setNegativeButton(R.string.continue_, null)
                 .create().show();
     }

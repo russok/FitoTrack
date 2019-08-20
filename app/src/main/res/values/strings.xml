@@ -20,7 +20,7 @@
 <resources>
     <string name="app_name">FitoTrack</string>
     <string name="workout_add">Add</string>
-    <string name="workoutStopRecording">Stop</string>
+    <string name="stop">Stop</string>
     <string name="delete">Delete</string>
 
     <string name="workoutTime">Time</string>

@@ -23,5 +23,5 @@
     <item
         android:id="@+id/actionRecordingStop"
         android:showAsAction="ifRoom"
-        android:title="@string/workoutStopRecording" />
+        android:title="@string/stop" />
 </menu>
