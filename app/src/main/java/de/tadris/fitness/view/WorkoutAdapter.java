@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness;
+package de.tadris.fitness.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.util.UnitUtils;
 

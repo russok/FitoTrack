@@ -22,6 +22,11 @@
     <string name="workout_add">Add</string>
     <string name="stop">Stop</string>
     <string name="delete">Delete</string>
+    <string name="exporting">Exporting</string>
+
+    <string name="error">Error</string>
+    <string name="errorGpxExportFailed">The GPX export has been failed.</string>
+    <string name="shareFile">Share file</string>
 
     <string name="workoutTime">Time</string>
     <string name="workoutDate">Date</string>
@@ -68,4 +73,5 @@
     <string name="trackingInfoDescription">Info about the tracker running</string>
 
     <string name="cancel">Cancel</string>
+    <string name="exportAsGpxFile">Export as GPX-File</string>
 </resources>

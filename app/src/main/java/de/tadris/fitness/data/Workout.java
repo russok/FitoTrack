@@ -22,6 +22,9 @@ package de.tadris.fitness.data;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity(tableName = "workout")
 public class Workout{
 
@@ -64,6 +67,14 @@ public class Workout{
     public String workoutType;
 
     public int calorie;
+
+    public String toString(){
+        if(comment.length() > 2){
+            return comment;
+        }else{
+            return SimpleDateFormat.getDateTimeInstance().format(new Date(start));
+        }
+    }
 
 
 }

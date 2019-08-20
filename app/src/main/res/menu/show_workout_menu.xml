@@ -21,7 +21,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/actionExportGpx"
+        android:title="@string/exportAsGpxFile" />
+    <item
         android:id="@+id/actionDeleteWorkout"
-        android:showAsAction="ifRoom"
         android:title="@string/delete" />
 </menu>
