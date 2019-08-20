@@ -25,8 +25,22 @@
     <string name="exporting">Exporting</string>
 
     <string name="error">Error</string>
-    <string name="errorGpxExportFailed">The GPX export has been failed.</string>
+    <string name="errorGpxExportFailed">The GPX export has failed.</string>
+    <string name="errorExportFailed">The data export has failed.</string>
+    <string name="errorImportFailed">The data import has failed.</string>
     <string name="shareFile">Share file</string>
+    <string name="initialising">Initialising</string>
+    <string name="preferences">Preferences</string>
+    <string name="workouts">Workouts</string>
+    <string name="locationData">Location data</string>
+    <string name="converting">Converting</string>
+    <string name="finished">Finished</string>
+    <string name="loadingFile">Loading file</string>
+    <string name="chooseBackupFile">Choose Backup-File</string>
+
+    <string name="importBackupMessage">WARNING: All your existing data in the app will be cleared. Are you sure, you want to restore this backup?</string>
+    <string name="restore">Restore</string>
+    <string name="backup">Backup</string>
 
     <string name="pref_ringtone_silent">Silent</string>
 
@@ -80,4 +94,8 @@
     <string name="pref_weight_summary">Your weight is needed to calculate the burned calories</string>
     <string name="pref_unit_system">Preferred system of units</string>
     <string name="settings">Settings</string>
+    <string name="exportData">Export Data</string>
+    <string name="exportDataSummary">This takes a backup of all your preferences and workout data</string>
+    <string name="importBackup">Import Data Backup</string>
+    <string name="importBackupSummary">Restore a taken backup</string>
 </resources>

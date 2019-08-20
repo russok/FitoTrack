@@ -19,29 +19,73 @@
 
 package de.tadris.fitness.activity;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import androidx.annotation.StringRes;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
+import androidx.core.content.FileProvider;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import de.tadris.fitness.R;
+import de.tadris.fitness.util.export.Exporter;
+import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
+import de.tadris.fitness.view.ProgressDialogController;
 
 public class SettingsActivity extends PreferenceActivity {
+
+
+    protected void shareFile(Uri uri){
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
+        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
+
+        Log.d("Export", uri.toString());
+        Log.d("Export", getContentResolver().getType(uri));
+        try {
+            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
+        } catch (FileNotFoundException e) {
+
+        }
+    }
+
+    protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(getString(message) + "\n\n" + e.getMessage())
+                .setPositiveButton(R.string.okay, null)
+                .create().show();
+    }
+
+
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -92,21 +136,6 @@ public class SettingsActivity extends PreferenceActivity {
         return true;
     };
 
-    /*@Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
-    }*/
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
@@ -118,6 +147,8 @@ public class SettingsActivity extends PreferenceActivity {
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
     }
+
+    private Handler mHandler= new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +162,115 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("unitSystem"));
 
         findPreference("weight").setOnPreferenceClickListener(preference -> showWeightPicker());
+        findPreference("import").setOnPreferenceClickListener(preference -> showImportDialog());
+        findPreference("export").setOnPreferenceClickListener(preference -> showExportDialog());
 
+    }
+
+    private boolean showExportDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.exportData)
+                .setMessage(R.string.exportDataSummary)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.backup, (dialog, which) -> {
+                    exportBackup();
+                }).create().show();
+        return true;
+    }
+
+    private void exportBackup(){
+        ProgressDialogController dialogController= new ProgressDialogController(this, getString(R.string.backup));
+        dialogController.show();
+        new Thread(() -> {
+            try{
+                String file= getFilesDir().getAbsolutePath() + "/shared/backup.ftb";
+                new File(file).getParentFile().mkdirs();
+                Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
+
+                Exporter.exportData(getBaseContext(), new File(file),
+                        (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
+
+                mHandler.post(() -> {
+                    dialogController.cancel();
+                    shareFile(uri);
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+                mHandler.post(() -> {
+                    dialogController.cancel();
+                    showErrorDialog(e, R.string.error, R.string.errorExportFailed);
+                });
+            }
+        }).start();
+    }
+
+    private boolean showImportDialog(){
+        if(!hasPermission()){
+            requestPermissions();
+            return true;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.importBackup)
+                .setMessage(R.string.importBackupMessage)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.restore, (dialog, which) -> {
+                    importBackup();
+                }).create().show();
+        return true;
+    }
+
+    void requestPermissions(){
+        if (!hasPermission()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
+        }
+    }
+
+    public boolean hasPermission(){
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private static final int FILE_SELECT_CODE= 21;
+    private void importBackup(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.chooseBackupFile)), FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ignored) { }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK){
+                    importBackup(data.getData());
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void importBackup(Uri uri){
+        ProgressDialogController dialogController= new ProgressDialogController(this, getString(R.string.backup));
+        dialogController.show();
+        new Thread(() -> {
+            try{
+                Exporter.importData(getBaseContext(), uri,
+                        (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
+
+                mHandler.post(() -> {
+                    // DO on backup finished
+                    dialogController.cancel();
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+                mHandler.post(() -> {
+                    dialogController.cancel();
+                    showErrorDialog(e, R.string.error, R.string.errorImportFailed);
+                });
+            }
+        }).start();
     }
 
     private boolean showWeightPicker() {

@@ -53,6 +53,6 @@ public class ProgressDialogController {
     }
 
     public void cancel(){
-        dialog.dismiss();
+        dialog.cancel();
     }
 }

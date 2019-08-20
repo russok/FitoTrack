@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
@@ -347,46 +348,12 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
                 dialogController.cancel();
                 mHandler.post(() -> shareFile(uri));
             }catch (Exception e){
-                mHandler.post(() -> showErrorDialog(e));
+                mHandler.post(() -> showErrorDialog(e, R.string.error, R.string.errorGpxExportFailed));
             }
         }).start();
     }
 
-    private void shareFile(Uri uri){
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
-
-        Log.d("Export", uri.toString());
-        Log.d("Export", getContentResolver().getType(uri));
-        try {
-            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
-        } catch (FileNotFoundException e) {
-
-        }
-    }
-
-    /*void requestPermissions(){
-        if (!hasPermission()) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
-        }
-    }
-
-    public boolean hasPermission(){
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }*/
-
-
-    private void showErrorDialog(Exception e){
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.error)
-                .setMessage(getString(R.string.errorGpxExportFailed) + "\n\n" + e.getMessage())
-                .setPositiveButton(R.string.okay, null)
-                .create().show();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -14,5 +14,14 @@
         android:summary="@string/pref_weight_summary"
         android:title="@string/pref_weight" />
 
+    <Preference
+        android:key="import"
+        android:summary="@string/importBackupSummary"
+        android:title="@string/importBackup" />
+    <Preference
+        android:key="export"
+        android:summary="@string/exportDataSummary"
+        android:title="@string/exportData" />
+
 
 </PreferenceScreen>

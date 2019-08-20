@@ -20,7 +20,18 @@
 package de.tadris.fitness.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
+
+import androidx.annotation.StringRes;
+
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+
+import de.tadris.fitness.R;
 
 abstract public class FitoTrackActivity extends Activity {
 
@@ -30,6 +41,31 @@ abstract public class FitoTrackActivity extends Activity {
         final TypedValue value = new TypedValue ();
         getTheme().resolveAttribute (android.R.attr.colorPrimary, value, true);
         return value.data;
+    }
+
+    protected void shareFile(Uri uri){
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
+        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
+
+        Log.d("Export", uri.toString());
+        Log.d("Export", getContentResolver().getType(uri));
+        try {
+            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
+        } catch (FileNotFoundException e) {
+
+        }
+    }
+
+    protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(getString(message) + "\n\n" + e.getMessage())
+                .setPositiveButton(R.string.okay, null)
+                .create().show();
     }
 
 

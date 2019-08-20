@@ -46,5 +46,8 @@ public interface WorkoutDao {
     @Update
     void updateWorkout(Workout workout);
 
+    @Update
+    void insertSample(WorkoutSample sample);
+
 
 }
