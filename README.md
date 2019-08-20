@@ -15,7 +15,7 @@ It is open-source and completely ad-free.
 - **View your workouts.** View general information like date, time, duration, distance, speed, pace. See your route on a map. Investigate how you performed in the speed diagram.
 - **Open-Source.** There is no advertivesment, no tracking and the source code is open and licensed under the GPLv3 .
 
-see [[Roadmap]] for more planned features
+see [Roadmap](https://codeberg.org/jannis/FitoTrack/wiki/Roadmap) for more planned features
 
 
 ## Installing
