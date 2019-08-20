@@ -20,8 +20,6 @@
 package de.tadris.fitness;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.room.Room;
 
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tadris.fitness.data.AppDatabase;
+import de.tadris.fitness.data.UserPreferences;
 import de.tadris.fitness.location.LocationListener;
 import de.tadris.fitness.util.unit.UnitUtils;
 
@@ -47,8 +46,10 @@ public class Instance {
 
     public AppDatabase db;
     public List<LocationListener.LocationChangeListener> locationChangeListeners= new ArrayList<>();
+    public UserPreferences userPreferences;
 
     private Instance(Context context) {
+        userPreferences= new UserPreferences(context);
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 .allowMainThreadQueries()
                 .build();

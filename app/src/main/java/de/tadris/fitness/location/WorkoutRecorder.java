@@ -214,7 +214,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     public int getCalories(){
         workout.avgSpeed= getAvgSpeed();
         workout.duration= getDuration();
-        int calories= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
+        int calories= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.getUserWeight());
         if(calories > maxCalories){
             maxCalories= calories;
         }

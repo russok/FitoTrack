@@ -1,29 +1,44 @@
+/*
+ * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ *
+ * This file is part of FitoTrack
+ *
+ * FitoTrack is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     FitoTrack is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.tadris.fitness.activity;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.NumberPicker;
 
 import androidx.core.app.NavUtils;
 
 import de.tadris.fitness.R;
-import de.tadris.fitness.util.unit.Unit;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -109,6 +124,8 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
 
+        setTitle(R.string.settings);
+
         addPreferencesFromResource(R.xml.preferences_main);
 
         bindPreferenceSummaryToValue(findPreference("unitSystem"));
@@ -125,14 +142,14 @@ public class SettingsActivity extends PreferenceActivity {
         NumberPicker np = v.findViewById(R.id.weightPicker);
         np.setMaxValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(150));
         np.setMinValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(20));
+        np.setFormatter(value -> value + " " + UnitUtils.CHOSEN_SYSTEM.getWeightUnit());
         np.setValue(preferences.getInt("weight", 80));
-        np.setFormatter(value -> value + UnitUtils.CHOSEN_SYSTEM.getWeightUnit());
         np.setWrapSelectorWheel(false);
 
         d.setView(v);
 
         d.setNegativeButton(R.string.cancel, null);
-        d.setPositiveButton(R.string.okay, (DialogInterface.OnClickListener) (dialog, which) -> {
+        d.setPositiveButton(R.string.okay, (dialog, which) -> {
             int unitValue= np.getValue();
             int kilograms= (int)Math.round(UnitUtils.CHOSEN_SYSTEM.getKilogramFromUnit(unitValue));
             preferences.edit().putInt("weight", kilograms).apply();

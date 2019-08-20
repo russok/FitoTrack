@@ -35,7 +35,8 @@ public class UnitUtils {
     public static Unit CHOSEN_SYSTEM= UNITS_METRIC;
 
     public static void setUnit(Context context){
-        PreferenceManager.getDefaultSharedPreferences(context).getInt("unitSystem", UnitUtils.UNITS_METRIC.getId());
+        int id= Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("unitSystem", String.valueOf(UnitUtils.UNITS_METRIC.getId())));
+        setUnit(id);
     }
 
     public static void setUnit(int id){

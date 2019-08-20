@@ -33,8 +33,8 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
-import de.tadris.fitness.view.WorkoutAdapter;
 import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.view.WorkoutAdapter;
 
 public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
 
@@ -96,6 +96,12 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        switch (id){
+            case R.id.actionOpenSettings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

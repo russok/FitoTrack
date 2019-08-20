@@ -56,7 +56,7 @@ public class WorkoutManager {
         workout.length= (int)length;
         workout.avgSpeed= ((double) workout.length) / ((double) workout.duration / 1000);
         workout.avgPace= ((double)workout.duration / 1000 / 60) / ((double) workout.length / 1000);
-        workout.calorie= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.weight);
+        workout.calorie= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.getUserWeight());
 
         // Setting workoutId in the samples
         int i= 0;
