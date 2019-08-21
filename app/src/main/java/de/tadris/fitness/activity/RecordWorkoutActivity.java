@@ -53,6 +53,7 @@ import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.location.LocationListener;
 import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
+import de.tadris.fitness.map.tilesource.TileSources;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 
@@ -115,7 +116,13 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     private void setupMap(){
         this.mapView= new MapView(this);
-        downloadLayer= MapManager.setupMap(mapView);
+        TileSources.Purpose purpose;
+        if(ACTIVITY.equals(Workout.WORKOUT_TYPE_CYCLING)){
+            purpose= TileSources.Purpose.CYCLING;
+        }else{
+            purpose= TileSources.Purpose.OUTDOOR;
+        }
+        downloadLayer= MapManager.setupMap(mapView, purpose);
     }
 
     private void updateLine(){

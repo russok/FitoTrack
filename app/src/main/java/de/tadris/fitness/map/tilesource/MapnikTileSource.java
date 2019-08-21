@@ -17,26 +17,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.map;
+package de.tadris.fitness.map.tilesource;
 
 import org.mapsforge.core.model.Tile;
-import org.mapsforge.map.layer.download.tilesource.AbstractTileSource;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class HumanitarianTileSource extends AbstractTileSource {
+public class MapnikTileSource extends FitoTrackTileSource {
 
-    public static HumanitarianTileSource INSTANCE= new HumanitarianTileSource(new String[]{"tile-a.openstreetmap.fr", "tile-b.openstreetmap.fr", "tile-c.openstreetmap.fr"}, 443);
-
+    public static final MapnikTileSource INSTANCE = new MapnikTileSource(new String[]{
+            "a.tile.openstreetmap.org", "b.tile.openstreetmap.org", "c.tile.openstreetmap.org"}, 443);
     private static final int PARALLEL_REQUESTS_LIMIT = 8;
     private static final String PROTOCOL = "https";
     private static final int ZOOM_LEVEL_MAX = 18;
     private static final int ZOOM_LEVEL_MIN = 0;
+    private static final String NAME = "OSM Mapnik";
 
-    public HumanitarianTileSource(String[] hostNames, int port) {
+    public MapnikTileSource(String[] hostNames, int port) {
         super(hostNames, port);
-        defaultTimeToLive = 864000000; // Ten days
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class HumanitarianTileSource extends AbstractTileSource {
     @Override
     public URL getTileUrl(Tile tile) throws MalformedURLException {
 
-        return new URL(PROTOCOL, getHostName(), this.port, "/hot/" + tile.zoomLevel + '/' + tile.tileX + '/' + tile.tileY + ".png");
+        return new URL(PROTOCOL, getHostName(), this.port, "/" + tile.zoomLevel + '/' + tile.tileX + '/' + tile.tileY + ".png");
     }
 
     @Override
@@ -58,10 +62,5 @@ public class HumanitarianTileSource extends AbstractTileSource {
     @Override
     public byte getZoomLevelMin() {
         return ZOOM_LEVEL_MIN;
-    }
-
-    @Override
-    public boolean hasAlpha() {
-        return false;
     }
 }

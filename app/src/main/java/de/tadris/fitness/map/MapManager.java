@@ -26,19 +26,33 @@ import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 
+import de.tadris.fitness.map.tilesource.FitoTrackTileSource;
+import de.tadris.fitness.map.tilesource.MapnikTileSource;
+import de.tadris.fitness.map.tilesource.ThunderforestTileSource;
+import de.tadris.fitness.map.tilesource.TileSources;
+
 public class MapManager {
 
-    public static TileDownloadLayer setupMap(MapView mapView){
-        mapView.setZoomLevelMin((byte) 18);
-        mapView.setZoomLevelMax((byte) 18);
+    public static TileDownloadLayer setupMap(MapView mapView, TileSources.Purpose purpose){
+        FitoTrackTileSource tileSource;
+        switch (purpose){
+            case OUTDOOR: tileSource= ThunderforestTileSource.OUTDOORS; break;
+            case CYCLING: tileSource= ThunderforestTileSource.CYLE_MAP; break;
+
+            case DEFAULT:
+            default:
+                tileSource= MapnikTileSource.INSTANCE; break;
+        }
+        tileSource.setUserAgent("mapsforge-android");
+
+        mapView.setZoomLevelMin(tileSource.getZoomLevelMin());
+        mapView.setZoomLevelMax(tileSource.getZoomLevelMax());
         mapView.setBuiltInZoomControls(false);
 
-        TileCache tileCache = AndroidUtil.createTileCache(mapView.getContext(), "mapcache",
+        TileCache tileCache = AndroidUtil.createTileCache(mapView.getContext(), tileSource.getName(),
                 mapView.getModel().displayModel.getTileSize(), 1f,
                 mapView.getModel().frameBufferModel.getOverdrawFactor(), true);
 
-        HumanitarianTileSource tileSource = HumanitarianTileSource.INSTANCE;
-        tileSource.setUserAgent("mapsforge-android");
         TileDownloadLayer downloadLayer = new TileDownloadLayer(tileCache, mapView.getModel().mapViewPosition, tileSource, AndroidGraphicFactory.INSTANCE);
 
         mapView.getLayerManager().getLayers().add(downloadLayer);
