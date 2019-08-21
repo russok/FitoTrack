@@ -64,7 +64,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     private static final double SIGNAL_BAD_THRESHOLD= 20; // In meters
     private static final int SIGNAL_LOST_THRESHOLD= 10000; // In milliseconds
-    private Location lastFix;
+    private Location lastFix= null;
     private GpsStateChangedListener gpsStateChangedListener;
     private GpsState gpsState= GpsState.SIGNAL_LOST;
 
@@ -127,6 +127,9 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     }
 
     private void checkSignalState(){
+        if(lastFix==null){
+            return;
+        }
         GpsState state;
         if(System.currentTimeMillis() - lastFix.getTime() > SIGNAL_LOST_THRESHOLD){
             state= GpsState.SIGNAL_LOST;
