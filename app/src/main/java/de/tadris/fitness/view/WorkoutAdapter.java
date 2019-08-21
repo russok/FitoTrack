@@ -32,8 +32,8 @@ import java.util.Date;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
-import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.util.WorkoutTypeCalculator;
+import de.tadris.fitness.util.unit.UnitUtils;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>{
 
@@ -75,10 +75,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         Workout workout= workouts[position];
         holder.dateText.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(workout.start)));
         holder.typeText.setText(WorkoutTypeCalculator.getType(workout));
-        if(workout.comment.length() > 33){
-            holder.commentText.setText(workout.comment.substring(0, 30) + "...");
+        if(workout.comment != null){
+            if(workout.comment.length() > 33){
+                holder.commentText.setText(workout.comment.substring(0, 30) + "...");
+            }else{
+                holder.commentText.setText(workout.comment);
+            }
         }else{
-            holder.commentText.setText(workout.comment);
+            holder.commentText.setText("");
         }
         holder.lengthText.setText(UnitUtils.getDistance(workout.length));
         holder.timeText.setText(UnitUtils.getHourMinuteTime(workout.duration));

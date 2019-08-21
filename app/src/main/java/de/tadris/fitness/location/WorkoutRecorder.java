@@ -59,12 +59,17 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private long lastPause= 0;
     private long lastSampleTime= 0;
     private double distance= 0;
+    private boolean hasBegan = false;
 
     public WorkoutRecorder(Context context, String workoutType) {
         this.context= context;
         this.state= RecordingState.IDLE;
 
         this.workout= new Workout();
+
+        // Default values
+        this.workout.comment= "";
+
         this.workout.workoutType= workoutType;
     }
 
@@ -178,13 +183,16 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
             }
             lastSampleTime= System.currentTimeMillis();
             if(state == RecordingState.RUNNING && location.getTime() > workout.start){
-                if(samples.size() == 2){
+                if(samples.size() == 2 && !hasBegan){
                     lastResume= System.currentTimeMillis();
                     workout.start= System.currentTimeMillis();
                     lastPause= 0;
                     time= 0;
                     pauseTime= 0;
                     this.distance= 0;
+                    samples.clear();
+
+                    hasBegan = true; // Do not clear a second time
                 }
                 this.distance+= distance;
                 WorkoutSample sample= new WorkoutSample();

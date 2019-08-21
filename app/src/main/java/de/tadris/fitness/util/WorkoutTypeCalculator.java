@@ -26,9 +26,9 @@ public class WorkoutTypeCalculator {
 
     public static int getType(Workout workout){
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING)){
-            if(workout.avgSpeed < 7){
+            if(workout.avgSpeed < 1.9){
                 return R.string.workoutTypeWalking;
-            }else if(workout.avgSpeed < 9.6){
+            }else if(workout.avgSpeed < 2.7){
                 return R.string.workoutTypeJogging;
             }else{
                 return R.string.workoutTypeRunning;

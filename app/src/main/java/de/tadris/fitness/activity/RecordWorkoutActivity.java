@@ -6,7 +6,7 @@
  * FitoTrack is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later velocationListener= new LocationListener(context);rsion.
+ *     (at your option) any later version.
  *
  *     FitoTrack is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -71,6 +71,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private Handler mHandler= new Handler();
     PowerManager.WakeLock wakeLock;
     Intent locationListener;
+    private boolean saved= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,20 +164,31 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     }
 
     private void saveAndClose(){
+        save();
+        finish();
+    }
+
+    private void save(){
         if(recorder.getSampleCount() > 3){
             recorder.save();
+            saved= true;
         }
-        finish();
+    }
+
+    private void saveIfNotSaved(){
+        if(!saved){
+            save();
+        }
     }
 
     private void showEnterDescriptionDialog(){
         final EditText editText= new EditText(this);
         editText.setSingleLine(true);
         new AlertDialog.Builder(this).setTitle(R.string.enterComment).setPositiveButton(R.string.okay, (dialog, which) -> {
-            dialog.cancel();
+            dialog.dismiss();
             recorder.setComment(editText.getText().toString());
             saveAndClose();
-        }).setView(editText).setCancelable(false).create().show();
+        }).setView(editText).setOnCancelListener(dialog -> saveAndClose()).create().show();
     }
 
     private void showAreYouSureToStopDialog(){
@@ -234,6 +246,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     @Override
     protected void onDestroy() {
         recorder.stop();
+        saveIfNotSaved(); // Important
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
         super.onDestroy();
