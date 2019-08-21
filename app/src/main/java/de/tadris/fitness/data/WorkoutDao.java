@@ -34,6 +34,9 @@ public interface WorkoutDao {
     @Query("SELECT * FROM workout ORDER BY start DESC")
     Workout[] getWorkouts();
 
+    @Query("SELECT * FROM workout_sample")
+    WorkoutSample[] getSamples();
+
     @Insert
     void insertWorkoutAndSamples(Workout workout, WorkoutSample[] samples);
 
@@ -46,7 +49,7 @@ public interface WorkoutDao {
     @Update
     void updateWorkout(Workout workout);
 
-    @Update
+    @Insert
     void insertSample(WorkoutSample sample);
 
 
