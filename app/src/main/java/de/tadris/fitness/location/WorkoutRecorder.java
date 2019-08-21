@@ -20,6 +20,7 @@
 package de.tadris.fitness.location;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
 
@@ -61,9 +62,16 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private double distance= 0;
     private boolean hasBegan = false;
 
-    public WorkoutRecorder(Context context, String workoutType) {
+    private static final double SIGNAL_BAD_THRESHOLD= 20; // In meters
+    private static final int SIGNAL_LOST_THRESHOLD= 10000; // In milliseconds
+    private Location lastFix;
+    private GpsStateChangedListener gpsStateChangedListener;
+    private GpsState gpsState= GpsState.SIGNAL_LOST;
+
+    public WorkoutRecorder(Context context, String workoutType, GpsStateChangedListener gpsStateChangedListener) {
         this.context= context;
         this.state= RecordingState.IDLE;
+        this.gpsStateChangedListener= gpsStateChangedListener;
 
         this.workout= new Workout();
 
@@ -92,32 +100,45 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     }
 
     private void startWatchdog(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (isActive()){
-                        synchronized (samples){
-                            if(samples.size() > 2){
-                                WorkoutSample lastSample= samples.get(samples.size()-1);
-                                if(System.currentTimeMillis() - lastSampleTime > PAUSE_TIME){
-                                    if(state == RecordingState.RUNNING){
-                                        pause();
-                                    }
-                                }else{
-                                    if(state == RecordingState.PAUSED){
-                                        resume();
-                                    }
+        new Thread(() -> {
+            try {
+                while (isActive()){
+                    checkSignalState();
+                    synchronized (samples){
+                        if(samples.size() > 2){
+                            WorkoutSample lastSample= samples.get(samples.size()-1);
+                            if(System.currentTimeMillis() - lastSampleTime > PAUSE_TIME){
+                                if(state == RecordingState.RUNNING){
+                                    pause();
+                                }
+                            }else{
+                                if(state == RecordingState.PAUSED){
+                                    resume();
                                 }
                             }
                         }
-                        Thread.sleep(5000);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.sleep(5000);
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
+    }
+
+    private void checkSignalState(){
+        GpsState state;
+        if(System.currentTimeMillis() - lastFix.getTime() > SIGNAL_LOST_THRESHOLD){
+            state= GpsState.SIGNAL_LOST;
+        }else if(lastFix.getAccuracy() > SIGNAL_BAD_THRESHOLD){
+            state= GpsState.SIGNAL_BAD;
+        }else{
+            state= GpsState.SIGNAL_OKAY;
+        }
+        if(state != gpsState){
+            gpsStateChangedListener.onGPSStateChanged(gpsState, state);
+            gpsState= state;
+        }
     }
 
     private void resume(){
@@ -169,6 +190,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     @Override
     public void onLocationChange(Location location) {
+        lastFix= location;
         if(isActive()){
             double distance= 0;
             if(getSampleCount() > 0){
@@ -260,6 +282,22 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     enum RecordingState{
         IDLE, RUNNING, PAUSED, STOPPED
+    }
+
+    public enum GpsState{
+        SIGNAL_LOST(Color.RED),
+        SIGNAL_OKAY(Color.GREEN),
+        SIGNAL_BAD(Color.YELLOW);
+
+        public int color;
+
+        GpsState(int color) {
+            this.color = color;
+        }
+    }
+
+    public interface GpsStateChangedListener{
+        void onGPSStateChanged(GpsState oldState, GpsState state);
     }
 
 }

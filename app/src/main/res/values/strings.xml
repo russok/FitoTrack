@@ -98,4 +98,5 @@
     <string name="exportDataSummary">This takes a backup of all your preferences and workout data</string>
     <string name="importBackup">Import Data Backup</string>
     <string name="importBackupSummary">Restore a taken backup</string>
+    <string name="gps">GPS</string>
 </resources>

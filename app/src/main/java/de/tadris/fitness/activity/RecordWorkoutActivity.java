@@ -57,7 +57,7 @@ import de.tadris.fitness.map.tilesource.TileSources;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 
-public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener {
+public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.GpsStateChangedListener {
 
     public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
 
@@ -88,7 +88,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         checkPermissions();
 
-        recorder= new WorkoutRecorder(this, ACTIVITY);
+        recorder= new WorkoutRecorder(this, ACTIVITY, this);
         recorder.start();
 
         infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
@@ -96,6 +96,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         infoViews[2]= new InfoViewHolder(findViewById(R.id.recordInfo3Title), findViewById(R.id.recordInfo3Value));
         infoViews[3]= new InfoViewHolder(findViewById(R.id.recordInfo4Title), findViewById(R.id.recordInfo4Value));
         timeView= findViewById(R.id.recordTime);
+        gpsStatusView= findViewById(R.id.recordGpsStatus);
 
         updateDescription();
 
@@ -301,6 +302,11 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }else{
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onGPSStateChanged(WorkoutRecorder.GpsState oldState, WorkoutRecorder.GpsState state) {
+        gpsStatusView.setTextColor(state.color);
     }
 
     public static class InfoViewHolder{
