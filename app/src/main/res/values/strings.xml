@@ -46,7 +46,6 @@
 
     <string name="setPreferencesTitle">Set Preferences</string>
     <string name="setPreferencesMessage">You can set your preferred unit system and your weight in the settings.</string>
-    <string name="takeMeThere">Take me there</string>
 
     <string name="workoutTime">Time</string>
     <string name="workoutDate">Date</string>

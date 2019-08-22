@@ -85,7 +85,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
                     .setTitle(R.string.setPreferencesTitle)
                     .setMessage(R.string.setPreferencesMessage)
                     .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton(R.string.takeMeThere, (dialog, which) -> startActivity(new Intent(ListWorkoutsActivity.this, SettingsActivity.class)))
+                    .setPositiveButton(R.string.settings, (dialog, which) -> startActivity(new Intent(ListWorkoutsActivity.this, SettingsActivity.class)))
                     .create().show();
         }
     }
