@@ -20,9 +20,12 @@
 package de.tadris.fitness.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -70,6 +73,21 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
         findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_CYCLING));
 
+        checkFirstStart();
+
+    }
+
+    private void checkFirstStart(){
+        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getBoolean("firstStart", true)){
+            preferences.edit().putBoolean("firstStart", false).apply();
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.setPreferencesTitle)
+                    .setMessage(R.string.setPreferencesMessage)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.takeMeThere, (dialog, which) -> startActivity(new Intent(ListWorkoutsActivity.this, SettingsActivity.class)))
+                    .create().show();
+        }
     }
 
     public void startRecording(String activity){
