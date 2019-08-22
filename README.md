@@ -7,9 +7,12 @@ It is open-source and completely ad-free.
 
 ## Screenshots
 
-...
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot1.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot2.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot3.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot4.png" width="300"/>
 
-## Implemented Features
+## Features
 
 - **Track workouts.** Choose your sports type and just start running/cycling/hiking/etc. You can see general information right below the map on the track screen.
 - **View your workouts.** View general information like date, time, duration, distance, speed, pace. See your route on a map. Investigate how you performed in the speed diagram.
