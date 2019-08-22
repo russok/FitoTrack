@@ -41,7 +41,7 @@
     <string name="finished">Fertig</string>
     <string name="gps">GPS</string>
     <string name="importBackup">Daten-Backup importieren</string>
-    <string name="importBackupMessage">WARNUNG: All deine aktuellen Daten in der App werden gelöscht. Bist du dir sicher, dass du das Backup wiederherstellen möchtest?</string>
+    <string name="importBackupMessage">WARNUNG: All deine aktuellen Daten in der App werden gelöscht. Wenn du diese nicht verlieren möchtest, mache vorher ein anderes Backup. Bist du dir sicher, dass du das Backup wiederherstellen möchtest?</string>
     <string name="importBackupSummary">Backup wiederherstellen</string>
     <string name="initialising">Initialisieren</string>
     <string name="loadingFile">Datei laden</string>

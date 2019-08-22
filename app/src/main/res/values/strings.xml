@@ -38,7 +38,7 @@
     <string name="loadingFile">Loading file</string>
     <string name="chooseBackupFile">Choose Backup-File</string>
 
-    <string name="importBackupMessage">WARNING: All your existing data in the app will be cleared. Are you sure, you want to restore this backup?</string>
+    <string name="importBackupMessage">WARNING: All your existing data in the app will be cleared. If you don\'t want to loose them, first take another backup. Are you sure, you want to restore this backup?</string>
     <string name="restore">Restore</string>
     <string name="backup">Backup</string>
 
