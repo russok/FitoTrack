@@ -97,8 +97,8 @@ public class LocationListener extends Service {
 
         Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle(getText(R.string.trackerRunning))
-                .setContentText(getText(R.string.trackerRunningMessage));
-              //.setSmallIcon(R.drawable.icon)
+                .setContentText(getText(R.string.trackerRunningMessage))
+                .setSmallIcon(R.drawable.notification);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationHelper.createChannels(this);
             builder.setChannelId(NotificationHelper.CHANNEL_WORKOUT);
