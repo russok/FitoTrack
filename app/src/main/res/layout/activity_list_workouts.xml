@@ -25,15 +25,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.ListWorkoutsActivity">
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workoutList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/workoutList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+        android:layout_height="wrap_content" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/workoutListMenu"
@@ -56,7 +51,7 @@
             app:fab_colorNormal="@color/colorPrimaryRunning"
             app:fab_colorPressed="@color/colorPrimaryDarkRunning"
             app:fab_label="@string/workoutTypeRunning"
-            app:fab_size="mini"/>
+            app:fab_size="normal"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/workoutListRecordHiking"
@@ -66,7 +61,7 @@
             app:fab_colorNormal="@color/colorPrimaryHiking"
             app:fab_colorPressed="@color/colorPrimaryDarkHiking"
             app:fab_label="@string/workoutTypeHiking"
-            app:fab_size="mini" />
+            app:fab_size="normal" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/workoutListRecordCycling"
@@ -76,7 +71,7 @@
             app:fab_colorNormal="@color/colorPrimaryBicycling"
             app:fab_colorPressed="@color/colorPrimaryDarkBicycling"
             app:fab_label="@string/workoutTypeCycling"
-            app:fab_size="mini"/>
+            app:fab_size="normal"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

@@ -22,6 +22,7 @@ package de.tadris.fitness.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
@@ -31,13 +32,14 @@ public class LauncherActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppThemeNoActionbar);
         setContentView(R.layout.activity_main);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        init();
+        new Handler().postDelayed(this::init, 100);
     }
 
     void init(){
@@ -48,5 +50,6 @@ public class LauncherActivity extends Activity {
     void start(){
         startActivity(new Intent(this, ListWorkoutsActivity.class));
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.stay);
     }
 }

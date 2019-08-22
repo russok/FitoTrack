@@ -18,18 +18,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/AppThemeNoActionbar"
-    tools:context=".activity.LauncherActivity">
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="300">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/logo_background"
-        android:src="@drawable/logo_foreground" />
-</FrameLayout>
+</set>

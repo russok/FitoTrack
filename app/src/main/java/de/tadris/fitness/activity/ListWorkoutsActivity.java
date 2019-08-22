@@ -57,6 +57,14 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         listView.setLayoutManager(layoutManager);
 
         menu= findViewById(R.id.workoutListMenu);
+        menu.setOnMenuButtonLongClickListener(v -> {
+            if(workouts.length > 0){
+                startRecording(workouts[0].workoutType);
+                return true;
+            }else{
+                return false;
+            }
+        });
 
         findViewById(R.id.workoutListRecordRunning).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_RUNNING));
         findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
