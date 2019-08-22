@@ -24,7 +24,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,6 +81,7 @@ public class Exporter {
         listener.onStatusChanged(0, context.getString(R.string.loadingFile));
         XmlMapper xmlMapper = new XmlMapper();
         FitoTrackDataContainer container = xmlMapper.readValue(context.getContentResolver().openInputStream(input), FitoTrackDataContainer.class);
+        xmlMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
         if(container.version != 1){
             throw new UnsupportedEncodingException("Version Code" + container.version + " is unsupported!");
