@@ -7,7 +7,10 @@ It is open-source and completely ad-free.
 
 ## Screenshots
 
-...
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot1.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot2.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot3.png" width="300"/>
+<img src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/screenshots/screenshot4.png" width="300"/>
 
 ## Implemented Features
 
