@@ -77,7 +77,6 @@
     <string name="workoutRoute">Route</string>
     <string name="workoutSpeed">Geschwindigkeit</string>
     <string name="workoutStartTime">Startzeit</string>
-    <string name="workoutStopRecording">Stopp</string>
     <string name="workoutTime">Zeit</string>
     <string name="workoutTopSpeed">Max Geschw.</string>
     <string name="workoutTotalEnergy">Gesamte Energie</string>
