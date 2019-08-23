@@ -306,7 +306,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     @Override
     public void onGPSStateChanged(WorkoutRecorder.GpsState oldState, WorkoutRecorder.GpsState state) {
-        gpsStatusView.setTextColor(state.color);
+        mHandler.post(() -> gpsStatusView.setTextColor(state.color));
     }
 
     public static class InfoViewHolder{
