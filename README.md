@@ -25,6 +25,20 @@ see [Roadmap](https://codeberg.org/jannis/FitoTrack/wiki/Roadmap) for more plann
 
 ...
 
+## Contributing
+
+You find the app useful and want to contribute to make it even better? There are many ways and here are some of them listed:
+
+* **Create issues.** As very simple way of contributing to the project is to report crashes and bugs and also suggest features. You can join the [Telegram Group](https://t.me/fitotrack) and share your ideas about the app.
+* **Share the app.** Tell your friends, family, colleagues about the app. In real life and online. You could for example write a post about FitoTrack on your favorite social media network.
+* **Write code.** If you're able to write code for Android you can contact me via the [Telegram Group](https://t.me/fitotrack).
+
+### Donate
+
+When I started programming this app I decided that it should be completely free and open-source. This also means for me that there will be no income from ads or paid features. So if you enjoy the app and want to support my work you are able to do so:
+
+* BTC: 3BSbGRbJaiSxVg3D6nVRK5C1SZEezhjtK5
+
 ## License
 
 Copyright (C) 2019 Jannis Scheibe <jannis@tadris.de>
