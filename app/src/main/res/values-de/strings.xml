@@ -36,7 +36,7 @@
     <string name="errorImportFailed">Der Datenimport ist fehlgeschlagen.</string>
     <string name="exportAsGpxFile">Als GPX-Datei exportieren</string>
     <string name="exportData">Daten exportieren</string>
-    <string name="exportDataSummary">"Es wird ein Backup von all deinen Einstallungen und "</string>
+    <string name="exportDataSummary">Erstellt ein Backup von all deinen Einstellungen und deiner Workoutdaten</string>
     <string name="exporting">Exportieren</string>
     <string name="finished">Fertig</string>
     <string name="gps">GPS</string>
