@@ -41,36 +41,24 @@ public class CalorieCalculator {
      *
      * workoutType and avgSpeed of workout have to be set
      *
+     * Calculation currently ignores height.
+     *
      * @param workout
      * @return MET
      */
     public static double getMET(Workout workout){
+        double speedInKmh= workout.avgSpeed * 3.6;
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING)){
-            if(workout.avgSpeed < 3.2){
-                return 1.5;
-            }else if(workout.avgSpeed < 4.0){
-                return 2.5;
-            }else if(workout.avgSpeed < 4.8){
-                return 3.25;
-            }else if(workout.avgSpeed < 5.9){
-                return 4.0;
-            }else if(workout.avgSpeed < 7.0){
-                return 5.0;
-            }else if(workout.avgSpeed < 8.0){
-                return 7.0;
-            }else if(workout.avgSpeed < 9.6){
-                return 9.0;
-            }else if(workout.avgSpeed < 12.8){
-                return 12.0;
-            }else{
-                return 16;
-            }
+            // This is a linear graph based on the website linked above
+            return Math.max(1.5, speedInKmh*1.117 - 2.1906);
         }
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
-            return 6.3;
+            // Use fixed MET because no more precise calculation was found
+            return 6.0;
         }
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_CYCLING)){
-            return Math.max(3, (workout.avgSpeed-10) / 1.5);
+            // This is a linear graph based on the website linked above
+            return Math.max(3, (speedInKmh-10) / 1.5);
         }
         return -1;
     }
