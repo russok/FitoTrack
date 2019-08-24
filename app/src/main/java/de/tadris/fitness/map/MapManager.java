@@ -28,7 +28,6 @@ import org.mapsforge.map.layer.download.TileDownloadLayer;
 
 import de.tadris.fitness.map.tilesource.FitoTrackTileSource;
 import de.tadris.fitness.map.tilesource.MapnikTileSource;
-import de.tadris.fitness.map.tilesource.ThunderforestTileSource;
 import de.tadris.fitness.map.tilesource.TileSources;
 
 public class MapManager {
@@ -36,8 +35,8 @@ public class MapManager {
     public static TileDownloadLayer setupMap(MapView mapView, TileSources.Purpose purpose){
         FitoTrackTileSource tileSource;
         switch (purpose){
-            case OUTDOOR: tileSource= ThunderforestTileSource.OUTDOORS; break;
-            case CYCLING: tileSource= ThunderforestTileSource.CYLE_MAP; break;
+            /*case OUTDOOR: tileSource= ThunderforestTileSource.OUTDOORS; break;
+            case CYCLING: tileSource= ThunderforestTileSource.CYLE_MAP; break;*/
 
             case DEFAULT:
             default:
