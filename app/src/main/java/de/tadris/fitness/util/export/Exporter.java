@@ -26,7 +26,6 @@ import android.preference.PreferenceManager;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,6 +91,7 @@ public class Exporter {
                 .edit().clear()
                 .putInt("weight", container.settings.weight)
                 .putString("unitSystem", container.settings.preferredUnitSystem)
+                .putBoolean("firstStart", false)
                 .commit();
 
         AppDatabase database= Instance.getInstance(context).db;
