@@ -31,7 +31,7 @@ You find the app useful and want to contribute to make it even better? There are
 
 * **Create issues.** As very simple way of contributing to the project is to report crashes and bugs and also suggest features. You can join the [Telegram Group](https://t.me/fitotrack) and share your ideas about the app.
 * **Share the app.** Tell your friends, family, colleagues about the app. In real life and online. You could for example write a post about FitoTrack on your favorite social media network.
-* **Write code.** If you're able to write code for Android you can contact me via the [Telegram Group](https://t.me/fitotrack).
+* **Write code.** If you're able to write code for Android or just want to help with the translation please refer to the [Contribiution](https://codeberg.org/jannis/FitoTrack/wiki/Contributing) site in the project wiki.
 
 ### Donate
 
