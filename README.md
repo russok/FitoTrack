@@ -1,7 +1,6 @@
 # FitoTrack
 
-FitoTrack is a mobile app for logging and viewing your workouts. Whether you're running, cycling or hiking FitoTrack will show you give you the most important information with detailed charts and statistics. 
-It is open-source and completely ad-free.
+FitoTrack is a mobile app for logging and viewing your workouts. Whether you're running, cycling or hiking, FitoTrack will show you the most important information, with detailed charts and statistics. It is open-source and completely ad-free.
 
 (download links)
 
@@ -14,9 +13,9 @@ It is open-source and completely ad-free.
 
 ## Features
 
-- **Track workouts.** Choose your sports type and just start running/cycling/hiking/etc. You can see general information right below the map on the track screen.
-- **View your workouts.** View general information like date, time, duration, distance, speed, pace. See your route on a map. Investigate how you performed in the speed diagram.
-- **Open-Source.** There is no advertivesment, no tracking and the source code is open and licensed under the GPLv3 .
+- **Track workouts.** Choose the type of sport you would like to track and just start running, cycling or hiking, for example. You can see the general information right below the map on the tracking screen.
+- **View your workouts.** View general information such as date, time, duration, distance, speed and pace. See your route on a map. Work out your level of performance from the speed diagram.
+- **Open-Source.** There is neither advertivesment nor tracking, and the source code is open and licensed under the GPLv3.
 
 see [Roadmap](https://codeberg.org/jannis/FitoTrack/wiki/Roadmap) for more planned features
 
@@ -27,15 +26,15 @@ see [Roadmap](https://codeberg.org/jannis/FitoTrack/wiki/Roadmap) for more plann
 
 ## Contributing
 
-You find the app useful and want to contribute to make it even better? There are many ways and here are some of them listed:
+You find the app useful and want to contribute to make it even better? Here are some ways you can help:
 
-* **Create issues.** As very simple way of contributing to the project is to report crashes and bugs and also suggest features. You can join the [Telegram Group](https://t.me/fitotrack) and share your ideas about the app.
-* **Share the app.** Tell your friends, family, colleagues about the app. In real life and online. You could for example write a post about FitoTrack on your favorite social media network.
-* **Write code.** If you're able to write code for Android or just want to help with the translation please refer to the [Contribiution](https://codeberg.org/jannis/FitoTrack/wiki/Contributing) site in the project wiki.
+* **Report issues.** A very simple way of contributing to the project is to report crashes and bugs, as well as suggest possible new features. You can join the [Telegram Group](https://t.me/fitotrack) and share your ideas regarding the app.
+* **Share the app.** Tell your friends, family, colleagues about the app, in real life and online, about the app. You could, for example, write a post about FitoTrack on your favorite social media networks.
+* **Write code.** If you're able to write code for Android or just want to help with translations, please refer to the [Contribiution](https://codeberg.org/jannis/FitoTrack/wiki/Contributing) site in the project wiki.
 
 ### Donate
 
-When I started programming this app I decided that it should be completely free and open-source. This also means for me that there will be no income from ads or paid features. So if you enjoy the app and want to support my work you are able to do so:
+When I started programming this app I decided that it should be completely free and open-source. This also means that there will be no income for me from ads or paid features. So if you enjoy the app and want to support my work you are able to do so:
 
 * BTC: 3BSbGRbJaiSxVg3D6nVRK5C1SZEezhjtK5
 
