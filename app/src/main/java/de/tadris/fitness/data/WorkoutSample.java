@@ -26,6 +26,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.mikephil.charting.data.Entry;
 
 import org.mapsforge.core.model.LatLong;
@@ -38,6 +39,7 @@ import static androidx.room.ForeignKey.CASCADE;
                 parentColumns = "id",
                 childColumns = "workout_id",
                 onDelete = CASCADE))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkoutSample{
 
     @PrimaryKey
@@ -56,17 +58,27 @@ public class WorkoutSample{
 
     public double elevation;
 
-    public double relativeElevation;
-
     public double speed;
 
     @JsonIgnore
     @Ignore
-    public Entry tmpEntry;
+    public Entry tmpHeightEntry;
+
+    @JsonIgnore
+    @Ignore
+    public Entry tmpSpeedEntry;
 
     @JsonIgnore
     @Ignore
     public double tmpRoundedSpeed;
+
+    @JsonIgnore
+    @Ignore
+    public float tmpPressure;
+
+    @JsonIgnore
+    @Ignore
+    public float tmpInclination;
 
     public LatLong toLatLong(){
         return new LatLong(lat, lon);

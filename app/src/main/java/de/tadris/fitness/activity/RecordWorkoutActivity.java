@@ -53,10 +53,11 @@ import java.util.List;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
-import de.tadris.fitness.location.LocationListener;
-import de.tadris.fitness.location.WorkoutRecorder;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.tilesource.TileSources;
+import de.tadris.fitness.recording.LocationListener;
+import de.tadris.fitness.recording.PressureService;
+import de.tadris.fitness.recording.WorkoutRecorder;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 
@@ -75,6 +76,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private Handler mHandler= new Handler();
     PowerManager.WakeLock wakeLock;
     Intent locationListener;
+    Intent pressureService;
     private boolean saved= false;
 
     @Override
@@ -157,7 +159,10 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
+    int i= 0;
+
     private void updateDescription(){
+        i++;
         timeView.setText(UnitUtils.getHourMinuteSecondTime(recorder.getDuration()));
         infoViews[0].setText(getString(R.string.workoutDistance), UnitUtils.getDistance(recorder.getDistance()));
         infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
@@ -231,18 +236,22 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     public void stopListener(){
         stopService(locationListener);
+        stopService(pressureService);
     }
 
     public void startListener(){
         if(locationListener == null){
             locationListener= new Intent(this, LocationListener.class);
+            pressureService= new Intent(this, PressureService.class);
         }else{
             stopListener();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(locationListener);
+            startService(pressureService);
         }else{
             startService(locationListener);
+            startService(pressureService);
         }
         checkGpsStatus();
     }
