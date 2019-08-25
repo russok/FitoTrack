@@ -48,13 +48,9 @@ public class CalorieCalculator {
      */
     public static double getMET(Workout workout){
         double speedInKmh= workout.avgSpeed * 3.6;
-        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING)){
+        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING) || workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
             // This is a linear graph based on the website linked above
             return Math.max(1.5, speedInKmh*1.117 - 2.1906);
-        }
-        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
-            // Use fixed MET because no more precise calculation was found
-            return 6.0;
         }
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_CYCLING)){
             // This is a linear graph based on the website linked above
