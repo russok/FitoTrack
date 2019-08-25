@@ -22,7 +22,6 @@ package de.tadris.fitness.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -270,6 +269,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                 .setMessage(R.string.noGpsMessage)
                 .setNegativeButton(R.string.cancel, (dialog, which) -> finish())
                 .setPositiveButton(R.string.enable, (dialog, which) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setCancelable(false)
                 .create().show();
     }
 
