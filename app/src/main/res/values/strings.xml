@@ -72,6 +72,10 @@
 
     <string name="recordWorkout">Record Workout</string>
 
+    <string name="noGpsTitle">GPS disabled</string>
+    <string name="noGpsMessage">Please enable GPS for tracking your workout.</string>
+    <string name="enable">Enable</string>
+
     <string name="comment">Comment</string>
     <string name="enterComment">Enter Comment</string>
     <string name="okay">Okay</string>
