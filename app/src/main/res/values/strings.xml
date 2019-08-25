@@ -63,6 +63,12 @@
     <string name="workoutTotalEnergy">Total Energy</string>
     <string name="workoutEnergyConsumption">Energy Consumption</string>
 
+    <string name="workoutAscent">Ascent</string>
+    <string name="workoutDescent">Descent</string>
+
+    <string name="height">Height</string>
+
+
     <string name="workoutTypeRunning">Running</string>
     <string name="workoutTypeWalking">Walking</string>
     <string name="workoutTypeJogging">Jogging</string>

@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.location;
+package de.tadris.fitness.recording;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -224,10 +224,14 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
                 sample.lat= location.getLatitude();
                 sample.lon= location.getLongitude();
                 sample.elevation= location.getAltitude();
-                sample.relativeElevation= 0.0;
                 sample.speed= location.getSpeed();
                 sample.relativeTime= location.getTime() - workout.start - pauseTime;
                 sample.absoluteTime= location.getTime();
+                if(Instance.getInstance(context).pressureAvailable){
+                    sample.tmpPressure= Instance.getInstance(context).lastPressure;
+                }else{
+                    sample.tmpPressure= -1;
+                }
                 synchronized (samples){
                     samples.add(sample);
                 }
@@ -280,6 +284,10 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     public void setComment(String comment){
         workout.comment= comment;
+    }
+
+    public boolean isPaused(){
+        return state == RecordingState.PAUSED;
     }
 
 

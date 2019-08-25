@@ -79,8 +79,8 @@ public class Exporter {
     public static void importData(Context context, Uri input, ExportStatusListener listener) throws IOException{
         listener.onStatusChanged(0, context.getString(R.string.loadingFile));
         XmlMapper xmlMapper = new XmlMapper();
-        FitoTrackDataContainer container = xmlMapper.readValue(context.getContentResolver().openInputStream(input), FitoTrackDataContainer.class);
         xmlMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+        FitoTrackDataContainer container = xmlMapper.readValue(context.getContentResolver().openInputStream(input), FitoTrackDataContainer.class);
 
         if(container.version != 1){
             throw new UnsupportedEncodingException("Version Code" + container.version + " is unsupported!");

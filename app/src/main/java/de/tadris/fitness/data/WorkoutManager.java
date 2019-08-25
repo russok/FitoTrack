@@ -20,6 +20,7 @@
 package de.tadris.fitness.data;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 import java.util.List;
@@ -61,16 +62,50 @@ public class WorkoutManager {
         // Setting workoutId in the samples
         int i= 0;
         double topSpeed= 0;
+        double elevationSum= 0; // Sum of elevation
+        double pressureSum= 0; // Sum of elevation
         for(WorkoutSample sample : samples){
             i++;
             sample.id= workout.id + i;
             sample.workoutId= workout.id;
+            elevationSum+= sample.elevation;
+            pressureSum+= sample.tmpPressure;
             if(sample.speed > topSpeed){
                 topSpeed= sample.speed;
             }
         }
 
         workout.topSpeed= topSpeed;
+
+        // Calculating height data
+        boolean pressureDataAvailable= samples.get(0).tmpPressure != -1;
+        double avgElevation= elevationSum / samples.size();
+        double avgPressure=  pressureSum  / samples.size();
+
+        workout.ascent = 0;
+        workout.descent = 0;
+
+        for(i= 0; i < samples.size(); i++){
+            WorkoutSample sample= samples.get(i);
+
+            if(pressureDataAvailable){
+                // Altitude Difference to Average Elevation in meters
+                float altitude_difference =
+                        SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, sample.tmpPressure) -
+                                SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, (float) avgPressure);
+                sample.elevation= avgElevation + altitude_difference;
+            } // Else: use already set GPS elevation in WorkoutSample.elevation
+
+            if(i >= 1){
+                WorkoutSample lastSample= samples.get(i-1);
+                double diff= sample.elevation - lastSample.elevation;
+                if(diff > 0){
+                    workout.ascent += diff;
+                }else{
+                    workout.descent += Math.abs(diff);
+                }
+            }
+        }
 
 
         // Saving workout and samples
@@ -88,6 +123,17 @@ public class WorkoutManager {
             }else{
                 sample.tmpRoundedSpeed= (sample.speed+samples.get(i-1).speed+samples.get(i+1).speed) / 3;
             }
+        }
+    }
+
+    public static void calculateInclination(List<WorkoutSample> samples){
+        samples.get(0).tmpInclination= 0;
+        for(int i= 1; i < samples.size(); i++){
+            WorkoutSample sample= samples.get(i);
+            WorkoutSample lastSample= samples.get(i);
+            double elevationDifference= sample.elevation - sample.elevation;
+            double distance= sample.toLatLong().sphericalDistance(lastSample.toLatLong());
+            sample.tmpInclination= (float)(elevationDifference*100/distance);
         }
     }
 

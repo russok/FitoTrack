@@ -21,14 +21,17 @@ package de.tadris.fitness;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.tadris.fitness.data.AppDatabase;
 import de.tadris.fitness.data.UserPreferences;
-import de.tadris.fitness.location.LocationListener;
+import de.tadris.fitness.recording.LocationListener;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public class Instance {
@@ -48,9 +51,45 @@ public class Instance {
     public List<LocationListener.LocationChangeListener> locationChangeListeners= new ArrayList<>();
     public UserPreferences userPreferences;
 
+    public boolean pressureAvailable= false;
+    public float lastPressure= 0;
+
     private Instance(Context context) {
         userPreferences= new UserPreferences(context);
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+                .addMigrations(new Migration(1, 2) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase database) {
+                        try{
+                            database.beginTransaction();
+
+                            database.execSQL("ALTER table workout add descent REAL NOT NULL DEFAULT 0;");
+                            database.execSQL("ALTER table workout add ascent REAL NOT NULL DEFAULT 0");
+
+                            database.execSQL("ALTER TABLE workout_sample RENAME TO workout_sample2;");
+
+                            database.execSQL("CREATE TABLE workout_sample (" +
+                                    "id INTEGER NOT NULL DEFAULT NULL PRIMARY KEY," +
+                                    "relativeTime INTEGER NOT NULL DEFAULT NULL," +
+                                    "elevation REAL NOT NULL DEFAULT NULL," +
+                                    "absoluteTime INTEGER NOT NULL DEFAULT NULL," +
+                                    "lat REAL NOT NULL DEFAULT NULL," +
+                                    "lon REAL NOT NULL DEFAULT NULL," +
+                                    "speed REAL NOT NULL DEFAULT NULL," +
+                                    "workout_id INTEGER NOT NULL DEFAULT NULL," +
+                                    "FOREIGN KEY (workout_id) REFERENCES workout(id) ON DELETE CASCADE);");
+
+                            database.execSQL("INSERT INTO workout_sample (id, relativeTime, elevation, absoluteTime, lat, lon, speed, workout_id) " +
+                                    "SELECT id, relativeTime, elevation, absoluteTime, lat, lon, speed, workout_id FROM workout_sample2");
+
+                            database.execSQL("DROP TABLE workout_sample2");
+
+                            database.setTransactionSuccessful();
+                        }finally {
+                            database.endTransaction();
+                        }
+                    }
+                })
                 .allowMainThreadQueries()
                 .build();
         UnitUtils.setUnit(context);
