@@ -74,6 +74,10 @@ public class WorkoutSample{
 
     @JsonIgnore
     @Ignore
+    public double tmpElevation;
+
+    @JsonIgnore
+    @Ignore
     public float tmpPressure;
 
     @JsonIgnore
