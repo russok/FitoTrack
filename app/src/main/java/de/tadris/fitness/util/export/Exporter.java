@@ -24,6 +24,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.File;
@@ -78,6 +79,7 @@ public class Exporter {
     public static void importData(Context context, Uri input, ExportStatusListener listener) throws IOException{
         listener.onStatusChanged(0, context.getString(R.string.loadingFile));
         XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
         FitoTrackDataContainer container = xmlMapper.readValue(context.getContentResolver().openInputStream(input), FitoTrackDataContainer.class);
 
         if(container.version != 1){
@@ -89,6 +91,7 @@ public class Exporter {
                 .edit().clear()
                 .putInt("weight", container.settings.weight)
                 .putString("unitSystem", container.settings.preferredUnitSystem)
+                .putBoolean("firstStart", false)
                 .commit();
 
         AppDatabase database= Instance.getInstance(context).db;

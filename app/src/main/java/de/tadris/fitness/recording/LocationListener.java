@@ -18,7 +18,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.location;
+package de.tadris.fitness.recording;
 
 import android.app.Notification;
 import android.app.Service;

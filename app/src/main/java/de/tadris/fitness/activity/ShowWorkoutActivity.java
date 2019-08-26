@@ -131,6 +131,13 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         addKeyValue(getString(R.string.workoutTotalEnergy), workout.calorie + " kcal",
                 getString(R.string.workoutEnergyConsumption), UnitUtils.getRelativeEnergyConsumption((double)workout.calorie / ((double)workout.length / 1000)));
 
+        addTitle(getString(R.string.height));
+
+        addKeyValue(getString(R.string.workoutAscent), UnitUtils.getDistance((int)workout.ascent),
+                getString(R.string.workoutDescent), UnitUtils.getDistance((int)workout.descent));
+
+        addHeightDiagram();
+
 
     }
 
@@ -199,20 +206,20 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         root.addView(v);
     }
 
-    void addSpeedDiagram(){
+    void addDiagram(SampleConverter converter){
         LineChart chart= new LineChart(this);
 
-        WorkoutManager.roundSpeedValues(samples);
+        converter.onCreate();
 
         List<Entry> entries = new ArrayList<>();
         for (WorkoutSample sample : samples) {
             // turn your data into Entry objects
-            Entry e= new Entry((float)(sample.relativeTime) / 1000f / 60f, (float)sample.tmpRoundedSpeed*3.6f);
+            Entry e= new Entry((float)(sample.relativeTime) / 1000f / 60f, converter.getValue(sample));
             entries.add(e);
-            sample.tmpEntry= e;
+            converter.sampleGetsEntry(sample, e);
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Speed"); // add entries to dataset // TODO: localisatoin
+        LineDataSet dataSet = new LineDataSet(entries, converter.getName()); // add entries to dataset
         dataSet.setColor(getThemePrimaryColor());
         dataSet.setValueTextColor(getThemePrimaryColor());
         dataSet.setDrawCircles(false);
@@ -220,11 +227,12 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
         Description description= new Description();
-        description.setText("min - km/h");
+        description.setText(converter.getDescription());
 
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
-        chart.setScaleEnabled(false);
+        chart.setScaleXEnabled(true);
+        chart.setScaleYEnabled(false);
         chart.setDescription(description);
         chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -232,7 +240,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
                 onNothingSelected();
                 Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
                 p.setColor(Color.BLUE);
-                highlightingCircle= new FixedPixelCircle(getSamplebyTime(e).toLatLong(), 10, p, null);
+                highlightingCircle= new FixedPixelCircle(findSample(converter, e).toLatLong(), 10, p, null);
                 map.addLayer(highlightingCircle);
             }
 
@@ -248,9 +256,84 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         root.addView(chart, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
     }
 
-    WorkoutSample getSamplebyTime(Entry entry){
+    interface SampleConverter{
+        void onCreate();
+        float getValue(WorkoutSample sample);
+        void sampleGetsEntry(WorkoutSample sample, Entry entry);
+        String getName();
+        String getDescription();
+        boolean compare(WorkoutSample sample, Entry entry);
+    }
+
+    void addHeightDiagram(){
+        addDiagram(new SampleConverter() {
+            @Override
+            public void onCreate() { }
+
+            @Override
+            public float getValue(WorkoutSample sample) {
+                return (float)UnitUtils.CHOSEN_SYSTEM.getDistanceFromMeters(sample.elevation);
+            }
+
+            @Override
+            public void sampleGetsEntry(WorkoutSample sample, Entry entry) {
+                sample.tmpHeightEntry= entry;
+            }
+
+            @Override
+            public String getName() {
+                return getString(R.string.height);
+            }
+
+            @Override
+            public String getDescription() {
+                return "min - " + UnitUtils.CHOSEN_SYSTEM.getShortDistanceUnit();
+            }
+
+            @Override
+            public boolean compare(WorkoutSample sample, Entry entry) {
+                return sample.tmpHeightEntry.equalTo(entry);
+            }
+        });
+    }
+
+    void addSpeedDiagram(){
+        addDiagram(new SampleConverter() {
+            @Override
+            public void onCreate() {
+                WorkoutManager.roundSpeedValues(samples);
+            }
+
+            @Override
+            public float getValue(WorkoutSample sample) {
+                return (float)UnitUtils.CHOSEN_SYSTEM.getSpeedFromMeterPerSecond(sample.tmpRoundedSpeed);
+            }
+
+            @Override
+            public void sampleGetsEntry(WorkoutSample sample, Entry entry) {
+                sample.tmpSpeedEntry= entry;
+            }
+
+            @Override
+            public String getName() {
+                return getString(R.string.workoutSpeed);
+            }
+
+            @Override
+            public String getDescription() {
+                return "min - " + UnitUtils.CHOSEN_SYSTEM.getSpeedUnit();
+            }
+
+            @Override
+            public boolean compare(WorkoutSample sample, Entry entry) {
+                return sample.tmpSpeedEntry.equalTo(entry);
+            }
+        });
+    }
+
+    WorkoutSample findSample(SampleConverter converter, Entry entry){
         for(WorkoutSample sample : samples){
-            if(sample.tmpEntry.equalTo(entry)){
+            if(converter.compare(sample, entry)){
                 return sample;
             }
         }

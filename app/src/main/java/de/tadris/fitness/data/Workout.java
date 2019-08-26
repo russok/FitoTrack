@@ -22,10 +22,13 @@ package de.tadris.fitness.data;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "workout")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Workout{
 
     public static final String WORKOUT_TYPE_RUNNING= "running";
@@ -65,6 +68,11 @@ public class Workout{
     public double avgPace;
 
     public String workoutType;
+
+
+    public float ascent;
+
+    public float descent;
 
     public int calorie;
 
