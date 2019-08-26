@@ -75,7 +75,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8'
 
     // Android Room
-    def room_version = "2.2.0-alpha02"
+    def room_version = "2.2.0-beta01"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
 
