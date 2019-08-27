@@ -95,7 +95,18 @@ public class WorkoutManager {
                                 SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, (float) avgPressure);
                 sample.elevation= avgElevation + altitude_difference;
             } // Else: use already set GPS elevation in WorkoutSample.elevation
+        }
 
+        int range= 3;
+        for(i= 0; i < samples.size(); i++){
+            int min= Math.max(i-range, 0);
+            int max= Math.min(i+range, samples.size()-1);
+            samples.get(i).tmpElevation= getAverageElevation(samples.subList(min, max));
+        }
+
+        for(i= 0; i < samples.size(); i++) {
+            WorkoutSample sample = samples.get(i);
+            sample.elevation= sample.tmpElevation;
             if(i >= 1){
                 WorkoutSample lastSample= samples.get(i-1);
                 double diff= sample.elevation - lastSample.elevation;
@@ -107,10 +118,17 @@ public class WorkoutManager {
             }
         }
 
-
         // Saving workout and samples
         db.workoutDao().insertWorkoutAndSamples(workout, samples.toArray(new WorkoutSample[0]));
 
+    }
+
+    public static double getAverageElevation(List<WorkoutSample> samples){
+        double sum= 0;
+        for(WorkoutSample sample : samples){
+            sum+= sample.elevation;
+        }
+        return sum / samples.size();
     }
 
     public static void roundSpeedValues(List<WorkoutSample> samples){

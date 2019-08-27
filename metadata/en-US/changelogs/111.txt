@@ -1,0 +1,13 @@
+**1.1.1:**
+- more accuracy in height data
+
+**1.1:**
+
+New:
+- Height measurement via GPS and pressure sensor
+- Show height diagram
+- Show dialog if GPS is disabled
+
+Fix:
+- Back-Button in Settings crashes on earlier Android versions (#20)
+- Fix Unit system "Imperial with meters"
