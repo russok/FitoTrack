@@ -22,12 +22,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="de.tadris.fitness">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -36,8 +37,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:appCategory="productivity"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SettingsActivity"></activity>
+        <activity android:name=".activity.ShowWorkoutMapActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.ShowWorkoutMapDiagramActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.SettingsActivity" />
         <activity
             android:name=".activity.ShowWorkoutActivity"
             android:screenOrientation="portrait" />
@@ -56,15 +62,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="de.tadris.fitness.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
         <service android:name=".recording.LocationListener" />
         <service android:name=".recording.PressureService" />
     </application>
