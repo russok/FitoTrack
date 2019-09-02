@@ -26,12 +26,15 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.transition.Scene;
+import android.transition.TransitionManager;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
@@ -86,6 +89,14 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
     FixedPixelCircle highlightingCircle;
     Handler mHandler= new Handler();
 
+    Scene sceneOverview;
+    Scene speedDiagramScene;
+    Scene heightDiagramScene;
+    Scene mapScene;
+    LineChart speedDiagram;
+    LineChart heightDiagram;
+    ViewGroup sceneRoot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +112,9 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         theme= getTheme();
 
         root= findViewById(R.id.showWorkoutRoot);
+        sceneRoot= findViewById(R.id.showWorkoutSceneRoot);
+        ViewGroup sceneLayout= findViewById(R.id.showWorkoutDefaultSceneRoot);
+        sceneOverview= new Scene(sceneRoot, sceneLayout);
 
         addText(getString(R.string.comment) + ": " + workout.comment).setOnClickListener(v -> {
             TextView textView= (TextView)v;
@@ -138,7 +152,22 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
         addHeightDiagram();
 
+        createScenes();
 
+    }
+
+    void createScenes(){
+        speedDiagramScene= createDiagramScene(speedDiagram);
+        heightDiagramScene= createDiagramScene(heightDiagram);
+        mapScene= new Scene(sceneRoot, map);
+    }
+
+    Scene createDiagramScene(LineChart chart){
+        LinearLayout layout= new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(map, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getMapHeight()));
+        layout.addView(chart, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        return new Scene(sceneRoot, layout);
     }
 
     void openEditCommentDialog(final TextView change){
@@ -253,6 +282,8 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         });
         chart.invalidate();
 
+        converter.afterAdd(chart);
+
         root.addView(chart, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
     }
 
@@ -263,6 +294,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         String getName();
         String getDescription();
         boolean compare(WorkoutSample sample, Entry entry);
+        void afterAdd(LineChart chart);
     }
 
     void addHeightDiagram(){
@@ -293,6 +325,12 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
             @Override
             public boolean compare(WorkoutSample sample, Entry entry) {
                 return sample.tmpHeightEntry.equalTo(entry);
+            }
+
+            @Override
+            public void afterAdd(LineChart chart) {
+                heightDiagram= chart;
+                heightDiagram.setOnClickListener(v -> TransitionManager.go(heightDiagramScene));
             }
         });
     }
@@ -328,6 +366,12 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
             public boolean compare(WorkoutSample sample, Entry entry) {
                 return sample.tmpSpeedEntry.equalTo(entry);
             }
+
+            @Override
+            public void afterAdd(LineChart chart) {
+                speedDiagram= chart;
+                heightDiagram.setOnClickListener(v -> TransitionManager.go(speedDiagramScene));
+            }
         });
     }
 
@@ -357,7 +401,7 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         map.getModel().mapViewPosition.setMapLimit(bounds);
 
 
-        root.addView(map, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
+        root.addView(map, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getMapHeight()));
         map.setAlpha(0);
 
 
@@ -367,6 +411,24 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         Paint pRed= AndroidGraphicFactory.INSTANCE.createPaint();
         pRed.setColor(Color.RED);
         map.addLayer(new FixedPixelCircle(samples.get(samples.size()-1).toLatLong(), 20, pRed, null));
+
+        map.setOnClickListener(v -> goToMapScene());
+
+        goToMapScene();
+    }
+
+    private void goToMapScene(){
+        TransitionManager.go(mapScene);
+        map.setOnClickListener(null);
+    }
+
+    private void leaveMapScene(){
+        TransitionManager.go(sceneOverview);
+        map.setOnClickListener(v -> goToMapScene());
+    }
+
+    int getMapHeight(){
+        return getWindowManager().getDefaultDisplay().getWidth()*3/4;
     }
 
     @Override
