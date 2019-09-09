@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
@@ -45,6 +46,7 @@ import de.tadris.fitness.view.ProgressDialogController;
 
 public class ShowWorkoutActivity extends WorkoutActivity {
 
+    TableLayout performanceTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +174,19 @@ public class ShowWorkoutActivity extends WorkoutActivity {
         v2.setText(value2);
 
         root.addView(v);
+    }
+
+    void addPerformanceTable(){
+        performanceTable= new TableLayout(this);
+
+        addTitle("Performance"); // TODO: localization
+        root.addView(performanceTable);
+
+        refreshPerformanceTable();
+    }
+
+    void refreshPerformanceTable(){
+
     }
 
 
