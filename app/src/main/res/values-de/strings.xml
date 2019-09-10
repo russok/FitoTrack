@@ -94,4 +94,6 @@
     <string name="noGpsMessage">Bitte aktiviere GPS, damit dein Workout aufgezeichnet werden kann.</string>
     <string name="workoutAscent">Aufstieg</string>
     <string name="workoutDescent">Abstieg</string>
+    <string name="data">Daten</string>
+    <string name="mapStyle">Kartenstil</string>
 </resources>

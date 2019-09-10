@@ -20,18 +20,18 @@
 
 <resources>
 
-    <string-array name="pref_unit_systems">
-        <item>Metric</item>
-        <item>Metric with m/s</item>
-        <item>Imperial</item>
-        <item>Imperial with meters</item>
+    <string-array name="pref_map_layers">
+        <item>Mapnik\nDefault OSM Mapstyle</item>
+        <item>Humanitarian\nClean map but sometimes not available</item>
+        <item>Outdoors\nLimited access</item>
+        <item>Cyclemap\nLimited access</item>
     </string-array>
 
-    <string-array name="pref_unit_system_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
+    <string-array name="pref_map_layers_values">
+        <item>osm.mapnik</item>
+        <item>osm.humanitarian</item>
+        <item>thunderforest.outdoors</item>
+        <item>thunderforest.cycle</item>
     </string-array>
 
 </resources>

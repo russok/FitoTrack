@@ -112,4 +112,6 @@
     <string name="importBackup">Import Data Backup</string>
     <string name="importBackupSummary">Restore a taken backup</string>
     <string name="gps">GPS</string>
+    <string name="data">Data</string>
+    <string name="mapStyle">Map Style</string>
 </resources>
