@@ -257,10 +257,8 @@ public class SettingsActivity extends PreferenceActivity {
                 Exporter.importData(getBaseContext(), uri,
                         (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
 
-                mHandler.post(() -> {
-                    // DO on backup finished
-                    dialogController.cancel();
-                });
+                // DO on backup finished
+                mHandler.post(dialogController::cancel);
             }catch (Exception e){
                 e.printStackTrace();
                 mHandler.post(() -> {

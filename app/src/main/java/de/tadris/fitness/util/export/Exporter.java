@@ -29,7 +29,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -59,6 +58,7 @@ public class Exporter {
         listener.onStatusChanged(10, context.getString(R.string.preferences));
         FitoTrackSettings settings= new FitoTrackSettings();
         settings.weight= preferences.getUserWeight();
+        settings.mapStyle= preferences.getMapStyle();
         settings.preferredUnitSystem= String.valueOf(UnitUtils.CHOSEN_SYSTEM.getId());
         container.settings= settings;
 
@@ -76,14 +76,14 @@ public class Exporter {
     }
 
     @SuppressLint("ApplySharedPref")
-    public static void importData(Context context, Uri input, ExportStatusListener listener) throws IOException{
+    public static void importData(Context context, Uri input, ExportStatusListener listener) throws IOException, UnsupportedVersionException {
         listener.onStatusChanged(0, context.getString(R.string.loadingFile));
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
         FitoTrackDataContainer container = xmlMapper.readValue(context.getContentResolver().openInputStream(input), FitoTrackDataContainer.class);
 
         if(container.version != 1){
-            throw new UnsupportedEncodingException("Version Code" + container.version + " is unsupported!");
+            throw new UnsupportedVersionException("Version Code" + container.version + " is unsupported!");
         }
 
         listener.onStatusChanged(40, context.getString(R.string.preferences));
@@ -91,7 +91,7 @@ public class Exporter {
                 .edit().clear()
                 .putInt("weight", container.settings.weight)
                 .putString("unitSystem", container.settings.preferredUnitSystem)
-                .putBoolean("firstStart", false)
+                .putBoolean("firstStart", false).putString("mapStyle", container.settings.mapStyle)
                 .commit();
 
         AppDatabase database= Instance.getInstance(context).db;

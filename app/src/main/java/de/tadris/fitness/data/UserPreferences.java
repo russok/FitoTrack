@@ -35,4 +35,8 @@ public class UserPreferences {
         return preferences.getInt("weight", 80);
     }
 
+    public String getMapStyle(){
+        return preferences.getString("mapStyle", "osm.mapnik");
+    }
+
 }

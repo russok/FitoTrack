@@ -19,8 +19,6 @@
 
 package de.tadris.fitness.map;
 
-import android.preference.PreferenceManager;
-
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
@@ -28,6 +26,7 @@ import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 
+import de.tadris.fitness.Instance;
 import de.tadris.fitness.map.tilesource.FitoTrackTileSource;
 import de.tadris.fitness.map.tilesource.HumanitarianTileSource;
 import de.tadris.fitness.map.tilesource.MapnikTileSource;
@@ -39,7 +38,7 @@ public class MapManager {
     public static TileDownloadLayer setupMap(MapView mapView, TileSources.Purpose purpose){
         FitoTrackTileSource tileSource;
 
-        String chosenTileLayer= PreferenceManager.getDefaultSharedPreferences(mapView.getContext()).getString("mapStyle", "osm.mapnik");
+        String chosenTileLayer= Instance.getInstance(mapView.getContext()).userPreferences.getMapStyle();
         switch (chosenTileLayer){
             case "osm.humanitarian":       tileSource= HumanitarianTileSource.INSTANCE; break;
             case "thunderforest.outdoors": tileSource= ThunderforestTileSource.OUTDOORS; break;
