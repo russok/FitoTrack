@@ -95,21 +95,25 @@ public class Exporter {
                 .commit();
 
         AppDatabase database= Instance.getInstance(context).db;
-        database.clearAllTables();
 
-        listener.onStatusChanged(60, context.getString(R.string.workouts));
-        if(container.workouts != null){
-            for(Workout workout : container.workouts){
-                database.workoutDao().insertWorkout(workout);
-            }
-        }
+        database.runInTransaction(() -> {
+            database.clearAllTables();
 
-        listener.onStatusChanged(80, context.getString(R.string.locationData));
-        if(container.samples != null){
-            for(WorkoutSample sample : container.samples){
-                database.workoutDao().insertSample(sample);
+            listener.onStatusChanged(60, context.getString(R.string.workouts));
+            if(container.workouts != null){
+                for(Workout workout : container.workouts){
+                    database.workoutDao().insertWorkout(workout);
+                }
             }
-        }
+
+            listener.onStatusChanged(80, context.getString(R.string.locationData));
+            if(container.samples != null){
+                for(WorkoutSample sample : container.samples){
+                    database.workoutDao().insertSample(sample);
+                }
+            }
+        });
+
 
         listener.onStatusChanged(100, context.getString(R.string.finished));
     }
