@@ -39,11 +39,12 @@ import java.util.Date;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
+import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
-public class ShowWorkoutActivity extends WorkoutActivity {
+public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.WorkoutDeleter {
 
 
     @Override
@@ -182,17 +183,13 @@ public class ShowWorkoutActivity extends WorkoutActivity {
         return true;
     }
 
-    private void deleteWorkout(){
+    public void deleteWorkout(){
         Instance.getInstance(this).db.workoutDao().deleteWorkout(workout);
         finish();
     }
 
     private void showDeleteDialog(){
-        new AlertDialog.Builder(this).setTitle(R.string.deleteWorkout)
-                .setMessage(R.string.deleteWorkoutMessage)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete, (dialog, which) -> deleteWorkout())
-                .create().show();
+        DialogUtils.showDeleteWorkoutDialog(this, this);
     }
 
     private void exportToGpx(){

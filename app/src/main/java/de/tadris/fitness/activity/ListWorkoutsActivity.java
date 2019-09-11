@@ -37,6 +37,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.view.WorkoutAdapter;
 
 public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
@@ -75,6 +76,9 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
         checkFirstStart();
 
+        adapter= new WorkoutAdapter(workouts, this);
+        listView.setAdapter(adapter);
+
     }
 
     private void checkFirstStart(){
@@ -101,15 +105,27 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     public void onResume() {
         super.onResume();
 
-        workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
-        adapter= new WorkoutAdapter(workouts, this);
-        listView.setAdapter(adapter);
+        loadData();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onItemClick(Workout workout) {
         ShowWorkoutActivity.selectedWorkout= workout;
         startActivity(new Intent(this, ShowWorkoutActivity.class));
+    }
+
+    @Override
+    public void onItemLongClick(int pos, Workout workout) {
+        DialogUtils.showDeleteWorkoutDialog(this, () -> {
+            Instance.getInstance(ListWorkoutsActivity.this).db.workoutDao().deleteWorkout(workout);
+            loadData();
+            adapter.notifyItemRemoved(pos);
+        });
+    }
+
+    private void loadData(){
+        workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
     }
 
     @Override
@@ -131,6 +147,4 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

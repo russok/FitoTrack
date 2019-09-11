@@ -87,6 +87,10 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         holder.lengthText.setText(UnitUtils.getDistance(workout.length));
         holder.timeText.setText(UnitUtils.getHourMinuteTime(workout.duration));
         holder.root.setOnClickListener(v -> listener.onItemClick(workout));
+        holder.root.setOnLongClickListener(v -> {
+            listener.onItemLongClick(position, workout);
+            return true;
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -97,6 +101,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     public interface WorkoutAdapterListener{
         void onItemClick(Workout workout);
+        void onItemLongClick(int pos, Workout workout);
     }
 
 
