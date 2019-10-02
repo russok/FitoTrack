@@ -62,6 +62,7 @@
     <string name="workoutBurnedEnergy">Burned Energy</string>
     <string name="workoutTotalEnergy">Total Energy</string>
     <string name="workoutEnergyConsumption">Energy Consumption</string>
+    <string name="calories">Calories</string>
 
     <string name="workoutAscent">Ascent</string>
     <string name="workoutDescent">Descent</string>
