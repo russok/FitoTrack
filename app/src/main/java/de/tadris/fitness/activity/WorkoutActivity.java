@@ -127,8 +127,8 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
                 public void onValueSelected(Entry e, Highlight h) {
                     onNothingSelected();
                     Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
-                    p.setColor(Color.BLUE);
-                    highlightingCircle= new FixedPixelCircle(findSample(converter, e).toLatLong(), 10, p, null);
+                    p.setColor(0xff693cff);
+                    highlightingCircle= new FixedPixelCircle(findSample(converter, e).toLatLong(), 20, p, null);
                     map.addLayer(highlightingCircle);
                 }
 
