@@ -114,4 +114,5 @@
     <string name="gps">GPS</string>
     <string name="data">Data</string>
     <string name="mapStyle">Map Style</string>
+    <string name="waiting_gps">Waiting for GPS</string>
 </resources>
