@@ -356,11 +356,13 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     @Override
     public void onGPSStateChanged(WorkoutRecorder.GpsState oldState, WorkoutRecorder.GpsState state) {
-        mHandler.post(() -> gpsStatusView.setTextColor(state.color));
-        if(!gpsFound && (state != WorkoutRecorder.GpsState.SIGNAL_LOST)){
-            gpsFound= true;
-            hideWaitOverlay();
-        }
+        mHandler.post(() -> {
+            gpsStatusView.setTextColor(state.color);
+            if(!gpsFound && (state != WorkoutRecorder.GpsState.SIGNAL_LOST)){
+                gpsFound= true;
+                hideWaitOverlay();
+            }
+        });
     }
 
     public static class InfoViewHolder{

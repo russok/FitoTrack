@@ -74,6 +74,8 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
         findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_CYCLING));
 
+        loadData();
+
         checkFirstStart();
 
         adapter= new WorkoutAdapter(workouts, this);
