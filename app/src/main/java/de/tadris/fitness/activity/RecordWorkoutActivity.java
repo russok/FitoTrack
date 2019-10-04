@@ -20,6 +20,7 @@
 package de.tadris.fitness.activity;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -71,6 +73,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     List<LatLong> latLongList= new ArrayList<>();
     InfoViewHolder[] infoViews= new InfoViewHolder[4];
     TextView timeView, gpsStatusView;
+    View waitingForGPSOverlay;
+    boolean gpsFound= false;
     boolean isResumed= false;
     private Handler mHandler= new Handler();
     PowerManager.WakeLock wakeLock;
@@ -89,6 +93,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         setupMap();
 
         ((ViewGroup)findViewById(R.id.recordMapViewrRoot)).addView(mapView);
+        waitingForGPSOverlay= findViewById(R.id.recorderWaitingOverlay);
+        waitingForGPSOverlay.setVisibility(View.VISIBLE);
 
         checkPermissions();
 
@@ -117,6 +123,20 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "de.tadris.fitotrack:workout_recorder");
         wakeLock.acquire(1000*60*120);
+    }
+
+    private void hideWaitOverlay(){
+        waitingForGPSOverlay.clearAnimation();
+        waitingForGPSOverlay.animate().alpha(0f).setDuration(1000).setListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animator) { }
+            @Override public void onAnimationCancel(Animator animator) { }
+            @Override public void onAnimationRepeat(Animator animator) { }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                waitingForGPSOverlay.setVisibility(View.GONE);
+            }
+        }).start();
     }
 
     private void setupMap(){
@@ -336,7 +356,13 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     @Override
     public void onGPSStateChanged(WorkoutRecorder.GpsState oldState, WorkoutRecorder.GpsState state) {
-        mHandler.post(() -> gpsStatusView.setTextColor(state.color));
+        mHandler.post(() -> {
+            gpsStatusView.setTextColor(state.color);
+            if(!gpsFound && (state != WorkoutRecorder.GpsState.SIGNAL_LOST)){
+                gpsFound= true;
+                hideWaitOverlay();
+            }
+        });
     }
 
     public static class InfoViewHolder{

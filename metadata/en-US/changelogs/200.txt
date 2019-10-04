@@ -1,0 +1,6 @@
+**2.0:**
+- Screen to compare height/elevation diagram and the map
+- Show overlay if GPS signal wasn't found yet
+- Set preferred map layer (#15)
+
+- Speed up data import

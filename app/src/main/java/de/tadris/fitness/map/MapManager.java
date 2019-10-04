@@ -26,21 +26,24 @@ import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 
+import de.tadris.fitness.Instance;
 import de.tadris.fitness.map.tilesource.FitoTrackTileSource;
+import de.tadris.fitness.map.tilesource.HumanitarianTileSource;
 import de.tadris.fitness.map.tilesource.MapnikTileSource;
+import de.tadris.fitness.map.tilesource.ThunderforestTileSource;
 import de.tadris.fitness.map.tilesource.TileSources;
 
 public class MapManager {
 
     public static TileDownloadLayer setupMap(MapView mapView, TileSources.Purpose purpose){
         FitoTrackTileSource tileSource;
-        switch (purpose){
-            /*case OUTDOOR: tileSource= ThunderforestTileSource.OUTDOORS; break;
-            case CYCLING: tileSource= ThunderforestTileSource.CYLE_MAP; break;*/
 
-            case DEFAULT:
-            default:
-                tileSource= MapnikTileSource.INSTANCE; break;
+        String chosenTileLayer= Instance.getInstance(mapView.getContext()).userPreferences.getMapStyle();
+        switch (chosenTileLayer){
+            case "osm.humanitarian":       tileSource= HumanitarianTileSource.INSTANCE; break;
+            case "thunderforest.outdoors": tileSource= ThunderforestTileSource.OUTDOORS; break;
+            case "thunderforest.cycle":    tileSource= ThunderforestTileSource.CYLE_MAP; break;
+            default:             tileSource= MapnikTileSource.INSTANCE; break; // Inclusive "osm.mapnik"
         }
         tileSource.setUserAgent("mapsforge-android");
 

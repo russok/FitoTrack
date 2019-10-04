@@ -17,26 +17,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.data;
+package de.tadris.fitness.activity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 
-public class UserPreferences {
+import de.tadris.fitness.R;
 
-    private SharedPreferences preferences;
+public class ShowWorkoutMapActivity extends WorkoutActivity {
 
-    public UserPreferences(Context context) {
-        this.preferences= PreferenceManager.getDefaultSharedPreferences(context);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initBeforeContent();
+
+        setContentView(R.layout.activity_show_workout_map);
+        root= findViewById(R.id.showWorkoutMapParent);
+
+        initAfterContent();
+
+        fullScreenItems = true;
+        addMap();
+
+        map.setClickable(true);
     }
 
-    public int getUserWeight(){
-        return preferences.getInt("weight", 80);
-    }
-
-    public String getMapStyle(){
-        return preferences.getString("mapStyle", "osm.mapnik");
-    }
 
 }

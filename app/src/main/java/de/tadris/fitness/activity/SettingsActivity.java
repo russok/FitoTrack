@@ -22,7 +22,6 @@ package de.tadris.fitness.activity;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,7 +43,6 @@ import android.widget.NumberPicker;
 
 import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NavUtils;
 import androidx.core.content.FileProvider;
 
 import java.io.BufferedInputStream;
@@ -53,7 +51,6 @@ import java.io.FileNotFoundException;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.util.export.Exporter;
-import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
@@ -160,6 +157,7 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences_main);
 
         bindPreferenceSummaryToValue(findPreference("unitSystem"));
+        bindPreferenceSummaryToValue(findPreference("mapStyle"));
 
         findPreference("weight").setOnPreferenceClickListener(preference -> showWeightPicker());
         findPreference("import").setOnPreferenceClickListener(preference -> showImportDialog());
@@ -259,10 +257,8 @@ public class SettingsActivity extends PreferenceActivity {
                 Exporter.importData(getBaseContext(), uri,
                         (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
 
-                mHandler.post(() -> {
-                    // DO on backup finished
-                    dialogController.cancel();
-                });
+                // DO on backup finished
+                mHandler.post(dialogController::cancel);
             }catch (Exception e){
                 e.printStackTrace();
                 mHandler.post(() -> {

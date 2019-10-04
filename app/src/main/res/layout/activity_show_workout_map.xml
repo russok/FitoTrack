@@ -18,20 +18,20 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showWorkoutMapRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ShowWorkoutMapActivity">
 
-    <string-array name="pref_unit_systems">
-        <item>Metric</item>
-        <item>Metric with m/s</item>
-        <item>Imperial</item>
-        <item>Imperial with meters</item>
-    </string-array>
+    <LinearLayout
+        android:id="@+id/showWorkoutMapParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <string-array name="pref_unit_system_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
+    </LinearLayout>
 
-</resources>
+</LinearLayout>

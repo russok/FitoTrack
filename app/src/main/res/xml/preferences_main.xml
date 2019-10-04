@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+  ~
+  ~ This file is part of FitoTrack
+  ~
+  ~ FitoTrack is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     FitoTrack is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:entries="@array/pref_unit_systems"
         android:entryValues="@array/pref_unit_system_values"
         android:key="unitSystem"
-        android:title="@string/pref_unit_system" />
+        android:title="@string/pref_unit_system"
+        android:defaultValue="1" />
 
     <Preference
         android:key="weight"
@@ -14,14 +34,25 @@
         android:summary="@string/pref_weight_summary"
         android:title="@string/pref_weight" />
 
-    <Preference
-        android:key="import"
-        android:summary="@string/importBackupSummary"
-        android:title="@string/importBackup" />
-    <Preference
-        android:key="export"
-        android:summary="@string/exportDataSummary"
-        android:title="@string/exportData" />
+    <ListPreference
+        android:defaultValue="osm.mapnik"
+        android:entries="@array/pref_map_layers"
+        android:entryValues="@array/pref_map_layers_values"
+        android:key="mapStyle"
+        android:title="@string/mapStyle" />
+
+
+    <PreferenceCategory android:title="@string/data">
+
+        <Preference
+            android:key="import"
+            android:summary="@string/importBackupSummary"
+            android:title="@string/importBackup" />
+        <Preference
+            android:key="export"
+            android:summary="@string/exportDataSummary"
+            android:title="@string/exportData" />
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

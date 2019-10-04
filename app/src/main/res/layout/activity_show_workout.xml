@@ -18,16 +18,25 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showWorkoutSceneRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ShowWorkoutActivity">
 
-    <LinearLayout
-        android:id="@+id/showWorkoutRoot"
+    <ScrollView
+        android:id="@+id/showWorkoutDefaultSceneRoot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"></LinearLayout>
-</ScrollView>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/showWorkoutRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"></LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -20,87 +20,43 @@
 package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
-import android.content.res.Resources;
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-
-import org.mapsforge.core.graphics.Paint;
-import org.mapsforge.core.model.BoundingBox;
-import org.mapsforge.core.model.MapPosition;
-import org.mapsforge.core.util.LatLongUtils;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.android.view.MapView;
-import org.mapsforge.map.layer.download.TileDownloadLayer;
-import org.mapsforge.map.layer.overlay.FixedPixelCircle;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
-import de.tadris.fitness.data.Workout;
-import de.tadris.fitness.data.WorkoutManager;
-import de.tadris.fitness.data.WorkoutSample;
-import de.tadris.fitness.map.MapManager;
-import de.tadris.fitness.map.WorkoutLayer;
-import de.tadris.fitness.map.tilesource.TileSources;
-import de.tadris.fitness.util.ThemeManager;
-import de.tadris.fitness.util.WorkoutTypeCalculator;
+import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
-public class ShowWorkoutActivity extends FitoTrackActivity {
-    static Workout selectedWorkout;
+public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.WorkoutDeleter {
 
-    List<WorkoutSample> samples;
-    Workout workout;
-    ViewGroup root;
-    Resources.Theme theme;
-    MapView map;
-    TileDownloadLayer downloadLayer;
-    FixedPixelCircle highlightingCircle;
-    Handler mHandler= new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        workout= selectedWorkout;
-        samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
-        setTheme(ThemeManager.getThemeByWorkout(workout));
+        initBeforeContent();
+
         setContentView(R.layout.activity_show_workout);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(WorkoutTypeCalculator.getType(workout));
-
-        theme= getTheme();
-
         root= findViewById(R.id.showWorkoutRoot);
+
+        initAfterContent();
 
         addText(getString(R.string.comment) + ": " + workout.comment).setOnClickListener(v -> {
             TextView textView= (TextView)v;
@@ -120,12 +76,17 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
         addMap();
 
+        map.setClickable(false);
+        mapRoot.setOnClickListener(v -> startActivity(new Intent(ShowWorkoutActivity.this, ShowWorkoutMapActivity.class)));
+
         addTitle(getString(R.string.workoutSpeed));
 
         addKeyValue(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(workout.avgSpeed),
                 getString(R.string.workoutTopSpeed), UnitUtils.getSpeed(workout.topSpeed));
 
         addSpeedDiagram();
+
+        speedDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_SPEED));
 
         addTitle(getString(R.string.workoutBurnedEnergy));
         addKeyValue(getString(R.string.workoutTotalEnergy), workout.calorie + " kcal",
@@ -138,8 +99,16 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
 
         addHeightDiagram();
 
+        heightDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_HEIGHT));
+
 
     }
+
+    void startDiagramActivity(String diagramType){
+        ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE= diagramType;
+        startActivity(new Intent(ShowWorkoutActivity.this, ShowWorkoutMapDiagramActivity.class));
+    }
+
 
     void openEditCommentDialog(final TextView change){
         final EditText editText= new EditText(this);
@@ -206,186 +175,6 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         root.addView(v);
     }
 
-    void addDiagram(SampleConverter converter){
-        LineChart chart= new LineChart(this);
-
-        converter.onCreate();
-
-        List<Entry> entries = new ArrayList<>();
-        for (WorkoutSample sample : samples) {
-            // turn your data into Entry objects
-            Entry e= new Entry((float)(sample.relativeTime) / 1000f / 60f, converter.getValue(sample));
-            entries.add(e);
-            converter.sampleGetsEntry(sample, e);
-        }
-
-        LineDataSet dataSet = new LineDataSet(entries, converter.getName()); // add entries to dataset
-        dataSet.setColor(getThemePrimaryColor());
-        dataSet.setValueTextColor(getThemePrimaryColor());
-        dataSet.setDrawCircles(false);
-        dataSet.setLineWidth(4);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
-        Description description= new Description();
-        description.setText(converter.getDescription());
-
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-        chart.setScaleXEnabled(true);
-        chart.setScaleYEnabled(false);
-        chart.setDescription(description);
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                onNothingSelected();
-                Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
-                p.setColor(Color.BLUE);
-                highlightingCircle= new FixedPixelCircle(findSample(converter, e).toLatLong(), 10, p, null);
-                map.addLayer(highlightingCircle);
-            }
-
-            @Override
-            public void onNothingSelected() {
-                if(highlightingCircle != null){
-                    map.getLayerManager().getLayers().remove(highlightingCircle);
-                }
-            }
-        });
-        chart.invalidate();
-
-        root.addView(chart, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
-    }
-
-    interface SampleConverter{
-        void onCreate();
-        float getValue(WorkoutSample sample);
-        void sampleGetsEntry(WorkoutSample sample, Entry entry);
-        String getName();
-        String getDescription();
-        boolean compare(WorkoutSample sample, Entry entry);
-    }
-
-    void addHeightDiagram(){
-        addDiagram(new SampleConverter() {
-            @Override
-            public void onCreate() { }
-
-            @Override
-            public float getValue(WorkoutSample sample) {
-                return (float)UnitUtils.CHOSEN_SYSTEM.getDistanceFromMeters(sample.elevation);
-            }
-
-            @Override
-            public void sampleGetsEntry(WorkoutSample sample, Entry entry) {
-                sample.tmpHeightEntry= entry;
-            }
-
-            @Override
-            public String getName() {
-                return getString(R.string.height);
-            }
-
-            @Override
-            public String getDescription() {
-                return "min - " + UnitUtils.CHOSEN_SYSTEM.getShortDistanceUnit();
-            }
-
-            @Override
-            public boolean compare(WorkoutSample sample, Entry entry) {
-                return sample.tmpHeightEntry.equalTo(entry);
-            }
-        });
-    }
-
-    void addSpeedDiagram(){
-        addDiagram(new SampleConverter() {
-            @Override
-            public void onCreate() {
-                WorkoutManager.roundSpeedValues(samples);
-            }
-
-            @Override
-            public float getValue(WorkoutSample sample) {
-                return (float)UnitUtils.CHOSEN_SYSTEM.getSpeedFromMeterPerSecond(sample.tmpRoundedSpeed);
-            }
-
-            @Override
-            public void sampleGetsEntry(WorkoutSample sample, Entry entry) {
-                sample.tmpSpeedEntry= entry;
-            }
-
-            @Override
-            public String getName() {
-                return getString(R.string.workoutSpeed);
-            }
-
-            @Override
-            public String getDescription() {
-                return "min - " + UnitUtils.CHOSEN_SYSTEM.getSpeedUnit();
-            }
-
-            @Override
-            public boolean compare(WorkoutSample sample, Entry entry) {
-                return sample.tmpSpeedEntry.equalTo(entry);
-            }
-        });
-    }
-
-    WorkoutSample findSample(SampleConverter converter, Entry entry){
-        for(WorkoutSample sample : samples){
-            if(converter.compare(sample, entry)){
-                return sample;
-            }
-        }
-        return null;
-    }
-
-    void addMap(){
-        map= new MapView(this);
-        downloadLayer= MapManager.setupMap(map, TileSources.Purpose.DEFAULT);
-
-        WorkoutLayer workoutLayer= new WorkoutLayer(samples, getThemePrimaryColor());
-        map.addLayer(workoutLayer);
-
-        final BoundingBox bounds= new BoundingBox(workoutLayer.getLatLongs()).extendMeters(50);
-        mHandler.postDelayed(() -> {
-            map.getModel().mapViewPosition.setMapPosition(new MapPosition(bounds.getCenterPoint(),
-                    (LatLongUtils.zoomForBounds(map.getDimension(), bounds, map.getModel().displayModel.getTileSize()))));
-            map.animate().alpha(1f).setDuration(1000).start();
-        }, 1000);
-
-        map.getModel().mapViewPosition.setMapLimit(bounds);
-
-
-        root.addView(map, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getWindowManager().getDefaultDisplay().getWidth()*3/4));
-        map.setAlpha(0);
-
-
-        Paint pGreen= AndroidGraphicFactory.INSTANCE.createPaint();
-        pGreen.setColor(Color.GREEN);
-        map.addLayer(new FixedPixelCircle(samples.get(0).toLatLong(), 20, pGreen, null));
-        Paint pRed= AndroidGraphicFactory.INSTANCE.createPaint();
-        pRed.setColor(Color.RED);
-        map.addLayer(new FixedPixelCircle(samples.get(samples.size()-1).toLatLong(), 20, pRed, null));
-    }
-
-    @Override
-    protected void onDestroy() {
-        map.destroyAll();
-        AndroidGraphicFactory.clearResourceMemoryCache();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        downloadLayer.onPause();
-    }
-
-    public void onResume(){
-        super.onResume();
-        downloadLayer.onResume();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -394,17 +183,13 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
         return true;
     }
 
-    private void deleteWorkout(){
+    public void deleteWorkout(){
         Instance.getInstance(this).db.workoutDao().deleteWorkout(workout);
         finish();
     }
 
     private void showDeleteDialog(){
-        new AlertDialog.Builder(this).setTitle(R.string.deleteWorkout)
-                .setMessage(R.string.deleteWorkoutMessage)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete, (dialog, which) -> deleteWorkout())
-                .create().show();
+        DialogUtils.showDeleteWorkoutDialog(this, this);
     }
 
     private void exportToGpx(){
@@ -437,9 +222,6 @@ public class ShowWorkoutActivity extends FitoTrackActivity {
                 return true;
             case R.id.actionExportGpx:
                 exportToGpx();
-                return true;
-            case android.R.id.home:
-                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
