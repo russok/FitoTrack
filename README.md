@@ -2,7 +2,12 @@
 
 FitoTrack is a mobile app for logging and viewing your workouts. Whether you're running, cycling or hiking, FitoTrack will show you the most important information, with detailed charts and statistics. It is open-source and completely ad-free.
 
-(download links)
+*(not downloadable on F-Droid yet)*
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=de.tadris.fitness"><img alt="Get it on Google Play" src="https://codeberg.org/jannis/FitoTrack/raw/branch/master/doc/badge-google-play.png" height="75px"/></a>
+  <a href="https://f-droid.org/packages/de.tadris.fitness"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75px"></a>
+</p>
 
 ## Screenshots
 
