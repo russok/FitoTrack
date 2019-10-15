@@ -47,6 +47,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionMenu menu;
     Workout[] workouts;
+    private boolean recorderHasStarted= false;
 
 
     @Override
@@ -78,8 +79,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
         checkFirstStart();
 
-        adapter= new WorkoutAdapter(workouts, this);
-        listView.setAdapter(adapter);
+        refreshAdapter();
 
     }
 
@@ -101,6 +101,8 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         RecordWorkoutActivity.ACTIVITY= activity;
         final Intent intent= new Intent(this, RecordWorkoutActivity.class);
         new Handler().postDelayed(() -> startActivity(intent), 300);
+
+        recorderHasStarted= true;
     }
 
     @Override
@@ -108,7 +110,10 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         super.onResume();
 
         loadData();
-        adapter.notifyDataSetChanged();
+        if(recorderHasStarted){
+            refreshAdapter();
+            recorderHasStarted= false;
+        }
     }
 
     @Override
@@ -128,6 +133,11 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
     private void loadData(){
         workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
+    }
+
+    private void refreshAdapter(){
+        adapter= new WorkoutAdapter(workouts, this);
+        listView.setAdapter(adapter);
     }
 
     @Override
