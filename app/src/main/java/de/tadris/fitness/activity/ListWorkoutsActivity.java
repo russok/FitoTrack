@@ -47,7 +47,6 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionMenu menu;
     Workout[] workouts;
-    private boolean recorderHasStarted= false;
 
 
     @Override
@@ -101,18 +100,16 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         RecordWorkoutActivity.ACTIVITY= activity;
         final Intent intent= new Intent(this, RecordWorkoutActivity.class);
         new Handler().postDelayed(() -> startActivity(intent), 300);
-
-        recorderHasStarted= true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        int count= workouts.length;
         loadData();
-        if(recorderHasStarted){
+        if(count != workouts.length){
             refreshAdapter();
-            recorderHasStarted= false;
         }
     }
 
