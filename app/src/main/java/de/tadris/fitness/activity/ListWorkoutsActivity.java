@@ -78,8 +78,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
         checkFirstStart();
 
-        adapter= new WorkoutAdapter(workouts, this);
-        listView.setAdapter(adapter);
+        refreshAdapter();
 
     }
 
@@ -107,8 +106,11 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     public void onResume() {
         super.onResume();
 
+        int count= workouts.length;
         loadData();
-        adapter.notifyDataSetChanged();
+        if(count != workouts.length){
+            refreshAdapter();
+        }
     }
 
     @Override
@@ -128,6 +130,11 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
 
     private void loadData(){
         workouts= Instance.getInstance(this).db.workoutDao().getWorkouts();
+    }
+
+    private void refreshAdapter(){
+        adapter= new WorkoutAdapter(workouts, this);
+        listView.setAdapter(adapter);
     }
 
     @Override
