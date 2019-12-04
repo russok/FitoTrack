@@ -33,7 +33,8 @@ public class CalorieCalculator {
      */
     public static int calculateCalories(Workout workout, double weight){
         double mins= (double)(workout.duration / 1000) / 60;
-        return (int)(mins * (getMET(workout) * 3.5 * weight) / 200);
+        int ascent= (int)workout.ascent; // 1 calorie per meter
+        return (int)(mins * (getMET(workout) * 3.5 * weight) / 200) + ascent;
     }
 
     /**
