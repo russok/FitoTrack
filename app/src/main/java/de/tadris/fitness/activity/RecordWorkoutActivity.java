@@ -62,7 +62,7 @@ import de.tadris.fitness.recording.WorkoutRecorder;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 
-public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.GpsStateChangedListener {
+public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.WorkoutRecorderListener {
 
     public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
 
@@ -379,5 +379,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }
     }
 
-
+    @Override
+    public void onAutoStop() {
+        finish();
+    }
 }
