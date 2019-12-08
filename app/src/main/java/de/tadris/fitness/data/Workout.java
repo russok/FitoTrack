@@ -80,8 +80,12 @@ public class Workout{
         if(comment.length() > 2){
             return comment;
         }else{
-            return SimpleDateFormat.getDateTimeInstance().format(new Date(start));
+            return getDateString();
         }
+    }
+
+    public String getDateString(){
+        return SimpleDateFormat.getDateTimeInstance().format(new Date(start));
     }
 
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="osm_track_visibility">
+        <item>Identifiable</item>
+        <item>Trackable</item>
+        <item>Private</item>
+    </string-array>
+</resources>
