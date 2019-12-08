@@ -1,0 +1,10 @@
+**3.0:**
+
+New:
+- Upload workouts as GPS-Tracks to OpenStreetMap (#24)
+- Automatic Workout Stop (#23)
+
+Improvements:
+- Fix Imperial Weight (#26)
+- Better behaviour of map in analyse screens
+- Better calorie calculation
