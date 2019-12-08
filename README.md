@@ -24,17 +24,12 @@ FitoTrack is a mobile app for logging and viewing your workouts. Whether you're 
 
 see the [Feature-List](https://codeberg.org/jannis/FitoTrack/wiki/Features) for a detailed list of features and the [Roadmap](https://codeberg.org/jannis/FitoTrack/wiki/Roadmap) for planned ones.
 
-
-## Installing
-
-...
-
 ## Contributing
 
 You find the app useful and want to contribute to make it even better? Here are some ways you can help:
 
 * **Report issues.** A very simple way of contributing to the project is to report crashes and bugs, as well as suggest possible new features. You can join the [Telegram Group](https://t.me/fitotrack) and share your ideas regarding the app.
-* **Share the app.** Tell your friends, family, colleagues about the app, in real life and online, about the app. You could, for example, write a post about FitoTrack on your favorite social media networks.
+* **Share the app.** Tell your friends, family, colleagues about the app, in real life and online. You could, for example, write a post about FitoTrack on your favorite social media networks.
 * **Write code.** If you're able to write code for Android or just want to help with translations, please refer to the [Contribiution](https://codeberg.org/jannis/FitoTrack/wiki/Contributing) site in the project wiki.
 
 ### Donate
