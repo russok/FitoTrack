@@ -74,8 +74,14 @@ dependencies {
     implementation 'stax:stax-api:1.0.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8'
 
+    implementation ('de.westnordost:osmapi-traces:1.0')
+    configurations {
+        compile.exclude group: 'net.sf.kxml', module: 'kxml2' // already included in Android
+    }
+    implementation 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
+
     // Android Room
-    def room_version = "2.2.0-beta01"
+    def room_version = "2.2.0"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
 
