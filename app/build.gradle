@@ -80,9 +80,7 @@ dependencies {
     implementation ('de.westnordost:osmapi-traces:1.0')
     configurations {
         compile.exclude group: 'net.sf.kxml', module: 'kxml2' // already included in Android
-        compile.exclude module: 'httpclient'
     }
-    implementation 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
 
     // Android Room Database
     def room_version = "2.2.0"
