@@ -20,6 +20,8 @@
 package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -28,21 +30,31 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
+import de.tadris.fitness.data.WorkoutSample;
+import de.tadris.fitness.osm.OAuthAuthentication;
+import de.tadris.fitness.osm.OsmTraceUploader;
 import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
+import de.westnordost.osmapi.traces.GpsTraceDetails;
+import oauth.signpost.OAuthConsumer;
 
 public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.WorkoutDeleter {
 
@@ -211,7 +223,55 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         }).start();
     }
 
+    private OAuthConsumer oAuthConsumer= null;
+    private void prepareUpload(){
+        OAuthAuthentication authentication= new OAuthAuthentication(mHandler, this, new OAuthAuthentication.OAuthAuthenticationListener() {
+            @Override
+            public void authenticationFailed() {
+                new AlertDialog.Builder(ShowWorkoutActivity.this)
+                        .setTitle(R.string.error)
+                        .setMessage(R.string.authenticationFailed)
+                        .setPositiveButton(R.string.okay, null)
+                        .create().show();
+            }
 
+            @Override
+            public void authenticationComplete(OAuthConsumer consumer) {
+                oAuthConsumer= consumer;
+                showUploadOptions();
+            }
+        });
+
+        authentication.authenticateIfNecessary();
+    }
+
+    AlertDialog dialog= null;
+    private void showUploadOptions(){
+        dialog= new AlertDialog.Builder(this)
+                .setTitle(R.string.actionUploadToOSM)
+                .setView(R.layout.dialog_upload_osm)
+                .setPositiveButton(R.string.upload, (dialogInterface, i) -> {
+                    CheckBox checkBox= dialog.findViewById(R.id.uploadCutting);
+                    Spinner spinner= dialog.findViewById(R.id.uploadVisibility);
+                    EditText descriptionEdit= dialog.findViewById(R.id.uploadDescription);
+                    String description= descriptionEdit.getText().toString().trim();
+                    GpsTraceDetails.Visibility visibility;
+                    switch (spinner.getSelectedItemPosition()){
+                        case 0: visibility= GpsTraceDetails.Visibility.IDENTIFIABLE; break;
+                        default:
+                        case 1: visibility= GpsTraceDetails.Visibility.TRACKABLE; break;
+                        case 2: visibility= GpsTraceDetails.Visibility.PRIVATE; break;
+                    }
+                    uploadToOsm(checkBox.isChecked(), visibility, description);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void uploadToOsm(boolean cut, GpsTraceDetails.Visibility visibility, String description){
+        List<WorkoutSample> samples = new ArrayList<>(this.samples);
+        new OsmTraceUploader(this, mHandler, workout, samples, visibility, oAuthConsumer, cut, description).upload();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -222,6 +282,9 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
                 return true;
             case R.id.actionExportGpx:
                 exportToGpx();
+                return true;
+            case R.id.actionUploadOSM:
+                prepareUpload();
                 return true;
         }
         return super.onOptionsItemSelected(item);

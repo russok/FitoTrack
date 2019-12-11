@@ -36,6 +36,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.model.BoundingBox;
+import org.mapsforge.core.model.LatLong;
 import org.mapsforge.core.model.MapPosition;
 import org.mapsforge.core.util.LatLongUtils;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
@@ -126,10 +127,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
                 @Override
                 public void onValueSelected(Entry e, Highlight h) {
                     onNothingSelected();
-                    Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
-                    p.setColor(0xff693cff);
-                    highlightingCircle= new FixedPixelCircle(findSample(converter, e).toLatLong(), 20, p, null);
-                    map.addLayer(highlightingCircle);
+                    onDiagramValueSelected(findSample(converter, e).toLatLong());
                 }
 
                 @Override
@@ -145,6 +143,17 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         converter.afterAdd(chart);
 
         return chart;
+    }
+
+    protected void onDiagramValueSelected(LatLong latLong){
+        Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
+        p.setColor(0xff693cff);
+        highlightingCircle= new FixedPixelCircle(latLong, 20, p, null);
+        map.addLayer(highlightingCircle);
+
+        if(!map.getBoundingBox().contains(latLong)){
+            map.getModel().mapViewPosition.animateTo(latLong);
+        }
     }
 
     interface SampleConverter{

@@ -17,25 +17,32 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.util;
+package de.tadris.fitness.osm;
 
-import android.app.AlertDialog;
-import android.content.Context;
+import de.tadris.fitness.data.WorkoutSample;
+import de.westnordost.osmapi.map.data.LatLon;
 
-import de.tadris.fitness.R;
+public class GpsTraceLatLong implements LatLon {
 
-public class DialogUtils {
+    private final double latitude;
+    private final double longitude;
 
-    public static void showDeleteWorkoutDialog(Context context, WorkoutDeleter deleter){
-        new AlertDialog.Builder(context).setTitle(R.string.deleteWorkout)
-                .setMessage(R.string.deleteWorkoutMessage)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete, (dialog, which) -> deleter.deleteWorkout())
-                .create().show();
+    public GpsTraceLatLong(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public interface WorkoutDeleter{
-        void deleteWorkout();
+    public GpsTraceLatLong(WorkoutSample sample) {
+        this(sample.lat, sample.lon);
     }
 
+    @Override
+    public double getLatitude() {
+        return latitude;
+    }
+
+    @Override
+    public double getLongitude() {
+        return longitude;
+    }
 }

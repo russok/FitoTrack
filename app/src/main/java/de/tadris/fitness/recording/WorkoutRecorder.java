@@ -50,6 +50,11 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
 
     private static final int PAUSE_TIME= 10000;
 
+    /**
+     * Time after which the workout is stopped and saved automatically because there is no activity anymore
+     */
+    private static final int AUTO_STOP_TIMEOUT= 1000*60*60*20;
+
     private Context context;
     private Workout workout;
     private RecordingState state;
@@ -65,13 +70,13 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private static final double SIGNAL_BAD_THRESHOLD= 20; // In meters
     private static final int SIGNAL_LOST_THRESHOLD= 10000; // In milliseconds
     private Location lastFix= null;
-    private GpsStateChangedListener gpsStateChangedListener;
+    private WorkoutRecorderListener workoutRecorderListener;
     private GpsState gpsState= GpsState.SIGNAL_LOST;
 
-    public WorkoutRecorder(Context context, String workoutType, GpsStateChangedListener gpsStateChangedListener) {
+    public WorkoutRecorder(Context context, String workoutType, WorkoutRecorderListener workoutRecorderListener) {
         this.context= context;
         this.state= RecordingState.IDLE;
-        this.gpsStateChangedListener= gpsStateChangedListener;
+        this.workoutRecorderListener = workoutRecorderListener;
 
         this.workout= new Workout();
 
@@ -107,7 +112,14 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
                     synchronized (samples){
                         if(samples.size() > 2){
                             WorkoutSample lastSample= samples.get(samples.size()-1);
-                            if(System.currentTimeMillis() - lastSampleTime > PAUSE_TIME){
+                            long timeDiff= System.currentTimeMillis() - lastSampleTime;
+                            if(timeDiff > AUTO_STOP_TIMEOUT){
+                                if(isActive()){
+                                    stop();
+                                    save();
+                                    workoutRecorderListener.onAutoStop();
+                                }
+                            }else if(timeDiff > PAUSE_TIME){
                                 if(state == RecordingState.RUNNING){
                                     pause();
                                 }
@@ -139,7 +151,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
             state= GpsState.SIGNAL_OKAY;
         }
         if(state != gpsState){
-            gpsStateChangedListener.onGPSStateChanged(gpsState, state);
+            workoutRecorderListener.onGPSStateChanged(gpsState, state);
             gpsState= state;
         }
     }
@@ -307,8 +319,9 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
     }
 
-    public interface GpsStateChangedListener{
+    public interface WorkoutRecorderListener {
         void onGPSStateChanged(GpsState oldState, GpsState state);
+        void onAutoStop();
     }
 
 }

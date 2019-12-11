@@ -270,6 +270,8 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private boolean showWeightPicker() {
+        UnitUtils.setUnit(this); // Maybe the user changed unit system
+
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
         final SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
         d.setTitle(getString(R.string.pref_weight));
@@ -278,7 +280,7 @@ public class SettingsActivity extends PreferenceActivity {
         np.setMaxValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(150));
         np.setMinValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(20));
         np.setFormatter(value -> value + " " + UnitUtils.CHOSEN_SYSTEM.getWeightUnit());
-        np.setValue(preferences.getInt("weight", 80));
+        np.setValue((int)Math.round(UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(preferences.getInt("weight", 80))));
         np.setWrapSelectorWheel(false);
 
         d.setView(v);

@@ -96,4 +96,15 @@
     <string name="workoutDescent">Abstieg</string>
     <string name="data">Daten</string>
     <string name="mapStyle">Kartenstil</string>
+    <string name="actionUploadToOSM">Auf OSM hochladen</string>
+    <string name="authenticationFailed">Authentifizierung fehlgeschlagen.</string>
+    <string name="cut">Die ersten/letzten 300 m abschneiden</string>
+    <string name="description">Beschreibung</string>
+    <string name="enterVerificationCode">Gebe den Verifizierungscode ein</string>
+    <string name="trackVisibilityPref">Spur Sichtbarkeit</string>
+    <string name="upload">Hochladen</string>
+    <string name="uploading">Hochladen</string>
+    <string name="waiting_gps">Warte auf GPS</string>
+    <string name="uploadFailed">Upload fehlgeschlagen</string>
+    <string name="uploadSuccessful">Upload erfolgreich</string>
 </resources>

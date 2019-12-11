@@ -24,6 +24,9 @@
         android:id="@+id/actionExportGpx"
         android:title="@string/exportAsGpxFile" />
     <item
+        android:id="@+id/actionUploadOSM"
+        android:title="@string/actionUploadToOSM" />
+    <item
         android:id="@+id/actionDeleteWorkout"
         android:title="@string/delete" />
 </menu>
