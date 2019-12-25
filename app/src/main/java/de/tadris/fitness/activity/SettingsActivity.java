@@ -50,7 +50,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import de.tadris.fitness.R;
-import de.tadris.fitness.util.export.Exporter;
+import de.tadris.fitness.export.BackupController;
+import de.tadris.fitness.export.RestoreController;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
@@ -185,8 +186,8 @@ public class SettingsActivity extends PreferenceActivity {
                 new File(file).getParentFile().mkdirs();
                 Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
 
-                Exporter.exportData(getBaseContext(), new File(file),
-                        (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
+                BackupController backupController= new BackupController(getBaseContext(), new File(file), (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
+                backupController.exportData();
 
                 mHandler.post(() -> {
                     dialogController.cancel();
@@ -254,10 +255,10 @@ public class SettingsActivity extends PreferenceActivity {
         dialogController.show();
         new Thread(() -> {
             try{
-                Exporter.importData(getBaseContext(), uri,
+                RestoreController restoreController= new RestoreController(getBaseContext(), uri,
                         (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
+                restoreController.restoreData();
 
-                // DO on backup finished
                 mHandler.post(dialogController::cancel);
             }catch (Exception e){
                 e.printStackTrace();
