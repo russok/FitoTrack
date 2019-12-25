@@ -81,7 +81,6 @@ dependencies {
     configurations {
         compile.exclude group: 'net.sf.kxml', module: 'kxml2' // already included in Android
     }
-    implementation 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
 
     // Android Room Database
     def room_version = "2.2.0"
