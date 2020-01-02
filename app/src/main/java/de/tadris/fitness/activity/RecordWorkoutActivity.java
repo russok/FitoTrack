@@ -38,6 +38,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.speech.tts.TextToSpeech;
+
 import androidx.core.app.ActivityCompat;
 
 import org.mapsforge.core.graphics.Paint;
@@ -171,6 +173,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                     if(isResumed){
                         mHandler.post(this::updateDescription);
                     }
+                    mHandler.post(this::speechUpdate);
                 }
             }catch (InterruptedException e){
                 e.printStackTrace();
@@ -178,14 +181,41 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    int i= 0;
+    private void speechUpdate() {
+        long duration = recorder.getDuration();
+        if (duration / interval == lastSpeechUpdate / interval)
+            return;
 
-    private void updateDescription(){
-        i++;
-        timeView.setText(UnitUtils.getHourMinuteSecondTime(recorder.getDuration()));
-        infoViews[0].setText(getString(R.string.workoutDistance), UnitUtils.getDistance(recorder.getDistance()));
+        timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
+        final String distanceCaption = getString(R.string.workoutDistance);
+        final String distance = UnitUtils.getDistance(recorder.getDistance());
+        final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
+        final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
+
+        tts = new TextToSpeech(this, (int status) -> {
+            if (status != TextToSpeech.SUCCESS) return;
+            final String text = distanceCaption + ": " + distance + ". "
+                    + avgSpeedCaption + ": " + avgSpeed;
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
+        });
+
+        lastSpeechUpdate = duration;
+    }
+
+    TextToSpeech tts;
+    long lastSpeechUpdate = 0;
+    final long interval = 60 * 1000;
+
+    private void updateDescription() {
+        long duration = recorder.getDuration();
+        timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
+        final String distanceCaption = getString(R.string.workoutDistance);
+        final String distance = UnitUtils.getDistance(recorder.getDistance());
+        final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
+        final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
+        infoViews[0].setText(distanceCaption, distance);
         infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
-        infoViews[2].setText(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed())));
+        infoViews[2].setText(avgSpeedCaption, avgSpeed);
         infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
     }
 

@@ -57,7 +57,7 @@
     <string name="workoutPace">Pace</string>
     <string name="workoutRoute">Route</string>
     <string name="workoutSpeed">Speed</string>
-    <string name="workoutAvgSpeed">Avg. Speed</string>
+    <string name="workoutAvgSpeed">Average Speed</string>
     <string name="workoutTopSpeed">Top Speed</string>
     <string name="workoutBurnedEnergy">Burned Energy</string>
     <string name="workoutTotalEnergy">Total Energy</string>
