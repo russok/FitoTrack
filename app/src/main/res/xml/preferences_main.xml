@@ -41,6 +41,13 @@
         android:key="mapStyle"
         android:title="@string/mapStyle" />
 
+    <Preference
+        android:key="spokenUpdatePeriod"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Choose the frequency of spoken updates"
+        android:title="Spoken updates" />
+
 
     <PreferenceCategory android:title="@string/data">
 

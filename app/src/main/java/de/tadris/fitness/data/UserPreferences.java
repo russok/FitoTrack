@@ -35,6 +35,10 @@ public class UserPreferences {
         return preferences.getInt("weight", 80);
     }
 
+    public int getSpokenUpdatePeriod(){
+        return preferences.getInt("spokenUpdatePeriod", 5);
+    }
+
     public String getMapStyle(){
         return preferences.getString("mapStyle", "osm.mapnik");
     }

@@ -173,7 +173,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                     if(isResumed){
                         mHandler.post(this::updateDescription);
                     }
-                    mHandler.post(this::speechUpdate);
+                    mHandler.post(this::spokenUpdate);
                 }
             }catch (InterruptedException e){
                 e.printStackTrace();
@@ -181,9 +181,12 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    private void speechUpdate() {
+    private void spokenUpdate() {
+        final long interval = 60 * 1000 * Instance.getInstance(this).userPreferences.getSpokenUpdatePeriod();
+        if (interval == 0)
+            return;
         long duration = recorder.getDuration();
-        if (duration / interval == lastSpeechUpdate / interval)
+        if (duration / interval == lastSpokenUpdate / interval)
             return;
 
         timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
@@ -199,12 +202,11 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
         });
 
-        lastSpeechUpdate = duration;
+        lastSpokenUpdate = duration;
     }
 
     TextToSpeech tts;
-    long lastSpeechUpdate = 0;
-    final long interval = 60 * 1000;
+    long lastSpokenUpdate = 0;
 
     private void updateDescription() {
         long duration = recorder.getDuration();

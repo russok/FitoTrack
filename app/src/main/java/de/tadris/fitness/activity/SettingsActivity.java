@@ -160,6 +160,7 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("mapStyle"));
 
         findPreference("weight").setOnPreferenceClickListener(preference -> showWeightPicker());
+        findPreference("spokenUpdatePeriod").setOnPreferenceClickListener(preference -> showSpokenUdatePeriodPicker());
         findPreference("import").setOnPreferenceClickListener(preference -> showImportDialog());
         findPreference("export").setOnPreferenceClickListener(preference -> showExportDialog());
 
@@ -280,7 +281,8 @@ public class SettingsActivity extends PreferenceActivity {
         np.setMaxValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(150));
         np.setMinValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(20));
         np.setFormatter(value -> value + " " + UnitUtils.CHOSEN_SYSTEM.getWeightUnit());
-        np.setValue((int)Math.round(UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(preferences.getInt("weight", 80))));
+        final String preferenceKey = "weight";
+        np.setValue((int)Math.round(UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(preferences.getInt(preferenceKey, 80))));
         np.setWrapSelectorWheel(false);
 
         d.setView(v);
@@ -289,7 +291,33 @@ public class SettingsActivity extends PreferenceActivity {
         d.setPositiveButton(R.string.okay, (dialog, which) -> {
             int unitValue= np.getValue();
             int kilograms= (int)Math.round(UnitUtils.CHOSEN_SYSTEM.getKilogramFromUnit(unitValue));
-            preferences.edit().putInt("weight", kilograms).apply();
+            preferences.edit().putInt(preferenceKey, kilograms).apply();
+        });
+
+        d.create().show();
+
+        return true;
+    }
+
+    private boolean showSpokenUdatePeriodPicker() {
+        final String preferenceKey = "spokenUpdatePeriod";
+        final AlertDialog.Builder d = new AlertDialog.Builder(this);
+        final SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
+        //d.setTitle(getString(R.string.pref_weight));
+        d.setTitle("Select period between spoken updates, in minutes");
+        View v= getLayoutInflater().inflate(R.layout.dialog_spoken_updates_picker, null);
+        NumberPicker np = v.findViewById(R.id.spokenUpdatesPicker);
+        np.setMaxValue(60);
+        np.setMinValue(0);
+        np.setFormatter(value -> value==0 ? "No speech" : value + " min" );
+        np.setValue((preferences.getInt(preferenceKey, 0)));
+        np.setWrapSelectorWheel(false);
+
+        d.setView(v);
+
+        d.setNegativeButton(R.string.cancel, null);
+        d.setPositiveButton(R.string.okay, (dialog, which) -> {
+            preferences.edit().putInt(preferenceKey, np.getValue()).apply();
         });
 
         d.create().show();
