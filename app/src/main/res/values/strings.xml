@@ -111,6 +111,8 @@
     <string name="exportAsGpxFile">Export as GPX-File</string>
     <string name="pref_weight">Your Weight</string>
     <string name="pref_weight_summary">Your weight is needed to calculate the burned calories</string>
+    <string name="pref_spoken_updates">Spoken Updates</string>
+    <string name="pref_spoken_updates_summary">Choose the time and distance between spoken updates</string>
     <string name="pref_unit_system">Preferred system of units</string>
     <string name="settings">Settings</string>
     <string name="exportData">Export Data</string>

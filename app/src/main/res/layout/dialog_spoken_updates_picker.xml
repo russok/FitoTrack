@@ -3,12 +3,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <NumberPicker
-        android:id="@+id/spokenUpdatesPicker"
+   <NumberPicker
+        android:id="@+id/spokenUpdatesTimePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="30dp" />
+        android:layout_margin="50dp"
+        android:layout_alignParentLeft="true"/>
+
+   <NumberPicker
+        android:id="@+id/spokenUpdatesDistancePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="50dp"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

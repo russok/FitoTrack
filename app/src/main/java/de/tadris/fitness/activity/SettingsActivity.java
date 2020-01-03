@@ -160,7 +160,7 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("mapStyle"));
 
         findPreference("weight").setOnPreferenceClickListener(preference -> showWeightPicker());
-        findPreference("spokenUpdatePeriod").setOnPreferenceClickListener(preference -> showSpokenUdatePeriodPicker());
+        findPreference("speech").setOnPreferenceClickListener(preference -> showSpeechConfig());
         findPreference("import").setOnPreferenceClickListener(preference -> showImportDialog());
         findPreference("export").setOnPreferenceClickListener(preference -> showExportDialog());
 
@@ -281,8 +281,8 @@ public class SettingsActivity extends PreferenceActivity {
         np.setMaxValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(150));
         np.setMinValue((int) UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(20));
         np.setFormatter(value -> value + " " + UnitUtils.CHOSEN_SYSTEM.getWeightUnit());
-        final String preferenceKey = "weight";
-        np.setValue((int)Math.round(UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(preferences.getInt(preferenceKey, 80))));
+        final String preferenceVariable = "weight";
+        np.setValue((int)Math.round(UnitUtils.CHOSEN_SYSTEM.getWeightFromKilogram(preferences.getInt(preferenceVariable, 80))));
         np.setWrapSelectorWheel(false);
 
         d.setView(v);
@@ -291,7 +291,7 @@ public class SettingsActivity extends PreferenceActivity {
         d.setPositiveButton(R.string.okay, (dialog, which) -> {
             int unitValue= np.getValue();
             int kilograms= (int)Math.round(UnitUtils.CHOSEN_SYSTEM.getKilogramFromUnit(unitValue));
-            preferences.edit().putInt(preferenceKey, kilograms).apply();
+            preferences.edit().putInt(preferenceVariable, kilograms).apply();
         });
 
         d.create().show();
@@ -299,25 +299,39 @@ public class SettingsActivity extends PreferenceActivity {
         return true;
     }
 
-    private boolean showSpokenUdatePeriodPicker() {
-        final String preferenceKey = "spokenUpdatePeriod";
+    private boolean showSpeechConfig() {
+        UnitUtils.setUnit(this); // Maybe the user changed unit system
+
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
         final SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
-        //d.setTitle(getString(R.string.pref_weight));
-        d.setTitle("Select period between spoken updates, in minutes");
+        d.setTitle(getString(R.string.pref_spoken_updates_summary));
         View v= getLayoutInflater().inflate(R.layout.dialog_spoken_updates_picker, null);
-        NumberPicker np = v.findViewById(R.id.spokenUpdatesPicker);
-        np.setMaxValue(60);
-        np.setMinValue(0);
-        np.setFormatter(value -> value==0 ? "No speech" : value + " min" );
-        np.setValue((preferences.getInt(preferenceKey, 0)));
-        np.setWrapSelectorWheel(false);
+
+        NumberPicker npT = v.findViewById(R.id.spokenUpdatesTimePicker);
+        npT.setMaxValue(60);
+        npT.setMinValue(0);
+        npT.setFormatter(value -> value == 0 ? "No speech" : value + " min");
+        final String updateTimeVariable = "spokenUpdateTimePeriod";
+        npT.setValue(preferences.getInt(updateTimeVariable, 0));
+        npT.setWrapSelectorWheel(false);
+
+        final String distanceUnit = " " + UnitUtils.CHOSEN_SYSTEM.getLongDistanceUnit();
+        NumberPicker npD = v.findViewById(R.id.spokenUpdatesDistancePicker);
+        npD.setMaxValue(10);
+        npD.setMinValue(0);
+        npD.setFormatter(value -> value == 0 ? "No speech" : value + distanceUnit);
+        final String updateDistanceVariable = "spokenUpdateDistancePeriod";
+        npD.setValue(preferences.getInt(updateDistanceVariable, 0));
+        npD.setWrapSelectorWheel(false);
 
         d.setView(v);
 
         d.setNegativeButton(R.string.cancel, null);
         d.setPositiveButton(R.string.okay, (dialog, which) -> {
-            preferences.edit().putInt(preferenceKey, np.getValue()).apply();
+            preferences.edit()
+                    .putInt(updateTimeVariable, npT.getValue())
+                    .putInt(updateDistanceVariable, npD.getValue())
+                    .apply();
         });
 
         d.create().show();

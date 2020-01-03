@@ -55,6 +55,7 @@ import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
+import de.tadris.fitness.data.UserPreferences;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.tilesource.TileSources;
@@ -170,10 +171,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
             try{
                 while (recorder.isActive()){
                     Thread.sleep(1000);
-                    if(isResumed){
-                        mHandler.post(this::updateDescription);
-                    }
-                    mHandler.post(this::spokenUpdate);
+                    mHandler.post(this::updateDescription);
                 }
             }catch (InterruptedException e){
                 e.printStackTrace();
@@ -181,19 +179,32 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    private void spokenUpdate() {
-        final long interval = 60 * 1000 * Instance.getInstance(this).userPreferences.getSpokenUpdatePeriod();
-        if (interval == 0)
-            return;
-        long duration = recorder.getDuration();
-        if (duration / interval == lastSpokenUpdate / interval)
-            return;
+    TextToSpeech tts;
+    long lastSpokenUpdateTime = 0;
+    int lastSpokenUpdateDistance = 0;
 
-        timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
+    private void updateDescription() {
+        long duration = recorder.getDuration();
+        int distanceInMeters = recorder.getDistance();
         final String distanceCaption = getString(R.string.workoutDistance);
-        final String distance = UnitUtils.getDistance(recorder.getDistance());
+        final String distance = UnitUtils.getDistance(distanceInMeters);
         final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
         final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
+        if (isResumed) {
+            timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
+            infoViews[0].setText(distanceCaption, distance);
+            infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
+            infoViews[2].setText(avgSpeedCaption, avgSpeed);
+            infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
+        }
+
+        final UserPreferences prefs=Instance.getInstance(this).userPreferences;
+        final long intervalT = 60 * 1000 * prefs.getSpokenUpdateTimePeriod();
+        final int intervalInMeters = (int)(1000.0/UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
+        if (
+                (intervalT == 0 || duration / intervalT == lastSpokenUpdateTime / intervalT)
+             && (intervalInMeters == 0 || distanceInMeters / intervalInMeters == lastSpokenUpdateDistance / intervalInMeters)
+        ) return;
 
         tts = new TextToSpeech(this, (int status) -> {
             if (status != TextToSpeech.SUCCESS) return;
@@ -202,23 +213,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
         });
 
-        lastSpokenUpdate = duration;
-    }
-
-    TextToSpeech tts;
-    long lastSpokenUpdate = 0;
-
-    private void updateDescription() {
-        long duration = recorder.getDuration();
-        timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
-        final String distanceCaption = getString(R.string.workoutDistance);
-        final String distance = UnitUtils.getDistance(recorder.getDistance());
-        final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
-        final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
-        infoViews[0].setText(distanceCaption, distance);
-        infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
-        infoViews[2].setText(avgSpeedCaption, avgSpeed);
-        infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
+        lastSpokenUpdateTime = duration;
+        lastSpokenUpdateDistance = distanceInMeters;
     }
 
     private void stop(){
