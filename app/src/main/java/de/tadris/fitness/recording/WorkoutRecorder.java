@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -31,7 +31,6 @@ import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.data.Workout;
-import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.util.CalorieCalculator;
 
@@ -53,7 +52,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     /**
      * Time after which the workout is stopped and saved automatically because there is no activity anymore
      */
-    private static final int AUTO_STOP_TIMEOUT= 1000*60*60*20;
+    private static final int AUTO_STOP_TIMEOUT= 1000*60*60*20; // 20 minutes
 
     private Context context;
     private Workout workout;
@@ -65,7 +64,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private long lastPause= 0;
     private long lastSampleTime= 0;
     private double distance= 0;
-    private boolean hasBegan = false;
+    private boolean hasBegun = false;
 
     private static final double SIGNAL_BAD_THRESHOLD= 20; // In meters
     private static final int SIGNAL_LOST_THRESHOLD= 10000; // In milliseconds
@@ -135,7 +134,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        }, "WorkoutWatchdog").start();
     }
 
     private void checkSignalState(){
@@ -193,7 +192,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
         Log.i("Recorder", "Save");
         synchronized (samples){
-            WorkoutManager.insertWorkout(context, workout, samples);
+            new WorkoutSaver(context, workout, samples).saveWorkout();
         }
     }
 
@@ -209,6 +208,8 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         if(isActive()){
             double distance= 0;
             if(getSampleCount() > 0){
+                // Checks whether the minimum distance to last sample was reached
+                // and if the time difference to the last sample is too small
                 synchronized (samples){
                     WorkoutSample lastSample= samples.get(samples.size() - 1);
                     distance= LocationListener.locationToLatLong(location).sphericalDistance(new LatLong(lastSample.lat, lastSample.lon));
@@ -220,36 +221,42 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
             }
             lastSampleTime= System.currentTimeMillis();
             if(state == RecordingState.RUNNING && location.getTime() > workout.start){
-                if(samples.size() == 2 && !hasBegan){
-                    lastResume= System.currentTimeMillis();
-                    workout.start= System.currentTimeMillis();
-                    lastPause= 0;
-                    time= 0;
-                    pauseTime= 0;
-                    this.distance= 0;
-                    samples.clear();
-
-                    hasBegan = true; // Do not clear a second time
+                if(samples.size() == 2 && !hasBegun){
+                    initialClearValues();
+                    hasBegun = true; // Do not clear a second time
                 }
                 this.distance+= distance;
-                WorkoutSample sample= new WorkoutSample();
-                sample.lat= location.getLatitude();
-                sample.lon= location.getLongitude();
-                sample.elevation= location.getAltitude();
-                sample.speed= location.getSpeed();
-                sample.relativeTime= location.getTime() - workout.start - pauseTime;
-                sample.absoluteTime= location.getTime();
-                if(Instance.getInstance(context).pressureAvailable){
-                    sample.tmpPressure= Instance.getInstance(context).lastPressure;
-                }else{
-                    sample.tmpPressure= -1;
-                }
-                synchronized (samples){
-                    samples.add(sample);
-                }
-
+                addToSamples(location);
             }
         }
+    }
+
+    private void addToSamples(Location location){
+        WorkoutSample sample= new WorkoutSample();
+        sample.lat= location.getLatitude();
+        sample.lon= location.getLongitude();
+        sample.elevation= location.getAltitude();
+        sample.speed= location.getSpeed();
+        sample.relativeTime= location.getTime() - workout.start - pauseTime;
+        sample.absoluteTime= location.getTime();
+        if(Instance.getInstance(context).pressureAvailable){
+            sample.tmpPressure= Instance.getInstance(context).lastPressure;
+        }else{
+            sample.tmpPressure= -1;
+        }
+        synchronized (samples){
+            samples.add(sample);
+        }
+    }
+
+    private void initialClearValues(){
+        lastResume= System.currentTimeMillis();
+        workout.start= System.currentTimeMillis();
+        lastPause= 0;
+        time= 0;
+        pauseTime= 0;
+        this.distance= 0;
+        samples.clear();
     }
 
     /**
