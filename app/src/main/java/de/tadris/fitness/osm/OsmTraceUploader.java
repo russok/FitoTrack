@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -24,6 +24,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -34,6 +36,7 @@ import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.view.ProgressDialogController;
 import de.westnordost.osmapi.OsmConnection;
+import de.westnordost.osmapi.common.errors.OsmAuthorizationException;
 import de.westnordost.osmapi.traces.GpsTraceDetails;
 import de.westnordost.osmapi.traces.GpsTracesDao;
 import de.westnordost.osmapi.traces.GpsTrackpoint;
@@ -85,12 +88,15 @@ public class OsmTraceUploader {
 
     public void upload(){
         new Thread(() -> {
-            try{
+            try {
                 executeTask();
             }catch (Exception e){
                 e.printStackTrace();
                 handler.post(() -> {
-                    Toast.makeText(activity, R.string.uploadFailed, Toast.LENGTH_LONG).show();
+                    @StringRes int textRes= e instanceof OsmAuthorizationException ?
+                            R.string.uploadFailedOsmNotAuthorized : R.string.uploadFailed;
+
+                    Toast.makeText(activity, textRes, Toast.LENGTH_LONG).show();
                     dialogController.cancel();
                 });
             }
