@@ -52,6 +52,7 @@ import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
@@ -84,6 +85,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     Intent locationListener;
     Intent pressureService;
     private boolean saved= false;
+    TextToSpeech tts;
+    boolean ttsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,9 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         recorder= new WorkoutRecorder(this, ACTIVITY, this);
         recorder.start();
 
+        tts = new TextToSpeech(this, (int status) -> {
+            ttsReady = status == TextToSpeech.SUCCESS && tts.setLanguage(Locale.getDefault())>=0;
+        });
         infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
         infoViews[1]= new InfoViewHolder(findViewById(R.id.recordInfo2Title), findViewById(R.id.recordInfo2Value));
         infoViews[2]= new InfoViewHolder(findViewById(R.id.recordInfo3Title), findViewById(R.id.recordInfo3Value));
@@ -179,7 +185,6 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    TextToSpeech tts;
     long lastSpokenUpdateTime = 0;
     int lastSpokenUpdateDistance = 0;
 
@@ -198,20 +203,17 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
             infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
         }
 
-        final UserPreferences prefs=Instance.getInstance(this).userPreferences;
+        final UserPreferences prefs = Instance.getInstance(this).userPreferences;
         final long intervalT = 60 * 1000 * prefs.getSpokenUpdateTimePeriod();
-        final int intervalInMeters = (int)(1000.0/UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
-        if (
+        final int intervalInMeters = (int) (1000.0 / UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
+        if (!ttsReady ||
                 (intervalT == 0 || duration / intervalT == lastSpokenUpdateTime / intervalT)
              && (intervalInMeters == 0 || distanceInMeters / intervalInMeters == lastSpokenUpdateDistance / intervalInMeters)
         ) return;
 
-        tts = new TextToSpeech(this, (int status) -> {
-            if (status != TextToSpeech.SUCCESS) return;
-            final String text = distanceCaption + ": " + distance + ". "
-                    + avgSpeedCaption + ": " + avgSpeed;
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
-        });
+        final String text = distanceCaption + ": " + distance + ". "
+                + avgSpeedCaption + ": " + avgSpeed;
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
 
         lastSpokenUpdateTime = duration;
         lastSpokenUpdateDistance = distanceInMeters;
