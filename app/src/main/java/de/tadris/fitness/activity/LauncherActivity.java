@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -42,12 +42,12 @@ public class LauncherActivity extends Activity {
         new Handler().postDelayed(this::init, 100);
     }
 
-    void init(){
+    private void init() {
         Instance.getInstance(this);
         start();
     }
 
-    void start(){
+    private void start() {
         startActivity(new Intent(this, ListWorkoutsActivity.class));
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.stay);

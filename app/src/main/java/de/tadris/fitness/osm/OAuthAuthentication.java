@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -39,14 +39,14 @@ import oauth.signpost.exception.OAuthException;
 
 public class OAuthAuthentication {
 
-    private OAuthConsumer oAuthConsumer= OAuthUrlProvider.getDefaultConsumer();
-    private OAuthProvider oAuthProvider= OAuthUrlProvider.getDefaultProvider();
+    private final OAuthConsumer oAuthConsumer = OAuthUrlProvider.getDefaultConsumer();
+    private final OAuthProvider oAuthProvider = OAuthUrlProvider.getDefaultProvider();
 
-    private Handler handler;
-    private Activity activity;
-    private ProgressDialogController dialogController;
-    private SharedPreferences preferences;
-    private OAuthAuthenticationListener listener;
+    private final Handler handler;
+    private final Activity activity;
+    private final ProgressDialogController dialogController;
+    private final SharedPreferences preferences;
+    private final OAuthAuthenticationListener listener;
 
     public OAuthAuthentication(Handler handler, Activity activity, OAuthAuthenticationListener listener) {
         this.handler = handler;

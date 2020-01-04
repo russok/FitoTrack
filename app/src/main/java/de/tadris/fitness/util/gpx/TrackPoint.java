@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -21,21 +21,23 @@ package de.tadris.fitness.util.gpx;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class TrackPoint {
+class TrackPoint {
 
     @JacksonXmlProperty(isAttribute = true)
+    private
     double lat;
 
     @JacksonXmlProperty(isAttribute = true)
+    private
     double lon;
 
-    double ele;
+    private double ele;
 
-    String time;
+    private String time;
 
-    String fix;
+    private String fix;
 
-    TrackPointExtension extensions;
+    private TrackPointExtension extensions;
 
     public TrackPoint(){}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -23,7 +23,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 import java.util.List;
 
-public class TrackSegment {
+class TrackSegment {
 
     @JacksonXmlElementWrapper(useWrapping = false)
     List<TrackPoint> trkpt;

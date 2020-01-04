@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -30,7 +30,7 @@ import de.tadris.fitness.data.WorkoutSample;
 
 public class WorkoutLayer extends Polyline {
 
-    public static Paint getDEFAULT_PAINT_STROKE(int color){
+    private static Paint getDEFAULT_PAINT_STROKE(int color) {
         Paint paint= AndroidGraphicFactory.INSTANCE.createPaint();
         paint.setStyle(Style.STROKE);
         paint.setColor(color);
@@ -38,13 +38,13 @@ public class WorkoutLayer extends Polyline {
         return paint;
     }
 
-    List<WorkoutSample> samples;
+    private final List<WorkoutSample> samples;
 
     public WorkoutLayer(List<WorkoutSample> samples, int color) {
         this(getDEFAULT_PAINT_STROKE(color), samples);
     }
 
-    public WorkoutLayer(Paint paintStroke, List<WorkoutSample> samples) {
+    private WorkoutLayer(Paint paintStroke, List<WorkoutSample> samples) {
         super(paintStroke, AndroidGraphicFactory.INSTANCE);
         this.samples = samples;
         init();

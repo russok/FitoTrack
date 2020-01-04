@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -25,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.ShowWorkoutMapActivity" >
+    tools:context=".activity.ShowWorkoutMapActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -58,6 +57,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline4"></LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
 </android.support.constraint.ConstraintLayout>

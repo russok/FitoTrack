@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -19,10 +18,10 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.ListWorkoutsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,12 +35,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="10dp"
+        app:menu_animationDelayPerItem="50"
         app:menu_colorNormal="@color/colorPrimary"
         app:menu_colorPressed="@color/colorPrimaryDark"
-        app:menu_animationDelayPerItem="50"
         app:menu_icon="@drawable/fab_add"
-        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right">
+        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/workoutListRecordRunning"
@@ -51,7 +50,7 @@
             app:fab_colorNormal="@color/colorPrimaryRunning"
             app:fab_colorPressed="@color/colorPrimaryDarkRunning"
             app:fab_label="@string/workoutTypeRunning"
-            app:fab_size="normal"/>
+            app:fab_size="normal" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/workoutListRecordHiking"
@@ -71,7 +70,7 @@
             app:fab_colorNormal="@color/colorPrimaryBicycling"
             app:fab_colorPressed="@color/colorPrimaryDarkBicycling"
             app:fab_label="@string/workoutTypeCycling"
-            app:fab_size="normal"/>
+            app:fab_size="normal" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

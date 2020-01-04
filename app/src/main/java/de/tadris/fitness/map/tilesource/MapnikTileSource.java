@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -34,7 +34,7 @@ public class MapnikTileSource extends FitoTrackTileSource {
     private static final int ZOOM_LEVEL_MIN = 0;
     private static final String NAME = "OSM Mapnik";
 
-    public MapnikTileSource(String[] hostNames, int port) {
+    private MapnikTileSource(String[] hostNames, int port) {
         super(hostNames, port);
     }
 

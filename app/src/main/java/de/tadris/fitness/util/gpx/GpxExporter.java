@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -19,6 +19,7 @@
 
 package de.tadris.fitness.util.gpx;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -40,7 +41,7 @@ public class GpxExporter {
         mapper.writeValue(file, getGpxFromWorkout(context, workout));
     }
 
-    public static Gpx getGpxFromWorkout(Context context, Workout workout){
+    private static Gpx getGpxFromWorkout(Context context, Workout workout) {
         Gpx gpx= new Gpx();
         gpx.name= workout.toString();
         gpx.version= "1.1";
@@ -52,7 +53,7 @@ public class GpxExporter {
         return gpx;
     }
 
-    public static Track getTrackFromWorkout(Context context, Workout workout, int number){
+    private static Track getTrackFromWorkout(Context context, Workout workout, int number) {
         WorkoutSample[] samples= Instance.getInstance(context).db.workoutDao().getAllSamplesOfWorkout(workout.id);
         Track track= new Track();
         track.number= number;
@@ -77,13 +78,14 @@ public class GpxExporter {
         return track;
     }
 
+    @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-    public static String getDateTime(long time){
+    private static String getDateTime(long time) {
         return getDateTime(new Date(time));
     }
 
-    public static String getDateTime(Date date){
+    private static String getDateTime(Date date) {
         return formatter.format(date);
     }
 

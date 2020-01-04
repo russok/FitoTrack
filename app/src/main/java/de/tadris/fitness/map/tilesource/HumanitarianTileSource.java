@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -26,7 +26,7 @@ import java.net.URL;
 
 public class HumanitarianTileSource extends FitoTrackTileSource {
 
-    public static HumanitarianTileSource INSTANCE= new HumanitarianTileSource(new String[]{"tile-a.openstreetmap.fr", "tile-b.openstreetmap.fr", "tile-c.openstreetmap.fr"}, 443);
+    public static final HumanitarianTileSource INSTANCE = new HumanitarianTileSource(new String[]{"tile-a.openstreetmap.fr", "tile-b.openstreetmap.fr", "tile-c.openstreetmap.fr"}, 443);
 
     private static final int PARALLEL_REQUESTS_LIMIT = 8;
     private static final String PROTOCOL = "https";
@@ -34,7 +34,7 @@ public class HumanitarianTileSource extends FitoTrackTileSource {
     private static final int ZOOM_LEVEL_MIN = 0;
     private static final String NAME = "Humanitarian";
 
-    public HumanitarianTileSource(String[] hostNames, int port) {
+    private HumanitarianTileSource(String[] hostNames, int port) {
         super(hostNames, port);
     }
 

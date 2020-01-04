@@ -31,12 +31,12 @@ import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.util.CalorieCalculator;
 
-public class WorkoutSaver {
+class WorkoutSaver {
 
-    private Context context;
-    private Workout workout;
-    private List<WorkoutSample> samples;
-    private AppDatabase db;
+    private final Context context;
+    private final Workout workout;
+    private final List<WorkoutSample> samples;
+    private final AppDatabase db;
 
     public WorkoutSaver(Context context, Workout workout, List<WorkoutSample> samples) {
         this.context = context;

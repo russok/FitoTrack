@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -20,8 +20,6 @@
 package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -34,11 +32,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,13 +114,13 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
     }
 
-    void startDiagramActivity(String diagramType){
+    private void startDiagramActivity(String diagramType) {
         ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE= diagramType;
         startActivity(new Intent(ShowWorkoutActivity.this, ShowWorkoutMapDiagramActivity.class));
     }
 
 
-    void openEditCommentDialog(final TextView change){
+    private void openEditCommentDialog(final TextView change) {
         final EditText editText= new EditText(this);
         editText.setText(workout.comment);
         editText.setSingleLine(true);
@@ -132,18 +130,18 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
                 .setView(editText).create().show();
     }
 
-    void changeComment(String comment, TextView onChange){
+    private void changeComment(String comment, TextView onChange) {
         workout.comment= comment;
         Instance.getInstance(this).db.workoutDao().updateWorkout(workout);
         onChange.setText(getString(R.string.comment) + ": " + workout.comment);
     }
 
-    String getDate(){
+    private String getDate() {
         return SimpleDateFormat.getDateInstance().format(new Date(workout.start));
     }
 
 
-    void addTitle(String title){
+    private void addTitle(String title) {
         TextView textView= new TextView(this);
         textView.setText(title);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
@@ -155,7 +153,7 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         root.addView(textView);
     }
 
-    TextView addText(String text){
+    private TextView addText(String text) {
         TextView textView= new TextView(this);
         textView.setText(text);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
@@ -167,11 +165,11 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         return textView;
     }
 
-    void addKeyValue(String key1, String value1){
+    private void addKeyValue(String key1, String value1) {
         addKeyValue(key1, value1, "", "");
     }
 
-    void addKeyValue(String key1, String value1, String key2, String value2){
+    private void addKeyValue(String key1, String value1, String key2, String value2) {
         View v= getLayoutInflater().inflate(R.layout.show_entry, root, false);
 
         TextView title1= v.findViewById(R.id.v1title);
@@ -211,13 +209,16 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         new Thread(() -> {
             try{
                 String file= getFilesDir().getAbsolutePath() + "/shared/workout.gpx";
-                new File(file).getParentFile().mkdirs();
+                if (!new File(file).getParentFile().mkdirs()) {
+                    throw new IOException("Cannot write to " + file);
+                }
                 Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
 
                 GpxExporter.exportWorkout(getBaseContext(), workout, new File(file));
                 dialogController.cancel();
                 mHandler.post(() -> shareFile(uri));
             }catch (Exception e){
+                e.printStackTrace();
                 mHandler.post(() -> showErrorDialog(e, R.string.error, R.string.errorGpxExportFailed));
             }
         }).start();
@@ -245,7 +246,7 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         authentication.authenticateIfNecessary();
     }
 
-    AlertDialog dialog= null;
+    private AlertDialog dialog = null;
     private void showUploadOptions(){
         dialog= new AlertDialog.Builder(this)
                 .setTitle(R.string.actionUploadToOSM)

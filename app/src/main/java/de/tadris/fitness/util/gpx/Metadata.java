@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -21,9 +21,9 @@ package de.tadris.fitness.util.gpx;
 
 public class Metadata {
 
-    String name;
-    String desc;
-    String time;
+    private String name;
+    private String desc;
+    private String time;
 
     public Metadata() {
     }

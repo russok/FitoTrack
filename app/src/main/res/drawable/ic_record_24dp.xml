@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -18,11 +18,11 @@
   -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
     <path
-        android:pathData="M12,12m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"
-        android:fillColor="@android:color/white"/>
+        android:fillColor="@android:color/white"
+        android:pathData="M12,12m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
 </vector>

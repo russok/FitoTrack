@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -28,8 +28,8 @@ import de.tadris.fitness.R;
 
 public class ProgressDialogController {
 
-    private Activity context;
-    private Dialog dialog;
+    private final Activity context;
+    private final Dialog dialog;
     private TextView infoView;
     private ProgressBar progressBar;
 
@@ -38,7 +38,7 @@ public class ProgressDialogController {
         setTitle(title);
     }
 
-    public ProgressDialogController(Activity context) {
+    private ProgressDialogController(Activity context) {
         this.context = context;
         this.dialog= new Dialog(context);
         initDialog();
@@ -51,7 +51,7 @@ public class ProgressDialogController {
         progressBar= dialog.findViewById(R.id.dialogProgressBar);
     }
 
-    public void setTitle(String title){
+    private void setTitle(String title) {
         dialog.setTitle(title);
     }
 

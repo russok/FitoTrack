@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -28,7 +28,7 @@ import de.tadris.fitness.R;
 
 public class NotificationHelper {
 
-    public static String CHANNEL_WORKOUT= "workout";
+    public static final String CHANNEL_WORKOUT = "workout";
 
     public static void createChannels(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

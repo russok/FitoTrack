@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -21,11 +20,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:defaultValue="1"
         android:entries="@array/pref_unit_systems"
         android:entryValues="@array/pref_unit_system_values"
         android:key="unitSystem"
-        android:title="@string/pref_unit_system"
-        android:defaultValue="1" />
+        android:title="@string/pref_unit_system" />
 
     <Preference
         android:key="weight"

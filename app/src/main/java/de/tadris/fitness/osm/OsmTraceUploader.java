@@ -46,15 +46,15 @@ public class OsmTraceUploader {
 
     private static final int CUT_DISTANCE= 300;
 
-    private Activity activity;
-    private Handler handler;
-    private Workout workout;
-    private List<WorkoutSample> samples;
-    private GpsTraceDetails.Visibility visibility;
-    private OAuthConsumer consumer;
-    private boolean cut;
-    private ProgressDialogController dialogController;
-    private String description;
+    private final Activity activity;
+    private final Handler handler;
+    private final Workout workout;
+    private final List<WorkoutSample> samples;
+    private final GpsTraceDetails.Visibility visibility;
+    private final OAuthConsumer consumer;
+    private final boolean cut;
+    private final ProgressDialogController dialogController;
+    private final String description;
 
     public OsmTraceUploader(Activity activity, Handler handler, Workout workout, List<WorkoutSample> samples, GpsTraceDetails.Visibility visibility, OAuthConsumer consumer, boolean cut, String description) {
         this.activity = activity;

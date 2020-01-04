@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -36,14 +36,13 @@ import de.tadris.fitness.R;
 abstract public class FitoTrackActivity extends Activity {
 
 
-
-    protected int getThemePrimaryColor() {
+    int getThemePrimaryColor() {
         final TypedValue value = new TypedValue ();
         getTheme().resolveAttribute (android.R.attr.colorPrimary, value, true);
         return value.data;
     }
 
-    protected void shareFile(Uri uri){
+    void shareFile(Uri uri) {
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
         intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
         intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
@@ -56,11 +55,11 @@ abstract public class FitoTrackActivity extends Activity {
         try {
             Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
         } catch (FileNotFoundException e) {
-
+            e.printStackTrace();
         }
     }
 
-    protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message){
+    void showErrorDialog(Exception e, @StringRes int title, @StringRes int message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(getString(message) + "\n\n" + e.getMessage())

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -22,12 +22,12 @@ package de.tadris.fitness.osm;
 import de.tadris.fitness.data.WorkoutSample;
 import de.westnordost.osmapi.map.data.LatLon;
 
-public class GpsTraceLatLong implements LatLon {
+class GpsTraceLatLong implements LatLon {
 
     private final double latitude;
     private final double longitude;
 
-    public GpsTraceLatLong(double latitude, double longitude) {
+    private GpsTraceLatLong(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

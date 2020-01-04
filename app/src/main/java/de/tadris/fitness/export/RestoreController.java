@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
+ *
+ * This file is part of FitoTrack
+ *
+ * FitoTrack is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     FitoTrack is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.tadris.fitness.export;
 
 import android.annotation.SuppressLint;
@@ -18,11 +37,11 @@ import de.tadris.fitness.data.WorkoutSample;
 
 public class RestoreController {
 
-    private Context context;
-    private Uri input;
-    private ImportStatusListener listener;
+    private final Context context;
+    private final Uri input;
+    private final ImportStatusListener listener;
     private FitoTrackDataContainer dataContainer;
-    private AppDatabase database;
+    private final AppDatabase database;
 
     public RestoreController(Context context, Uri input, ImportStatusListener listener) {
         this.context = context;
@@ -98,8 +117,8 @@ public class RestoreController {
         void onStatusChanged(int progress, String action);
     }
 
-    public static class UnsupportedVersionException extends Exception{
-        public UnsupportedVersionException(String message) {
+    static class UnsupportedVersionException extends Exception {
+        UnsupportedVersionException(String message) {
             super(message);
         }
     }

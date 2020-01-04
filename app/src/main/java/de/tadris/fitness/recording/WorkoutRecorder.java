@@ -54,8 +54,8 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
      */
     private static final int AUTO_STOP_TIMEOUT= 1000*60*60*20; // 20 minutes
 
-    private Context context;
-    private Workout workout;
+    private final Context context;
+    private final Workout workout;
     private RecordingState state;
     private final List<WorkoutSample> samples= new ArrayList<>();
     private long time= 0;
@@ -69,7 +69,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private static final double SIGNAL_BAD_THRESHOLD= 20; // In meters
     private static final int SIGNAL_LOST_THRESHOLD= 10000; // In milliseconds
     private Location lastFix= null;
-    private WorkoutRecorderListener workoutRecorderListener;
+    private final WorkoutRecorderListener workoutRecorderListener;
     private GpsState gpsState= GpsState.SIGNAL_LOST;
 
     public WorkoutRecorder(Context context, String workoutType, WorkoutRecorderListener workoutRecorderListener) {
@@ -164,7 +164,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
     }
 
-    public void pause(){
+    private void pause() {
         if(state == RecordingState.RUNNING){
             Log.i("Recorder", "Pause");
             state= RecordingState.PAUSED;
@@ -319,7 +319,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         SIGNAL_OKAY(Color.GREEN),
         SIGNAL_BAD(Color.YELLOW);
 
-        public int color;
+        public final int color;
 
         GpsState(int color) {
             this.color = color;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -64,37 +64,40 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
 
     public static Workout selectedWorkout;
 
-    protected List<WorkoutSample> samples;
-    protected Workout workout;
-    protected ViewGroup root;
-    protected Resources.Theme theme;
-    protected MapView map;
-    protected TileDownloadLayer downloadLayer;
-    protected FixedPixelCircle highlightingCircle;
-    protected Handler mHandler= new Handler();
+    List<WorkoutSample> samples;
+    Workout workout;
+    ViewGroup root;
+    private Resources.Theme theme;
+    MapView map;
+    private TileDownloadLayer downloadLayer;
+    private FixedPixelCircle highlightingCircle;
+    final Handler mHandler = new Handler();
 
-    protected LineChart speedDiagram, heightDiagram;
+    LineChart speedDiagram;
+    LineChart heightDiagram;
 
-    protected void initBeforeContent(){
+    void initBeforeContent() {
         workout= selectedWorkout;
         samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
         setTheme(ThemeManager.getThemeByWorkout(workout));
     }
 
-    protected void initAfterContent(){
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+    void initAfterContent() {
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setTitle(WorkoutTypeCalculator.getType(workout));
 
         theme= getTheme();
     }
 
-    void addDiagram(SampleConverter converter){
+    private void addDiagram(SampleConverter converter) {
         root.addView(getDiagram(converter), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, fullScreenItems ? ViewGroup.LayoutParams.MATCH_PARENT : getWindowManager().getDefaultDisplay().getWidth()*3/4));
     }
 
-    protected boolean diagramsInteractive= false;
+    boolean diagramsInteractive = false;
 
-    LineChart getDiagram(SampleConverter converter){
+    private LineChart getDiagram(SampleConverter converter) {
         LineChart chart= new LineChart(this);
 
         converter.onCreate();
@@ -145,7 +148,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         return chart;
     }
 
-    protected void onDiagramValueSelected(LatLong latLong){
+    private void onDiagramValueSelected(LatLong latLong) {
         Paint p= AndroidGraphicFactory.INSTANCE.createPaint();
         p.setColor(0xff693cff);
         highlightingCircle= new FixedPixelCircle(latLong, 20, p, null);
@@ -166,7 +169,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         void afterAdd(LineChart chart);
     }
 
-    WorkoutSample findSample(SampleConverter converter, Entry entry){
+    private WorkoutSample findSample(SampleConverter converter, Entry entry) {
         for(WorkoutSample sample : samples){
             if(converter.compare(sample, entry)){
                 return sample;
@@ -251,8 +254,8 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         });
     }
 
-    protected boolean fullScreenItems = false;
-    protected LinearLayout mapRoot;
+    boolean fullScreenItems = false;
+    LinearLayout mapRoot;
 
     void addMap(){
         map= new MapView(this);
@@ -290,7 +293,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
 
     }
 
-    int getMapHeight(){
+    private int getMapHeight() {
         return getWindowManager().getDefaultDisplay().getWidth()*3/4;
     }
 

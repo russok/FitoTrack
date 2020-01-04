@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -24,22 +24,23 @@ import android.preference.PreferenceManager;
 
 public class UnitUtils {
 
-    public static final Unit UNITS_METRIC= new Metric();
-    public static final Unit UNITS_METRIC_PHYSICAL= new MetricPhysical();
-    public static final Unit UNITS_IMPERIAL_YARDS= new Imperial();
-    public static final Unit UNITS_IMPERIAL_METERS= new ImperialWithMeters();
-    public static final Unit[] supportedUnits= new Unit[] {
+    private static final Unit UNITS_METRIC = new Metric();
+    private static final Unit UNITS_METRIC_PHYSICAL = new MetricPhysical();
+    private static final Unit UNITS_IMPERIAL_YARDS = new Imperial();
+    private static final Unit UNITS_IMPERIAL_METERS = new ImperialWithMeters();
+    private static final Unit[] supportedUnits = new Unit[]{
             UNITS_METRIC, UNITS_METRIC_PHYSICAL, UNITS_IMPERIAL_YARDS, UNITS_IMPERIAL_METERS
     };
 
     public static Unit CHOSEN_SYSTEM= UNITS_METRIC;
 
     public static void setUnit(Context context){
-        int id= Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("unitSystem", String.valueOf(UnitUtils.UNITS_METRIC.getId())));
-        setUnit(id);
+        String id = PreferenceManager.getDefaultSharedPreferences(context).getString("unitSystem", String.valueOf(UnitUtils.UNITS_METRIC.getId()));
+        assert id != null;
+        setUnit(Integer.parseInt(id));
     }
 
-    public static void setUnit(int id){
+    private static void setUnit(int id) {
         CHOSEN_SYSTEM= UNITS_METRIC;
         for(Unit unit : supportedUnits){
             if(id == unit.getId()){
@@ -62,13 +63,13 @@ public class UnitUtils {
     }
 
     public static String getHourMinuteSecondTime(long time){
-        long totalSeks= time / 1000;
-        long totalMins= totalSeks / 60;
+        long totalSecs = time / 1000;
+        long totalMins = totalSecs / 60;
         long hours= totalMins / 60;
         long mins= totalMins % 60;
-        long seks= totalSeks % 60;
+        long secs = totalSecs % 60;
         String minStr= (mins < 10 ? "0" : "") + mins;
-        String sekStr= (seks < 10 ? "0" : "") + seks;
+        String sekStr = (secs < 10 ? "0" : "") + secs;
         return hours + ":" + minStr + ":" + sekStr;
     }
 
@@ -85,7 +86,6 @@ public class UnitUtils {
     /**
      *CHOSEN_SYSTEM.getLongDistanceUnit()
      * @param consumption consumption in kcal/km
-     * @return
      */
     public static String getRelativeEnergyConsumption(double consumption){
         double one= CHOSEN_SYSTEM.getDistanceFromKilometers(1);
@@ -115,7 +115,7 @@ public class UnitUtils {
         return round(CHOSEN_SYSTEM.getSpeedFromMeterPerSecond(speed), 1) + " " + CHOSEN_SYSTEM.getSpeedUnit();
     }
 
-    public static double round(double d, int count){
+    private static double round(double d, int count) {
         return (double)Math.round(d * Math.pow(10, count)) / Math.pow(10, count);
     }
 

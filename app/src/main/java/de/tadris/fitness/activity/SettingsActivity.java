@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -48,6 +48,7 @@ import androidx.core.content.FileProvider;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.export.BackupController;
@@ -58,7 +59,7 @@ import de.tadris.fitness.view.ProgressDialogController;
 public class SettingsActivity extends PreferenceActivity {
 
 
-    protected void shareFile(Uri uri){
+    private void shareFile(Uri uri) {
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
         intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
         intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
@@ -71,7 +72,7 @@ public class SettingsActivity extends PreferenceActivity {
         try {
             Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
         } catch (FileNotFoundException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -89,7 +90,7 @@ public class SettingsActivity extends PreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
         String stringValue = value.toString();
 
         if (preference instanceof ListPreference) {
@@ -146,7 +147,7 @@ public class SettingsActivity extends PreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
-    private Handler mHandler= new Handler();
+    private final Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,21 +161,27 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("unitSystem"));
         bindPreferenceSummaryToValue(findPreference("mapStyle"));
 
-        findPreference("weight").setOnPreferenceClickListener(preference -> showWeightPicker());
-        findPreference("import").setOnPreferenceClickListener(preference -> showImportDialog());
-        findPreference("export").setOnPreferenceClickListener(preference -> showExportDialog());
+        findPreference("weight").setOnPreferenceClickListener(preference -> {
+            showWeightPicker();
+            return true;
+        });
+        findPreference("import").setOnPreferenceClickListener(preference -> {
+            showImportDialog();
+            return true;
+        });
+        findPreference("export").setOnPreferenceClickListener(preference -> {
+            showExportDialog();
+            return true;
+        });
 
     }
 
-    private boolean showExportDialog(){
+    private void showExportDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.exportData)
                 .setMessage(R.string.exportDataSummary)
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.backup, (dialog, which) -> {
-                    exportBackup();
-                }).create().show();
-        return true;
+                .setPositiveButton(R.string.backup, (dialog, which) -> exportBackup()).create().show();
     }
 
     private void exportBackup(){
@@ -183,7 +190,9 @@ public class SettingsActivity extends PreferenceActivity {
         new Thread(() -> {
             try{
                 String file= getFilesDir().getAbsolutePath() + "/shared/backup.ftb";
-                new File(file).getParentFile().mkdirs();
+                if (!new File(file).getParentFile().mkdirs()) {
+                    throw new IOException("Cannot write");
+                }
                 Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
 
                 BackupController backupController= new BackupController(getBaseContext(), new File(file), (progress, action) -> mHandler.post(() -> dialogController.setProgress(progress, action)));
@@ -203,28 +212,25 @@ public class SettingsActivity extends PreferenceActivity {
         }).start();
     }
 
-    private boolean showImportDialog(){
+    private void showImportDialog() {
         if(!hasPermission()){
             requestPermissions();
-            return true;
+            return;
         }
         new AlertDialog.Builder(this)
                 .setTitle(R.string.importBackup)
                 .setMessage(R.string.importBackupMessage)
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.restore, (dialog, which) -> {
-                    importBackup();
-                }).create().show();
-        return true;
+                .setPositiveButton(R.string.restore, (dialog, which) -> importBackup()).create().show();
     }
 
-    void requestPermissions(){
+    private void requestPermissions() {
         if (!hasPermission()) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
         }
     }
 
-    public boolean hasPermission(){
+    private boolean hasPermission() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -240,12 +246,10 @@ public class SettingsActivity extends PreferenceActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == RESULT_OK){
-                    importBackup(data.getData());
-                }
-                break;
+        if (requestCode == FILE_SELECT_CODE) {
+            if (resultCode == RESULT_OK) {
+                importBackup(data.getData());
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -270,7 +274,7 @@ public class SettingsActivity extends PreferenceActivity {
         }).start();
     }
 
-    private boolean showWeightPicker() {
+    private void showWeightPicker() {
         UnitUtils.setUnit(this); // Maybe the user changed unit system
 
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
@@ -294,8 +298,6 @@ public class SettingsActivity extends PreferenceActivity {
         });
 
         d.create().show();
-
-        return true;
     }
 
     /**
@@ -307,11 +309,6 @@ public class SettingsActivity extends PreferenceActivity {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override

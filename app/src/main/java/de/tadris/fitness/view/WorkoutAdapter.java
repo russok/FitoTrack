@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -40,10 +40,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder{
 
-        View root;
-        TextView lengthText, timeText, dateText, typeText, commentText;
+        final View root;
+        final TextView lengthText;
+        final TextView timeText;
+        final TextView dateText;
+        final TextView typeText;
+        final TextView commentText;
 
-        public WorkoutViewHolder(@NonNull View itemView) {
+        WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
             this.root= itemView;
             lengthText= itemView.findViewById(R.id.workoutLength);
@@ -54,8 +58,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         }
     }
 
-    Workout[] workouts;
-    WorkoutAdapterListener listener;
+    private final Workout[] workouts;
+    private final WorkoutAdapterListener listener;
 
     public WorkoutAdapter(Workout[] workouts, WorkoutAdapterListener listener) {
         this.workouts = workouts;

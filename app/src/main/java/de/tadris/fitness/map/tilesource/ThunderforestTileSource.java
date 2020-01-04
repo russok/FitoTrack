@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -26,7 +26,7 @@ import java.net.URL;
 
 public class ThunderforestTileSource extends FitoTrackTileSource{
 
-    public static final String API_KEY= "87b07337e42c405db6d8d39b1c0c179e";
+    private static final String API_KEY = "87b07337e42c405db6d8d39b1c0c179e";
 
     public static final ThunderforestTileSource OUTDOORS = new ThunderforestTileSource("outdoors", "Outdoor");
     public static final ThunderforestTileSource CYLE_MAP = new ThunderforestTileSource("cycle", "Cycle Map");
@@ -35,10 +35,10 @@ public class ThunderforestTileSource extends FitoTrackTileSource{
     private static final int ZOOM_LEVEL_MAX = 22;
     private static final int ZOOM_LEVEL_MIN = 0;
 
-    private String mapName;
-    private String name;
+    private final String mapName;
+    private final String name;
 
-    public ThunderforestTileSource(String mapName, String name) {
+    private ThunderforestTileSource(String mapName, String name) {
         super(new String[]{"tile.thunderforest.com"}, 443);
         this.mapName = mapName;
         this.name = name;

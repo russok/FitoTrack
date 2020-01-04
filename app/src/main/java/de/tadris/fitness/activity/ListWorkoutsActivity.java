@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -46,7 +46,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionMenu menu;
-    Workout[] workouts;
+    private Workout[] workouts;
 
 
     @Override
@@ -95,7 +95,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         }
     }
 
-    public void startRecording(String activity){
+    private void startRecording(String activity) {
         menu.close(true);
         RecordWorkoutActivity.ACTIVITY= activity;
         final Intent intent= new Intent(this, RecordWorkoutActivity.class);
@@ -148,10 +148,9 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
-            case R.id.actionOpenSettings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
+        if (id == R.id.actionOpenSettings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -51,9 +51,9 @@ public class LocationListener extends Service {
     private static final int LOCATION_INTERVAL = 1000;
 
     private class LocationChangedListener implements android.location.LocationListener {
-        Location mLastLocation;
+        final Location mLastLocation;
 
-        public LocationChangedListener(String provider) {
+        LocationChangedListener(String provider) {
             Log.i(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
         }
@@ -83,7 +83,7 @@ public class LocationListener extends Service {
         }
     }
 
-    LocationChangedListener gpsListener= new LocationChangedListener(LocationManager.GPS_PROVIDER);
+    private final LocationChangedListener gpsListener = new LocationChangedListener(LocationManager.GPS_PROVIDER);
 
     @Override
     public IBinder onBind(Intent arg0) {

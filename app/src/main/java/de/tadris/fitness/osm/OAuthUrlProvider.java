@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -24,7 +24,7 @@ import oauth.signpost.OAuthProvider;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthProvider;
 
-public class OAuthUrlProvider {
+class OAuthUrlProvider {
 
     static private final String CONSUMER_KEY= "jFL9grFmAo5ZS720YDDRXdSOb7F0IZQf9lnY1PHq";
     static private final String CONSUMER_SECRET= "oH969vYW60fZLco6E09UQl3uFXqjl4siQbOL0q9q";

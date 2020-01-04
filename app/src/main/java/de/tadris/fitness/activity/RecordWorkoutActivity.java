@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -66,20 +66,21 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
 
-    MapView mapView;
-    TileDownloadLayer downloadLayer;
-    WorkoutRecorder recorder;
-    Polyline polyline;
-    List<LatLong> latLongList= new ArrayList<>();
-    InfoViewHolder[] infoViews= new InfoViewHolder[4];
-    TextView timeView, gpsStatusView;
-    View waitingForGPSOverlay;
-    boolean gpsFound= false;
-    boolean isResumed= false;
-    private Handler mHandler= new Handler();
-    PowerManager.WakeLock wakeLock;
-    Intent locationListener;
-    Intent pressureService;
+    private MapView mapView;
+    private TileDownloadLayer downloadLayer;
+    private WorkoutRecorder recorder;
+    private Polyline polyline;
+    private final List<LatLong> latLongList = new ArrayList<>();
+    private final InfoViewHolder[] infoViews = new InfoViewHolder[4];
+    private TextView timeView;
+    private TextView gpsStatusView;
+    private View waitingForGPSOverlay;
+    private boolean gpsFound = false;
+    private boolean isResumed = false;
+    private final Handler mHandler = new Handler();
+    private PowerManager.WakeLock wakeLock;
+    private Intent locationListener;
+    private Intent pressureService;
     private boolean saved= false;
 
     @Override
@@ -92,7 +93,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         setupMap();
 
-        ((ViewGroup)findViewById(R.id.recordMapViewrRoot)).addView(mapView);
+        ((ViewGroup) findViewById(R.id.recordMapViewerRoot)).addView(mapView);
         waitingForGPSOverlay= findViewById(R.id.recorderWaitingOverlay);
         waitingForGPSOverlay.setVisibility(View.VISIBLE);
 
@@ -178,7 +179,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    int i= 0;
+    private int i = 0;
 
     private void updateDescription(){
         i++;
@@ -235,14 +236,14 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                 .create().show();
     }
 
-    void checkPermissions(){
+    private void checkPermissions() {
         if (!hasPermission()) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
         }
     }
 
-    public boolean hasPermission(){
+    private boolean hasPermission() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
@@ -253,12 +254,12 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }
     }
 
-    public void stopListener(){
+    private void stopListener() {
         stopService(locationListener);
         stopService(pressureService);
     }
 
-    public void startListener(){
+    private void startListener() {
         if(locationListener == null){
             locationListener= new Intent(this, LocationListener.class);
             pressureService= new Intent(this, PressureService.class);
@@ -365,10 +366,11 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         });
     }
 
-    public static class InfoViewHolder{
-        TextView titleView, valueView;
+    static class InfoViewHolder {
+        final TextView titleView;
+        final TextView valueView;
 
-        public InfoViewHolder(TextView titleView, TextView valueView) {
+        InfoViewHolder(TextView titleView, TextView valueView) {
             this.titleView = titleView;
             this.valueView = valueView;
         }

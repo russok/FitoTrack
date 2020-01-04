@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -43,11 +43,9 @@ public class CalorieCalculator {
      * workoutType and avgSpeed of workout have to be set
      *
      * Calculation currently ignores height.
-     *
-     * @param workout
      * @return MET
      */
-    public static double getMET(Workout workout){
+    private static double getMET(Workout workout) {
         double speedInKmh= workout.avgSpeed * 3.6;
         if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING) || workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
             // This is a linear graph based on the website linked above

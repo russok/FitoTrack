@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -36,7 +36,7 @@ import de.tadris.fitness.util.unit.UnitUtils;
 
 public class Instance {
 
-    public static final String DATABASE_NAME= "fito-track";
+    private static final String DATABASE_NAME = "fito-track";
 
     private static Instance instance;
 
@@ -47,9 +47,9 @@ public class Instance {
         return instance;
     }
 
-    public AppDatabase db;
-    public List<LocationListener.LocationChangeListener> locationChangeListeners= new ArrayList<>();
-    public UserPreferences userPreferences;
+    public final AppDatabase db;
+    public final List<LocationListener.LocationChangeListener> locationChangeListeners = new ArrayList<>();
+    public final UserPreferences userPreferences;
 
     public boolean pressureAvailable= false;
     public float lastPressure= 0;
