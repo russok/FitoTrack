@@ -47,7 +47,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         }
     }
 
-    private static final int PAUSE_TIME= 1000*1000;
+    private static final int PAUSE_TIME= 10000;
 
     /**
      * Time after which the workout is stopped and saved automatically because there is no activity anymore
