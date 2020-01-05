@@ -62,7 +62,6 @@ public class MapManager {
         mapView.getLayerManager().redrawLayers();
 
         mapView.setZoomLevel((byte) 18);
-        mapView.setCenter(new LatLong(52, 13));
 
         return downloadLayer;
     }

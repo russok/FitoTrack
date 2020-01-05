@@ -40,6 +40,13 @@
         android:key="mapStyle"
         android:title="@string/mapStyle" />
 
+    <Preference
+        android:key="speech"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/pref_spoken_updates_summary"
+        android:title="@string/pref_spoken_updates" />
+
 
     <PreferenceCategory android:title="@string/data">
 

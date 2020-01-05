@@ -50,6 +50,11 @@
     <string name="pref_unit_system">Bevorzugtes Einheitensystem</string>
     <string name="pref_weight">Dein Gewicht</string>
     <string name="pref_weight_summary">Dein Gewicht ist zur Kalorienberechnung wichtig</string>
+
+    <!-- please translate -->
+    <string name="pref_spoken_updates">Spoken Updates</string>
+    <string name="pref_spoken_updates_summary">Choose the time and distance between spoken updates</string>
+
     <string name="preferences">Einstellungen</string>
     <string name="recordWorkout">Workout aufzeichnen</string>
     <string name="restore">Wiederherstellen</string>

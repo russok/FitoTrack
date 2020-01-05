@@ -38,6 +38,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.speech.tts.TextToSpeech;
+
 import androidx.core.app.ActivityCompat;
 
 import org.mapsforge.core.graphics.Paint;
@@ -50,9 +52,11 @@ import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
+import de.tadris.fitness.data.UserPreferences;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.tilesource.TileSources;
@@ -82,6 +86,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private Intent locationListener;
     private Intent pressureService;
     private boolean saved= false;
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +108,9 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         recorder= new WorkoutRecorder(this, ACTIVITY, this);
         recorder.start();
 
+        tts = new TextToSpeech(this, (int status) -> {
+            ttsReady = status == TextToSpeech.SUCCESS && tts.setLanguage(Locale.getDefault())>=0;
+        });
         infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
         infoViews[1]= new InfoViewHolder(findViewById(R.id.recordInfo2Title), findViewById(R.id.recordInfo2Value));
         infoViews[2]= new InfoViewHolder(findViewById(R.id.recordInfo3Title), findViewById(R.id.recordInfo3Value));
@@ -169,9 +178,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
             try{
                 while (recorder.isActive()){
                     Thread.sleep(1000);
-                    if(isResumed){
-                        mHandler.post(this::updateDescription);
-                    }
+                    mHandler.post(this::updateDescription);
                 }
             }catch (InterruptedException e){
                 e.printStackTrace();
@@ -179,15 +186,38 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    private int i = 0;
+    long lastSpokenUpdateTime = 0;
+    int lastSpokenUpdateDistance = 0;
 
-    private void updateDescription(){
-        i++;
-        timeView.setText(UnitUtils.getHourMinuteSecondTime(recorder.getDuration()));
-        infoViews[0].setText(getString(R.string.workoutDistance), UnitUtils.getDistance(recorder.getDistance()));
-        infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
-        infoViews[2].setText(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed())));
-        infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
+    private void updateDescription() {
+        long duration = recorder.getDuration();
+        int distanceInMeters = recorder.getDistance();
+        final String distanceCaption = getString(R.string.workoutDistance);
+        final String distance = UnitUtils.getDistance(distanceInMeters);
+        final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
+        final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
+        if (isResumed) {
+            timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
+            infoViews[0].setText(distanceCaption, distance);
+            infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
+            infoViews[2].setText(avgSpeedCaption, avgSpeed);
+            infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
+        }
+
+        final UserPreferences prefs = Instance.getInstance(this).userPreferences;
+        final long intervalT = 60 * 1000 * prefs.getSpokenUpdateTimePeriod();
+        final int intervalInMeters = (int) (1000.0 / UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
+        if (!ttsReady ||
+                (intervalT == 0 || duration / intervalT == lastSpokenUpdateTime / intervalT)
+             && (intervalInMeters == 0 || distanceInMeters / intervalInMeters == lastSpokenUpdateDistance / intervalInMeters)
+        ) return;
+
+        final String text = distanceCaption + ": " + distance + ". "
+                + avgSpeedCaption + ": " + avgSpeed;
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
+
+        lastSpokenUpdateTime = duration;
+        lastSpokenUpdateDistance = distanceInMeters;
     }
 
     private void stop(){
