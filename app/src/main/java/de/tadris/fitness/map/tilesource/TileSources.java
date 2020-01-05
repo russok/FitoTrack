@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -23,7 +23,7 @@ package de.tadris.fitness.map.tilesource;
 public class TileSources {
 
     public static FitoTrackTileSource[] tileSources= new FitoTrackTileSource[]{
-            MapnikTileSource.INSTANCE, HumanitarianTileSource.INSTANCE, ThunderforestTileSource.OUTDOORS, ThunderforestTileSource.CYLE_MAP
+            MapnikTileSource.INSTANCE, HumanitarianTileSource.INSTANCE, ThunderforestTileSource.OUTDOORS, ThunderforestTileSource.CYCLE_MAP
     };
 
     public enum Purpose{

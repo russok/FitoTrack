@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -19,7 +19,6 @@
 
 package de.tadris.fitness.map;
 
-import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
 import org.mapsforge.map.android.view.MapView;
@@ -42,7 +41,9 @@ public class MapManager {
         switch (chosenTileLayer){
             case "osm.humanitarian":       tileSource= HumanitarianTileSource.INSTANCE; break;
             case "thunderforest.outdoors": tileSource= ThunderforestTileSource.OUTDOORS; break;
-            case "thunderforest.cycle":    tileSource= ThunderforestTileSource.CYLE_MAP; break;
+            case "thunderforest.cycle":
+                tileSource = ThunderforestTileSource.CYCLE_MAP;
+                break;
             default:             tileSource= MapnikTileSource.INSTANCE; break; // Inclusive "osm.mapnik"
         }
         tileSource.setUserAgent("mapsforge-android");

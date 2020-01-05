@@ -29,10 +29,10 @@ public class ThunderforestTileSource extends FitoTrackTileSource{
     private static final String API_KEY = "87b07337e42c405db6d8d39b1c0c179e";
 
     public static final ThunderforestTileSource OUTDOORS = new ThunderforestTileSource("outdoors", "Outdoor");
-    public static final ThunderforestTileSource CYLE_MAP = new ThunderforestTileSource("cycle", "Cycle Map");
+    public static final ThunderforestTileSource CYCLE_MAP = new ThunderforestTileSource("cycle", "Cycle Map");
     private static final int PARALLEL_REQUESTS_LIMIT = 8;
     private static final String PROTOCOL = "https";
-    private static final int ZOOM_LEVEL_MAX = 22;
+    private static final int ZOOM_LEVEL_MAX = 19;
     private static final int ZOOM_LEVEL_MIN = 0;
 
     private final String mapName;
