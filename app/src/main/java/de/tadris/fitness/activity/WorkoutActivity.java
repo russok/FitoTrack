@@ -115,7 +115,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         dataSet.setValueTextColor(getThemePrimaryColor());
         dataSet.setDrawCircles(false);
         dataSet.setLineWidth(4);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         Description description= new Description();
         description.setText(converter.getDescription());
