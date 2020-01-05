@@ -30,7 +30,7 @@ public class MapnikTileSource extends FitoTrackTileSource {
             "a.tile.openstreetmap.org", "b.tile.openstreetmap.org", "c.tile.openstreetmap.org"}, 443);
     private static final int PARALLEL_REQUESTS_LIMIT = 8;
     private static final String PROTOCOL = "https";
-    private static final int ZOOM_LEVEL_MAX = 18;
+    private static final int ZOOM_LEVEL_MAX = 19;
     private static final int ZOOM_LEVEL_MIN = 0;
     private static final String NAME = "OSM Mapnik";
 
