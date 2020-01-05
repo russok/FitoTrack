@@ -31,14 +31,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import android.speech.tts.TextToSpeech;
 
 import androidx.core.app.ActivityCompat;
 
@@ -110,6 +110,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         tts = new TextToSpeech(this, (int status) -> {
             ttsReady = status == TextToSpeech.SUCCESS && tts.setLanguage(Locale.getDefault())>=0;
+            Log.d("Recorder", "TTS-ready: " + ttsReady);
         });
         infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
         infoViews[1]= new InfoViewHolder(findViewById(R.id.recordInfo2Title), findViewById(R.id.recordInfo2Value));
@@ -214,6 +215,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
         final String text = distanceCaption + ": " + distance + ". "
                 + avgSpeedCaption + ": " + avgSpeed;
+
+        Log.d("Recorder", "TTS speak: " + text);
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
 
         lastSpokenUpdateTime = duration;
@@ -335,9 +338,16 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     @Override
     protected void onDestroy() {
         recorder.stop();
-        saveIfNotSaved(); // Important
+        saveIfNotSaved(); // Important to save
+
+        // Clear map
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
+
+        // Shutdown TTS engine
+        ttsReady = false;
+        tts.shutdown();
+
         super.onDestroy();
         if(wakeLock.isHeld()){
             wakeLock.release();
