@@ -303,11 +303,9 @@ public class SettingsActivity extends PreferenceActivity {
         });
 
         d.create().show();
-
-        return true;
     }
 
-    private boolean showSpeechConfig() {
+    private void showSpeechConfig() {
         UnitUtils.setUnit(this); // Maybe the user changed unit system
 
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
