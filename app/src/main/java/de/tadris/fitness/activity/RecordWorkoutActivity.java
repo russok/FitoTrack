@@ -86,8 +86,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private Intent locationListener;
     private Intent pressureService;
     private boolean saved= false;
-    TextToSpeech tts;
-    boolean ttsReady = false;
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
