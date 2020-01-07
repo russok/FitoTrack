@@ -119,7 +119,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
                                     workoutRecorderListener.onAutoStop();
                                 }
                             }else if(timeDiff > PAUSE_TIME){
-                                if(state == RecordingState.RUNNING){
+                                if (state == RecordingState.RUNNING && gpsState != GpsState.SIGNAL_LOST) {
                                     pause();
                                 }
                             }else{
@@ -259,10 +259,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
         samples.clear();
     }
 
-    /**
-     * Returns the distance in meters
-     */
-    public int getDistance(){
+    public int getDistanceInMeters() {
         return (int)distance;
     }
 
