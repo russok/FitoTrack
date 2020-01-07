@@ -31,8 +31,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,11 +50,11 @@ import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
-import de.tadris.fitness.data.UserPreferences;
+import de.tadris.fitness.announcement.AnnouncementGPSStatus;
+import de.tadris.fitness.announcement.VoiceAnnouncements;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.tilesource.TileSources;
@@ -66,7 +64,7 @@ import de.tadris.fitness.recording.WorkoutRecorder;
 import de.tadris.fitness.util.ThemeManager;
 import de.tadris.fitness.util.unit.UnitUtils;
 
-public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.WorkoutRecorderListener {
+public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.WorkoutRecorderListener, VoiceAnnouncements.VoiceAnnouncementCallback {
 
     public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
 
@@ -86,8 +84,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private Intent locationListener;
     private Intent pressureService;
     private boolean saved= false;
-    private TextToSpeech tts;
-    private boolean ttsReady = false;
+
+    private VoiceAnnouncements voiceAnnouncements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +106,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         recorder= new WorkoutRecorder(this, ACTIVITY, this);
         recorder.start();
 
-        tts = new TextToSpeech(this, (int status) -> {
-            ttsReady = status == TextToSpeech.SUCCESS && tts.setLanguage(Locale.getDefault())>=0;
-            Log.d("Recorder", "TTS-ready: " + ttsReady);
-        });
+        voiceAnnouncements = new VoiceAnnouncements(this, this);
+
         infoViews[0]= new InfoViewHolder(findViewById(R.id.recordInfo1Title), findViewById(R.id.recordInfo1Value));
         infoViews[1]= new InfoViewHolder(findViewById(R.id.recordInfo2Title), findViewById(R.id.recordInfo2Value));
         infoViews[2]= new InfoViewHolder(findViewById(R.id.recordInfo3Title), findViewById(R.id.recordInfo3Value));
@@ -187,40 +183,23 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         }).start();
     }
 
-    long lastSpokenUpdateTime = 0;
-    int lastSpokenUpdateDistance = 0;
 
     private void updateDescription() {
         long duration = recorder.getDuration();
-        int distanceInMeters = recorder.getDistance();
+        int distanceInMeters = recorder.getDistanceInMeters();
         final String distanceCaption = getString(R.string.workoutDistance);
         final String distance = UnitUtils.getDistance(distanceInMeters);
-        final String avgSpeedCaption = getString(R.string.workoutAvgSpeed);
         final String avgSpeed = UnitUtils.getSpeed(Math.min(100d, recorder.getAvgSpeed()));
         if (isResumed) {
             timeView.setText(UnitUtils.getHourMinuteSecondTime(duration));
             infoViews[0].setText(distanceCaption, distance);
             infoViews[1].setText(getString(R.string.workoutBurnedEnergy), recorder.getCalories() + " kcal");
-            infoViews[2].setText(avgSpeedCaption, avgSpeed);
+            infoViews[2].setText(getString(R.string.workoutAvgSpeedShort), avgSpeed);
             infoViews[3].setText(getString(R.string.workoutPauseDuration), UnitUtils.getHourMinuteSecondTime(recorder.getPauseDuration()));
         }
 
-        final UserPreferences prefs = Instance.getInstance(this).userPreferences;
-        final long intervalT = 60 * 1000 * prefs.getSpokenUpdateTimePeriod();
-        final int intervalInMeters = (int) (1000.0 / UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
-        if (!ttsReady ||
-                (intervalT == 0 || duration / intervalT == lastSpokenUpdateTime / intervalT)
-             && (intervalInMeters == 0 || distanceInMeters / intervalInMeters == lastSpokenUpdateDistance / intervalInMeters)
-        ) return;
+        voiceAnnouncements.check(recorder);
 
-        final String text = distanceCaption + ": " + distance + ". "
-                + avgSpeedCaption + ": " + avgSpeed;
-
-        Log.d("Recorder", "TTS speak: " + text);
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "updateDescription" + duration);
-
-        lastSpokenUpdateTime = duration;
-        lastSpokenUpdateDistance = distanceInMeters;
     }
 
     private void stop(){
@@ -344,9 +323,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
 
-        // Shutdown TTS engine
-        ttsReady = false;
-        tts.shutdown();
+        // Shutdown TTS
+        voiceAnnouncements.destroy();
 
         super.onDestroy();
         if(wakeLock.isHeld()){
@@ -403,7 +381,20 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                 gpsFound= true;
                 hideWaitOverlay();
             }
+
+            AnnouncementGPSStatus announcement = new AnnouncementGPSStatus(RecordWorkoutActivity.this);
+            if (announcement.isEnabled()) {
+                if (oldState == WorkoutRecorder.GpsState.SIGNAL_LOST) { // GPS Signal found
+                    voiceAnnouncements.speak(announcement.getSpokenGPSFound());
+                } else if (state == WorkoutRecorder.GpsState.SIGNAL_LOST) {
+                    voiceAnnouncements.speak(announcement.getSpokenGPSLost());
+                }
+            }
         });
+    }
+
+    @Override
+    public void onVoiceAnnouncementIsReady(boolean available) {
     }
 
     static class InfoViewHolder {

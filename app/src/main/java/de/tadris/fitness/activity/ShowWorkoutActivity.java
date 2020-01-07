@@ -91,7 +91,7 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
         addTitle(getString(R.string.workoutSpeed));
 
-        addKeyValue(getString(R.string.workoutAvgSpeed), UnitUtils.getSpeed(workout.avgSpeed),
+        addKeyValue(getString(R.string.workoutAvgSpeedShort), UnitUtils.getSpeed(workout.avgSpeed),
                 getString(R.string.workoutTopSpeed), UnitUtils.getSpeed(workout.topSpeed));
 
         addSpeedDiagram();

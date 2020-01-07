@@ -17,34 +17,35 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.data;
+package de.tadris.fitness.announcement;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class UserPreferences {
+import androidx.annotation.StringRes;
 
-    private final SharedPreferences preferences;
+import de.tadris.fitness.recording.WorkoutRecorder;
 
-    public UserPreferences(Context context) {
-        this.preferences= PreferenceManager.getDefaultSharedPreferences(context);
+public abstract class Announcement {
+
+    private Context context;
+
+    Announcement(Context context) {
+        this.context = context;
     }
 
-    public int getUserWeight(){
-        return preferences.getInt("weight", 80);
+    public boolean isEnabled() {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("announcement_" + getId(), isEnabledByDefault());
     }
 
-    public int getSpokenUpdateTimePeriod(){
-        return preferences.getInt("spokenUpdateTimePeriod", 0);
+    protected String getString(@StringRes int resId) {
+        return context.getString(resId);
     }
 
-    public int getSpokenUpdateDistancePeriod(){
-        return preferences.getInt("spokenUpdateDistancePeriod", 0);
-    }
+    public abstract String getId();
 
-    public String getMapStyle(){
-        return preferences.getString("mapStyle", "osm.mapnik");
-    }
+    abstract boolean isEnabledByDefault();
+
+    abstract String getSpoken(WorkoutRecorder recorder);
 
 }

@@ -47,6 +47,26 @@
     <string name="setPreferencesTitle">Set Preferences</string>
     <string name="setPreferencesMessage">You can set your preferred unit system and your weight in the settings.</string>
 
+    <string name="timeMinuteSingular">Minute</string>
+    <string name="timeMinutePlural">Minutes</string>
+    <string name="timeHourSingular">Hour</string>
+    <string name="timeHourPlural">Hours</string>
+    <string name="and">and</string>
+
+    <string name="announcementGPSStatus">GPS Status</string>
+
+    <string name="voiceAnnouncementsTitle">Voice Announcements</string>
+
+    <string name="pref_voice_announcements_summary">Configure voice prompts that inform you during the workout</string>
+
+    <string name="pref_announcements_config_title">Announcement Trigger</string>
+    <string name="pref_announcements_config_summary">Choose the time and distance between voice announcements</string>
+
+    <string name="pref_announcements_content">Content of the announcements</string>
+
+    <string name="gpsLost">GPS signal lost</string>
+    <string name="gpsFound">GPS signal found</string>
+
     <string name="workoutTime">Time</string>
     <string name="workoutDate">Date</string>
     <string name="workoutDuration">Duration</string>
@@ -57,7 +77,8 @@
     <string name="workoutPace">Pace</string>
     <string name="workoutRoute">Route</string>
     <string name="workoutSpeed">Speed</string>
-    <string name="workoutAvgSpeed">Average Speed</string>
+    <string name="workoutAvgSpeedShort">Avg. Speed</string>
+    <string name="workoutAvgSpeedLong">Average Speed</string>
     <string name="workoutTopSpeed">Top Speed</string>
     <string name="workoutBurnedEnergy">Burned Energy</string>
     <string name="workoutTotalEnergy">Total Energy</string>
@@ -112,8 +133,6 @@
     <string name="exportAsGpxFile">Export as GPX-File</string>
     <string name="pref_weight">Your Weight</string>
     <string name="pref_weight_summary">Your weight is needed to calculate the burned calories</string>
-    <string name="pref_spoken_updates">Spoken Updates</string>
-    <string name="pref_spoken_updates_summary">Choose the time and distance between spoken updates</string>
     <string name="pref_unit_system">Preferred system of units</string>
     <string name="settings">Settings</string>
     <string name="exportData">Export Data</string>
@@ -128,4 +147,5 @@
     <string name="cut">Cut the first/last 300 Meters</string>
     <string name="trackVisibilityPref">Track Visibility</string>
     <string name="description">Description</string>
+    <string name="ttsNotAvailable">TextToSpeech is not available</string>
 </resources>

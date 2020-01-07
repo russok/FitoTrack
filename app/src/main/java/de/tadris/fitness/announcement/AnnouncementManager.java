@@ -17,34 +17,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.data;
+package de.tadris.fitness.announcement;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-public class UserPreferences {
+import java.util.ArrayList;
+import java.util.List;
 
-    private final SharedPreferences preferences;
+public class AnnouncementManager {
 
-    public UserPreferences(Context context) {
-        this.preferences= PreferenceManager.getDefaultSharedPreferences(context);
+    private Context context;
+    private List<Announcement> announcements = new ArrayList<>();
+
+    public AnnouncementManager(Context context) {
+        this.context = context;
+        addAnnouncements();
     }
 
-    public int getUserWeight(){
-        return preferences.getInt("weight", 80);
+    private void addAnnouncements() {
+        announcements.add(new AnnouncementGPSStatus(context));
+        announcements.add(new AnnouncementDuration(context));
+        announcements.add(new AnnouncementDistance(context));
+        announcements.add(new AnnouncementAverageSpeed(context));
     }
 
-    public int getSpokenUpdateTimePeriod(){
-        return preferences.getInt("spokenUpdateTimePeriod", 0);
+    public List<Announcement> getAnnouncements() {
+        return announcements;
     }
-
-    public int getSpokenUpdateDistancePeriod(){
-        return preferences.getInt("spokenUpdateDistancePeriod", 0);
-    }
-
-    public String getMapStyle(){
-        return preferences.getString("mapStyle", "osm.mapnik");
-    }
-
 }

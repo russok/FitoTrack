@@ -25,127 +25,28 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
-import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import de.tadris.fitness.R;
+import de.tadris.fitness.announcement.VoiceAnnouncements;
 import de.tadris.fitness.export.BackupController;
 import de.tadris.fitness.export.RestoreController;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
-public class SettingsActivity extends PreferenceActivity {
-
-
-    private void shareFile(Uri uri) {
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
-
-        Log.d("Export", uri.toString());
-        Log.d("Export", getContentResolver().getType(uri));
-        try {
-            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message){
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(getString(message) + "\n\n" + e.getMessage())
-                .setPositiveButton(R.string.okay, null)
-                .create().show();
-    }
-
-
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
-        String stringValue = value.toString();
-
-        if (preference instanceof ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list.
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringValue);
-
-            // Set the summary to reflect the new value.
-            preference.setSummary(
-                    index >= 0
-                            ? listPreference.getEntries()[index]
-                            : null);
-
-        } else if (preference instanceof RingtonePreference) {
-            // For ringtone preferences, look up the correct display value
-            // using RingtoneManager.
-            if (TextUtils.isEmpty(stringValue)) {
-                // Empty values correspond to 'silent' (no ringtone).
-                preference.setSummary(R.string.pref_ringtone_silent);
-
-            } else {
-                Ringtone ringtone = RingtoneManager.getRingtone(
-                        preference.getContext(), Uri.parse(stringValue));
-
-                if (ringtone == null) {
-                    // Clear the summary if there was a lookup error.
-                    preference.setSummary(null);
-                } else {
-                    // Set the summary to reflect the new ringtone display
-                    // name.
-                    String name = ringtone.getTitle(preference.getContext());
-                    preference.setSummary(name);
-                }
-            }
-
-        } else {
-            // For all other preferences, set the summary to the value's
-            // simple string representation.
-            preference.setSummary(stringValue);
-        }
-        return true;
-    };
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
+public class SettingsActivity extends FitoTrackSettingsActivity {
 
     private final Handler mHandler = new Handler();
 
@@ -166,7 +67,7 @@ public class SettingsActivity extends PreferenceActivity {
             return true;
         });
         findPreference("speech").setOnPreferenceClickListener(preference -> {
-            showSpeechConfig();
+            checkTTSandShowConfig();
             return true;
         });
         findPreference("import").setOnPreferenceClickListener(preference -> {
@@ -178,6 +79,24 @@ public class SettingsActivity extends PreferenceActivity {
             return true;
         });
 
+    }
+
+    private VoiceAnnouncements voiceAnnouncements;
+
+    private void checkTTSandShowConfig() {
+        voiceAnnouncements = new VoiceAnnouncements(this, available -> {
+            if (available) {
+                showSpeechConfig();
+            } else {
+                // TextToSpeech is not available
+                Toast.makeText(SettingsActivity.this, R.string.ttsNotAvailable, Toast.LENGTH_LONG).show();
+            }
+            voiceAnnouncements.destroy();
+        });
+    }
+
+    private void showSpeechConfig() {
+        startActivity(new Intent(this, VoiceAnnouncementsSettingsActivity.class));
     }
 
     private void showExportDialog() {
@@ -305,44 +224,6 @@ public class SettingsActivity extends PreferenceActivity {
         d.create().show();
     }
 
-    private void showSpeechConfig() {
-        UnitUtils.setUnit(this); // Maybe the user changed unit system
-
-        final AlertDialog.Builder d = new AlertDialog.Builder(this);
-        final SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
-        d.setTitle(getString(R.string.pref_spoken_updates_summary));
-        View v= getLayoutInflater().inflate(R.layout.dialog_spoken_updates_picker, null);
-
-        NumberPicker npT = v.findViewById(R.id.spokenUpdatesTimePicker);
-        npT.setMaxValue(60);
-        npT.setMinValue(0);
-        npT.setFormatter(value -> value == 0 ? "No speech" : value + " min");
-        final String updateTimeVariable = "spokenUpdateTimePeriod";
-        npT.setValue(preferences.getInt(updateTimeVariable, 0));
-        npT.setWrapSelectorWheel(false);
-
-        final String distanceUnit = " " + UnitUtils.CHOSEN_SYSTEM.getLongDistanceUnit();
-        NumberPicker npD = v.findViewById(R.id.spokenUpdatesDistancePicker);
-        npD.setMaxValue(10);
-        npD.setMinValue(0);
-        npD.setFormatter(value -> value == 0 ? "No speech" : value + distanceUnit);
-        final String updateDistanceVariable = "spokenUpdateDistancePeriod";
-        npD.setValue(preferences.getInt(updateDistanceVariable, 0));
-        npD.setWrapSelectorWheel(false);
-
-        d.setView(v);
-
-        d.setNegativeButton(R.string.cancel, null);
-        d.setPositiveButton(R.string.okay, (dialog, which) -> {
-            preferences.edit()
-                    .putInt(updateTimeVariable, npT.getValue())
-                    .putInt(updateDistanceVariable, npD.getValue())
-                    .apply();
-        });
-
-        d.create().show();
-    }
-
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
@@ -354,19 +235,4 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UnitUtils.setUnit(this);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
 }

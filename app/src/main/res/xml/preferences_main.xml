@@ -44,8 +44,8 @@
         android:key="speech"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:summary="@string/pref_spoken_updates_summary"
-        android:title="@string/pref_spoken_updates" />
+        android:summary="@string/pref_voice_announcements_summary"
+        android:title="@string/voiceAnnouncementsTitle" />
 
 
     <PreferenceCategory android:title="@string/data">

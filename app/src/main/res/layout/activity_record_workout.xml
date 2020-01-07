@@ -155,7 +155,7 @@
                     android:id="@+id/recordInfo3Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/workoutAvgSpeed"
+                    android:text="@string/workoutAvgSpeedShort"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textStyle="bold" />

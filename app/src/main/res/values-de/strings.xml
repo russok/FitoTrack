@@ -51,10 +51,6 @@
     <string name="pref_weight">Dein Gewicht</string>
     <string name="pref_weight_summary">Dein Gewicht ist zur Kalorienberechnung wichtig</string>
 
-    <!-- please translate -->
-    <string name="pref_spoken_updates">Spoken Updates</string>
-    <string name="pref_spoken_updates_summary">Choose the time and distance between spoken updates</string>
-
     <string name="preferences">Einstellungen</string>
     <string name="recordWorkout">Workout aufzeichnen</string>
     <string name="restore">Wiederherstellen</string>
@@ -69,7 +65,7 @@
     <string name="trackerRunningMessage">Dein Workout wird aufgezeichnet</string>
     <string name="trackingInfo">Tracking Info</string>
     <string name="trackingInfoDescription">Info über den laufenden Tracker</string>
-    <string name="workoutAvgSpeed">Durchschnittsgeschw.</string>
+    <string name="workoutAvgSpeedShort">Durchschnittsgeschw.</string>
     <string name="workoutBurnedEnergy">Verbrannte Kalorien</string>
     <string name="workoutDate">Datum</string>
     <string name="workoutDistance">Distanz</string>
@@ -112,4 +108,19 @@
     <string name="uploadFailed">Upload fehlgeschlagen</string>
     <string name="uploadSuccessful">Upload erfolgreich</string>
     <string name="uploadFailedOsmNotAuthorized">Nicht autorisiert, nocheinmal versuchen</string>
+    <string name="ttsNotAvailable">Sprachausgabe ist nicht verfügbar</string>
+    <string name="workoutAvgSpeedLong">Durchschnittsgeschwindigkeit</string>
+    <string name="and">und</string>
+    <string name="announcementGPSStatus">GPS Status</string>
+    <string name="gpsFound">GPS Signal gefunden</string>
+    <string name="gpsLost">GPS Signal verloren</string>
+    <string name="pref_announcements_config_summary">Wähle die Zeit und Distanz zwischen den Sprachansagen</string>
+    <string name="pref_announcements_config_title">Auslöser der Ansage</string>
+    <string name="pref_announcements_content">Inhalt der Ansagen</string>
+    <string name="pref_voice_announcements_summary">Konfiguriere Sprachansagen, die dich während des Trainings informieren</string>
+    <string name="timeHourPlural">Stunden</string>
+    <string name="timeHourSingular">Stunde</string>
+    <string name="timeMinutePlural">Minuten</string>
+    <string name="timeMinuteSingular">Minute</string>
+    <string name="voiceAnnouncementsTitle">Sprachansagen</string>
 </resources>
