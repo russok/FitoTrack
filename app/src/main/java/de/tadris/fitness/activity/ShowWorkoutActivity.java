@@ -56,6 +56,7 @@ import oauth.signpost.OAuthConsumer;
 
 public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.WorkoutDeleter {
 
+    TextView commentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +69,8 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
         initAfterContent();
 
-        addText(getString(R.string.comment) + ": " + workout.comment).setOnClickListener(v -> {
-            TextView textView= (TextView)v;
-            openEditCommentDialog(textView);
-        });
+        commentView = addText(getString(R.string.comment) + ": " + workout.comment);
+        commentView.setOnClickListener(v -> openEditCommentDialog());
 
         addTitle(getString(R.string.workoutTime));
         addKeyValue(getString(R.string.workoutDate), getDate());
@@ -120,13 +119,13 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
     }
 
 
-    private void openEditCommentDialog(final TextView change) {
+    private void openEditCommentDialog() {
         final EditText editText= new EditText(this);
         editText.setText(workout.comment);
         editText.setSingleLine(true);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.enterComment)
-                .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString(), change))
+                .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString(), commentView))
                 .setView(editText).create().show();
     }
 
@@ -286,6 +285,9 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
                 return true;
             case R.id.actionUploadOSM:
                 prepareUpload();
+                return true;
+            case R.id.actionEditComment:
+                openEditCommentDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);

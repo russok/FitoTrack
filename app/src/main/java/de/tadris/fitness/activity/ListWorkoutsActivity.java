@@ -114,7 +114,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     }
 
     @Override
-    public void onItemClick(Workout workout) {
+    public void onItemClick(int pos, Workout workout) {
         ShowWorkoutActivity.selectedWorkout= workout;
         startActivity(new Intent(this, ShowWorkoutActivity.class));
     }

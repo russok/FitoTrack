@@ -20,6 +20,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/actionEditComment"
+        android:title="@string/action_edit_comment" />
+    <item
         android:id="@+id/actionExportGpx"
         android:title="@string/exportAsGpxFile" />
     <item

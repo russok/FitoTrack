@@ -123,4 +123,5 @@
     <string name="timeMinutePlural">Minuten</string>
     <string name="timeMinuteSingular">Minute</string>
     <string name="voiceAnnouncementsTitle">Sprachansagen</string>
+    <string name="action_edit_comment">Kommentar bearbeiten</string>
 </resources>
