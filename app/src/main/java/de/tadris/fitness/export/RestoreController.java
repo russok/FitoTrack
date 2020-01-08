@@ -19,10 +19,8 @@
 
 package de.tadris.fitness.export;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -54,9 +52,6 @@ public class RestoreController {
         listener.onStatusChanged(0, context.getString(R.string.loadingFile));
         loadDataFromFile();
         checkVersion();
-        listener.onStatusChanged(40, context.getString(R.string.preferences));
-        restoreSettings();
-
         restoreDatabase();
         listener.onStatusChanged(100, context.getString(R.string.finished));
     }
@@ -68,19 +63,9 @@ public class RestoreController {
     }
 
     private void checkVersion() throws UnsupportedVersionException {
-        if(dataContainer.version != 1){
-            throw new UnsupportedVersionException("Version Code" + dataContainer.version + " is unsupported!");
+        if (dataContainer.getVersion() != 1) {
+            throw new UnsupportedVersionException("Version Code" + dataContainer.getVersion() + " is unsupported!");
         }
-    }
-
-    @SuppressLint("ApplySharedPref")
-    private void restoreSettings(){
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit().clear()
-                .putInt("weight", dataContainer.settings.weight)
-                .putString("unitSystem", dataContainer.settings.preferredUnitSystem)
-                .putBoolean("firstStart", false).putString("mapStyle", dataContainer.settings.mapStyle)
-                .commit();
     }
 
     private void restoreDatabase(){
@@ -97,8 +82,8 @@ public class RestoreController {
 
     private void restoreWorkouts(){
         listener.onStatusChanged(60, context.getString(R.string.workouts));
-        if(dataContainer.workouts != null){
-            for(Workout workout : dataContainer.workouts){
+        if (dataContainer.getWorkouts() != null) {
+            for (Workout workout : dataContainer.getWorkouts()) {
                 database.workoutDao().insertWorkout(workout);
             }
         }
@@ -106,8 +91,8 @@ public class RestoreController {
 
     private void restoreSamples(){
         listener.onStatusChanged(80, context.getString(R.string.locationData));
-        if(dataContainer.samples != null){
-            for(WorkoutSample sample : dataContainer.samples){
+        if (dataContainer.getSamples() != null) {
+            for (WorkoutSample sample : dataContainer.getSamples()) {
                 database.workoutDao().insertSample(sample);
             }
         }

@@ -31,7 +31,6 @@ import java.util.Arrays;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.AppDatabase;
-import de.tadris.fitness.data.UserPreferences;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public class BackupController {
@@ -41,7 +40,6 @@ public class BackupController {
     private final Context context;
     private final File output;
     private final ExportStatusListener listener;
-    private UserPreferences preferences;
     private AppDatabase database;
 
     private FitoTrackDataContainer dataContainer;
@@ -55,10 +53,6 @@ public class BackupController {
     public void exportData() throws IOException {
         listener.onStatusChanged(0, context.getString(R.string.initialising));
         init();
-        listener.onStatusChanged(10, context.getString(R.string.preferences));
-        newContainer();
-
-        saveSettingsToContainer();
         listener.onStatusChanged(20, context.getString(R.string.workouts));
         saveWorkoutsToContainer();
         listener.onStatusChanged(40, context.getString(R.string.locationData));
@@ -69,32 +63,23 @@ public class BackupController {
     }
 
     private void init(){
-        preferences= Instance.getInstance(context).userPreferences;
         database= Instance.getInstance(context).db;
         UnitUtils.setUnit(context); // Ensure unit system is correct
     }
 
     private void newContainer(){
         dataContainer= new FitoTrackDataContainer();
-        dataContainer.version= VERSION;
-        dataContainer.workouts= new ArrayList<>();
-        dataContainer.samples= new ArrayList<>();
-    }
-
-    private void saveSettingsToContainer(){
-        FitoTrackSettings settings= new FitoTrackSettings();
-        settings.weight= preferences.getUserWeight();
-        settings.mapStyle= preferences.getMapStyle();
-        settings.preferredUnitSystem= String.valueOf(UnitUtils.CHOSEN_SYSTEM.getId());
-        dataContainer.settings= settings;
+        dataContainer.setVersion(VERSION);
+        dataContainer.setWorkouts(new ArrayList<>());
+        dataContainer.setSamples(new ArrayList<>());
     }
 
     private void saveWorkoutsToContainer(){
-        dataContainer.workouts.addAll(Arrays.asList(database.workoutDao().getWorkouts()));
+        dataContainer.getWorkouts().addAll(Arrays.asList(database.workoutDao().getWorkouts()));
     }
 
     private void saveSamplesToContainer(){
-        dataContainer.samples.addAll(Arrays.asList(database.workoutDao().getSamples()));
+        dataContainer.getSamples().addAll(Arrays.asList(database.workoutDao().getSamples()));
     }
 
     private void writeContainerToOutputFile() throws IOException {
