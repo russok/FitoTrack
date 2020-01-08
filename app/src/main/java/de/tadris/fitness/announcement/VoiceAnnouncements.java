@@ -42,6 +42,7 @@ public class VoiceAnnouncements {
     private long lastSpokenUpdateTime = 0;
     private int lastSpokenUpdateDistance = 0;
 
+    private final AnnouncementMode currentMode;
     private final long intervalTime;
     private final int intervalInMeters;
 
@@ -57,6 +58,8 @@ public class VoiceAnnouncements {
 
         this.manager = new AnnouncementManager(context);
         this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+        this.currentMode = AnnouncementMode.getCurrentMode(context);
     }
 
     private void ttsReady(int status) {
@@ -109,8 +112,13 @@ public class VoiceAnnouncements {
 
     public void speak(String text) {
         if (!ttsAvailable) {
+            // Cannot speak
             return;
-        } // Cannot speak
+        }
+        if (currentMode == AnnouncementMode.HEADPHONES && !audioManager.isWiredHeadsetOn()) {
+            // Not allowed to speak
+            return;
+        }
         Log.d("Recorder", "TTS speaks: " + text);
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, "announcement" + (++speakId));
     }

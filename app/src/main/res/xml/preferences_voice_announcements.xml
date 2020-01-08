@@ -25,6 +25,12 @@
         android:title="@string/pref_announcements_config_title"
         android:summary="@string/pref_announcements_config_summary" />
 
+    <ListPreference
+        android:defaultValue="headphones"
+        android:entries="@array/pref_announcement_mode"
+        android:entryValues="@array/pref_announcement_mode_values"
+        android:key="announcementMode"
+        android:title="@string/pref_announcement_mode" />
     <PreferenceCategory android:title="@string/pref_announcements_content">
 
         <CheckBoxPreference

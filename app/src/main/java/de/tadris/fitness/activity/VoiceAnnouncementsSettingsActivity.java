@@ -41,6 +41,8 @@ public class VoiceAnnouncementsSettingsActivity extends FitoTrackSettingsActivit
 
         addPreferencesFromResource(R.xml.preferences_voice_announcements);
 
+        bindPreferenceSummaryToValue(findPreference("announcementMode"));
+
         findPreference("speechConfig").setOnPreferenceClickListener(preference -> {
             showSpeechConfig();
             return true;
