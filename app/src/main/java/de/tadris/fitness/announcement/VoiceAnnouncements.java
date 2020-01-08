@@ -20,7 +20,9 @@
 package de.tadris.fitness.announcement;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
 import java.util.Locale;
@@ -43,6 +45,8 @@ public class VoiceAnnouncements {
     private final long intervalTime;
     private final int intervalInMeters;
 
+    private final AudioManager audioManager;
+
     public VoiceAnnouncements(Context context, VoiceAnnouncementCallback callback) {
         this.callback = callback;
         UserPreferences prefs = Instance.getInstance(context).userPreferences;
@@ -52,10 +56,14 @@ public class VoiceAnnouncements {
         this.intervalInMeters = (int) (1000.0 / UnitUtils.CHOSEN_SYSTEM.getDistanceFromKilometers(1) * prefs.getSpokenUpdateDistancePeriod());
 
         this.manager = new AnnouncementManager(context);
+        this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     private void ttsReady(int status) {
         ttsAvailable = status == TextToSpeech.SUCCESS && textToSpeech.setLanguage(Locale.getDefault()) >= 0;
+        if (ttsAvailable) {
+            textToSpeech.setOnUtteranceProgressListener(new TextToSpeechListener());
+        }
         callback.onVoiceAnnouncementIsReady(ttsAvailable);
     }
 
@@ -109,6 +117,23 @@ public class VoiceAnnouncements {
 
     public void destroy() {
         textToSpeech.shutdown();
+    }
+
+    private class TextToSpeechListener extends UtteranceProgressListener {
+
+        @Override
+        public void onStart(String utteranceId) {
+            audioManager.requestAudioFocus(null, AudioManager.STREAM_SYSTEM, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+        }
+
+        @Override
+        public void onDone(String utteranceId) {
+            audioManager.abandonAudioFocus(null);
+        }
+
+        @Override
+        public void onError(String utteranceId) {
+        }
     }
 
     public interface VoiceAnnouncementCallback {
