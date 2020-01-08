@@ -1,0 +1,12 @@
+**4.0:**
+
+New:
+- Voice announcements: optionally gives you updates about your current workout
+
+Improvements:
+- Make it clear that workout comments can be edited
+- Handle invalid OSM authentication
+- Disabled auto-pause when there is no GPS (prevent bad results)
+
+Localisation:
+- Spanish translation
