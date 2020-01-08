@@ -26,11 +26,4 @@
         <item>Cyclemap\nLimited access</item>
     </string-array>
 
-    <string-array name="pref_map_layers_values">
-        <item>osm.mapnik</item>
-        <item>osm.humanitarian</item>
-        <item>thunderforest.outdoors</item>
-        <item>thunderforest.cycle</item>
-    </string-array>
-
 </resources>
