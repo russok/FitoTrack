@@ -91,7 +91,9 @@ public class SettingsActivity extends FitoTrackSettingsActivity {
                 // TextToSpeech is not available
                 Toast.makeText(SettingsActivity.this, R.string.ttsNotAvailable, Toast.LENGTH_LONG).show();
             }
-            voiceAnnouncements.destroy();
+            if (voiceAnnouncements != null) {
+                voiceAnnouncements.destroy();
+            }
         });
     }
 
