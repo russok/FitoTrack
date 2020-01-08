@@ -93,8 +93,12 @@ public class OsmTraceUploader {
             }catch (Exception e){
                 e.printStackTrace();
                 handler.post(() -> {
-                    @StringRes int textRes= e instanceof OsmAuthorizationException ?
-                            R.string.uploadFailedOsmNotAuthorized : R.string.uploadFailed;
+                    @StringRes int textRes = R.string.uploadFailed;
+
+                    if (e instanceof OsmAuthorizationException) {
+                        textRes = R.string.uploadFailedOsmNotAuthorized;
+                        new OAuthAuthentication(handler, activity, null).clearAccessToken();
+                    }
 
                     Toast.makeText(activity, textRes, Toast.LENGTH_LONG).show();
                     dialogController.cancel();
@@ -104,7 +108,7 @@ public class OsmTraceUploader {
     }
 
     private void executeTask(){
-        handler.post(() -> dialogController.show());
+        handler.post(dialogController::show);
         setProgress(0);
         if(cut){ cut(); }
         setProgress(20);

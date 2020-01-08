@@ -118,12 +118,12 @@ public class OAuthAuthentication {
                 .putBoolean("authenticated", true).apply();
     }
 
-    public void clearAccessToken(){
+    void clearAccessToken() {
         preferences.edit().putBoolean("authenticated", false).apply();
     }
 
     private void retrieveAccessToken(String verificationCode){
-        handler.post(() -> dialogController.show());
+        handler.post(dialogController::show);
         try{
             oAuthProvider.retrieveAccessToken(oAuthConsumer, verificationCode);
             handler.post(() -> {
