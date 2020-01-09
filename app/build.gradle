@@ -82,6 +82,9 @@ dependencies {
     implementation 'stax:stax-api:1.0.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8'
 
+    // File Utils
+    implementation 'commons-io:commons-io:2.6'
+
     // Upload to OSM
     implementation('de.westnordost:osmapi-traces:1.0')
     configurations {

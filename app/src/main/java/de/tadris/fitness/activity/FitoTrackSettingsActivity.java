@@ -20,7 +20,6 @@
 package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,35 +29,14 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.StringRes;
-
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public abstract class FitoTrackSettingsActivity extends PreferenceActivity {
-
-    protected void shareFile(Uri uri) {
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
-
-        Log.d("Export", uri.toString());
-        Log.d("Export", getContentResolver().getType(uri));
-        try {
-            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message) {
         new AlertDialog.Builder(this)

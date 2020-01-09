@@ -19,17 +19,14 @@
 
 package de.tadris.fitness.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
+import android.content.pm.PackageManager;
 import android.util.TypedValue;
 
 import androidx.annotation.StringRes;
-
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
+import androidx.core.app.ActivityCompat;
 
 import de.tadris.fitness.R;
 
@@ -42,29 +39,23 @@ abstract public class FitoTrackActivity extends Activity {
         return value.data;
     }
 
-    void shareFile(Uri uri) {
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        intentShareFile.setDataAndType(uri, getContentResolver().getType(uri));
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        startActivity(Intent.createChooser(intentShareFile, getString(R.string.shareFile)));
-
-        Log.d("Export", uri.toString());
-        Log.d("Export", getContentResolver().getType(uri));
-        try {
-            Log.d("Export", new BufferedInputStream(getContentResolver().openInputStream(uri)).toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     void showErrorDialog(Exception e, @StringRes int title, @StringRes int message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(getString(message) + "\n\n" + e.getMessage())
                 .setPositiveButton(R.string.okay, null)
                 .create().show();
+    }
+
+    protected void requestStoragePermissions() {
+        if (!hasStoragePermission()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
+        }
+    }
+
+    protected boolean hasStoragePermission() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
 

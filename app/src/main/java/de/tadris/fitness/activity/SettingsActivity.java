@@ -43,6 +43,7 @@ import de.tadris.fitness.R;
 import de.tadris.fitness.announcement.VoiceAnnouncements;
 import de.tadris.fitness.export.BackupController;
 import de.tadris.fitness.export.RestoreController;
+import de.tadris.fitness.util.FileUtils;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
 
@@ -100,6 +101,10 @@ public class SettingsActivity extends FitoTrackSettingsActivity {
     }
 
     private void showExportDialog() {
+        if (!hasPermission()) {
+            requestPermissions();
+            return;
+        }
         new AlertDialog.Builder(this)
                 .setTitle(R.string.exportData)
                 .setMessage(R.string.exportDataSummary)
@@ -113,7 +118,8 @@ public class SettingsActivity extends FitoTrackSettingsActivity {
         new Thread(() -> {
             try{
                 String file= getFilesDir().getAbsolutePath() + "/shared/backup.ftb";
-                if (!new File(file).getParentFile().mkdirs()) {
+                File parent = new File(file).getParentFile();
+                if (!parent.exists() && !parent.mkdirs()) {
                     throw new IOException("Cannot write");
                 }
                 Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
@@ -123,7 +129,7 @@ public class SettingsActivity extends FitoTrackSettingsActivity {
 
                 mHandler.post(() -> {
                     dialogController.cancel();
-                    shareFile(uri);
+                    FileUtils.saveOrShareFile(this, uri, "ftb");
                 });
             }catch (Exception e){
                 e.printStackTrace();

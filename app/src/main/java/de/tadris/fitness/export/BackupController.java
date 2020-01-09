@@ -65,6 +65,7 @@ public class BackupController {
     private void init(){
         database= Instance.getInstance(context).db;
         UnitUtils.setUnit(context); // Ensure unit system is correct
+        newContainer();
     }
 
     private void newContainer(){

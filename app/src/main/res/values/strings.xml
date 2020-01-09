@@ -150,4 +150,9 @@
     <string name="ttsNotAvailable">TextToSpeech is not available</string>
     <string name="action_edit_comment">Edit Comment</string>
     <string name="pref_announcement_mode">Announcement Mode</string>
+
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="savedToDownloads">Saved to Downloads</string>
+    <string name="savingFailed">Saving failed</string>
 </resources>
