@@ -115,7 +115,6 @@
     <string name="pref_unit_system">Sistema preferido de unidades</string>
     <string name="settings">Ajustes</string>
     <string name="exportData">Datos de exportación</string>
-    <string name="exportDataSummary">Esto toma una copia de seguridad de todas sus preferencias y datos de entrenamiento</string>
     <string name="importBackup">Importar copia de seguridad</string>
     <string name="importBackupSummary">Restaurar una copia de seguridad</string>
     <string name="gps">GPS</string>

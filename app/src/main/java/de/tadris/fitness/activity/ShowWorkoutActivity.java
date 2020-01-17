@@ -48,6 +48,7 @@ import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.osm.OAuthAuthentication;
 import de.tadris.fitness.osm.OsmTraceUploader;
 import de.tadris.fitness.util.DialogUtils;
+import de.tadris.fitness.util.FileUtils;
 import de.tadris.fitness.util.gpx.GpxExporter;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;
@@ -202,20 +203,25 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
     }
 
     private void exportToGpx(){
+        if (!hasStoragePermission()) {
+            requestStoragePermissions();
+            return;
+        }
         ProgressDialogController dialogController= new ProgressDialogController(this, getString(R.string.exporting));
         dialogController.setIndeterminate(true);
         dialogController.show();
         new Thread(() -> {
             try{
                 String file= getFilesDir().getAbsolutePath() + "/shared/workout.gpx";
-                if (!new File(file).getParentFile().mkdirs()) {
+                File parent = new File(file).getParentFile();
+                if (!parent.exists() && !parent.mkdirs()) {
                     throw new IOException("Cannot write to " + file);
                 }
                 Uri uri= FileProvider.getUriForFile(getBaseContext(), "de.tadris.fitness.fileprovider", new File(file));
 
                 GpxExporter.exportWorkout(getBaseContext(), workout, new File(file));
                 dialogController.cancel();
-                mHandler.post(() -> shareFile(uri));
+                mHandler.post(() -> FileUtils.saveOrShareFile(this, uri, "gpx"));
             }catch (Exception e){
                 e.printStackTrace();
                 mHandler.post(() -> showErrorDialog(e, R.string.error, R.string.errorGpxExportFailed));

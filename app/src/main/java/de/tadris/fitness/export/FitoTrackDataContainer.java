@@ -31,18 +31,16 @@ import de.tadris.fitness.data.WorkoutSample;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class FitoTrackDataContainer {
 
-    int version;
-    List<Workout> workouts;
-    List<WorkoutSample> samples;
-    FitoTrackSettings settings;
+    private int version;
+    private List<Workout> workouts;
+    private List<WorkoutSample> samples;
 
     public FitoTrackDataContainer(){}
 
-    public FitoTrackDataContainer(int version, List<Workout> workouts, List<WorkoutSample> samples, FitoTrackSettings settings) {
+    public FitoTrackDataContainer(int version, List<Workout> workouts, List<WorkoutSample> samples) {
         this.version = version;
         this.workouts = workouts;
         this.samples = samples;
-        this.settings = settings;
     }
 
     public int getVersion() {
@@ -69,11 +67,5 @@ class FitoTrackDataContainer {
         this.samples = samples;
     }
 
-    public FitoTrackSettings getSettings() {
-        return settings;
-    }
 
-    public void setSettings(FitoTrackSettings settings) {
-        this.settings = settings;
-    }
 }
