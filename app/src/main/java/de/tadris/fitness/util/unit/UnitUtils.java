@@ -90,17 +90,11 @@ public class UnitUtils {
         return round(consumption / one, 2) + " kcal/" + CHOSEN_SYSTEM.getLongDistanceUnit();
     }
 
-    /**
-     *
-     * @param distance Distance in meters
-     * @return String in preferred unit
-     */
-    public static String getDistance(int distance){
-        double units= CHOSEN_SYSTEM.getDistanceFromMeters(distance);
-        if(units >= 1000){
-            return round(units / 1000, 1) + " " + CHOSEN_SYSTEM.getLongDistanceUnit();
+    public static String getDistance(int distanceInMeters) {
+        if (distanceInMeters >= 1000) {
+            return round(CHOSEN_SYSTEM.getDistanceFromKilometers((double) distanceInMeters / 1000d), 1) + " " + CHOSEN_SYSTEM.getLongDistanceUnit();
         }else{
-            return (int)units + " " + CHOSEN_SYSTEM.getShortDistanceUnit();
+            return (int) CHOSEN_SYSTEM.getDistanceFromMeters(distanceInMeters) + " " + CHOSEN_SYSTEM.getShortDistanceUnit();
         }
     }
 
