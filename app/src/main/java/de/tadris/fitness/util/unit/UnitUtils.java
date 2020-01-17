@@ -73,14 +73,12 @@ public class UnitUtils {
         return hours + ":" + minStr + ":" + sekStr;
     }
 
-    /**
-     *
-     * @param pace Pace in min/km
-     * @return Pace
-     */
-    public static String getPace(double pace){
+    public static String getPace(double metricPace) {
         double one= CHOSEN_SYSTEM.getDistanceFromKilometers(1);
-        return round(pace / one, 1) + " min/" + CHOSEN_SYSTEM.getLongDistanceUnit();
+        double secondsTotal = 60 * metricPace / one;
+        int minutes = (int) secondsTotal / 60;
+        int seconds = (int) secondsTotal % 60;
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min/" + CHOSEN_SYSTEM.getLongDistanceUnit();
     }
 
     /**
