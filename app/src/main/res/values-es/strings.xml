@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -48,6 +48,26 @@
     <string name="setPreferencesTitle">Establecer preferencias</string>
     <string name="setPreferencesMessage">Puede configurar su sistema de unidad preferido y su peso en la configuración.</string>
 
+    <string name="timeMinuteSingular">Minuto</string>
+    <string name="timeMinutePlural">Minutos</string>
+    <string name="timeHourSingular">Hora/string>
+    <string name="timeHourPlural">Horas</string>
+    <string name="and">y</string>
+
+    <string name="announcementGPSStatus">Estado del GPS</string>
+
+    <string name="voiceAnnouncementsTitle">Anuncios de voz</string>
+
+    <string name="pref_voice_announcements_summary">Configure indicaciones de voz que le informarán durante el entrenamiento</string>
+
+    <string name="pref_announcements_config_title">Disparador de anuncio</string>
+    <string name="pref_announcements_config_summary">Elija el tiempo y la distancia entre los anuncios de voz.</string>
+
+    <string name="pref_announcements_content">Contenido de los anuncios.</string>
+
+    <string name="gpsLost">Señal de GPS perdida</string>
+    <string name="gpsFound">Señal GPS encontrada</string>
+
     <string name="workoutTime">Hora</string>
     <string name="workoutDate">Fecha</string>
     <string name="workoutDuration">Duración</string>
@@ -58,7 +78,8 @@
     <string name="workoutPace">Ritmo</string>
     <string name="workoutRoute">Ruta</string>
     <string name="workoutSpeed">Velocidad</string>
-    <string name="workoutAvgSpeed">Velocidad promedio</string>
+    <string name="workoutAvgSpeedShort">Velo. Prom.</string>
+    <string name="workoutAvgSpeedLong">Velocidad promedio</string>
     <string name="workoutTopSpeed">Velocidad máxima</string>
     <string name="workoutBurnedEnergy">Energía quemada</string>
     <string name="workoutTotalEnergy">Energía total</string>
@@ -69,6 +90,7 @@
     <string name="upload">Subir</string>
     <string name="uploadSuccessful">Subida exitosa</string>
     <string name="uploadFailed">Fallo en la subida</string>
+    <string name="uploadFailedOsmNotAuthorized">No autorizado, intente nuevamente</string>
 
     <string name="workoutAscent">Ascenso</string>
     <string name="workoutDescent">Descenso</string>
@@ -115,6 +137,7 @@
     <string name="pref_unit_system">Sistema preferido de unidades</string>
     <string name="settings">Ajustes</string>
     <string name="exportData">Datos de exportación</string>
+    <string name="exportDataSummary">Esto toma una copia de seguridad de todas sus preferencias y datos de entrenamiento</string>
     <string name="importBackup">Importar copia de seguridad</string>
     <string name="importBackupSummary">Restaurar una copia de seguridad</string>
     <string name="gps">GPS</string>
@@ -125,4 +148,12 @@
     <string name="cut">Corte los primeros/últimos 300 metros</string>
     <string name="trackVisibilityPref">Visibilidad de la pista</string>
     <string name="description">Descripción</string>
+    <string name="ttsNotAvailable">TextToSpeech no está disponible</string>
+    <string name="action_edit_comment">Editar comentario</string>
+    <string name="pref_announcement_mode">Modo de anuncio</string>
+
+    <string name="save">Guardar</string>
+    <string name="share">Compartir</string>
+    <string name="savedToDownloads">Guardado en Descargas</string>
+    <string name="savingFailed">Error al guardar</string>
 </resources>

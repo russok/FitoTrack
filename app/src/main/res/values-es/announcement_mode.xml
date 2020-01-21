@@ -20,18 +20,14 @@
 
 <resources>
 
-    <string-array name="pref_map_layers">
-        <item>Mapnik\nMapa OSM predeterminado</item>
-        <item>Humanitarian\nMapa limpio pero a veces no disponible</item>
-        <item>Outdoors\nAcceso limitado</item>
-        <item>Cyclemap\nAcceso limitado</item>
+    <string-array name="pref_announcement_mode">
+        <item>Siempre</item>
+        <item>Solo en auriculares</item>
     </string-array>
 
-    <string-array name="pref_map_layers_values">
-        <item>osm.mapnik</item>
-        <item>osm.humanitarian</item>
-        <item>thunderforest.outdoors</item>
-        <item>thunderforest.cycle</item>
+    <string-array name="pref_announcement_mode_values">
+        <item>siempre</item>
+        <item>auriculares</item>
     </string-array>
 
 </resources>
