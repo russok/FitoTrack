@@ -54,6 +54,8 @@ class WorkoutSaver {
         setRealElevation();
         setAscentAndDescent();
 
+        setCalories();
+
         storeInDatabase();
     }
 
@@ -89,7 +91,6 @@ class WorkoutSaver {
         workout.length= (int)length;
         workout.avgSpeed= ((double) workout.length) / ((double) workout.duration / 1000);
         workout.avgPace= ((double)workout.duration / 1000 / 60) / ((double) workout.length / 1000);
-        workout.calorie= CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.getUserWeight());
     }
 
     private void setTopSpeed(){
@@ -175,6 +176,11 @@ class WorkoutSaver {
             }
         }
 
+    }
+
+    private void setCalories() {
+        // Ascent has to be set previously
+        workout.calorie = CalorieCalculator.calculateCalories(workout, Instance.getInstance(context).userPreferences.getUserWeight());
     }
 
     private void storeInDatabase(){
