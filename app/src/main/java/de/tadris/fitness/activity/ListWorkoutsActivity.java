@@ -74,12 +74,9 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
         findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_CYCLING));
 
-        loadData();
-
         checkFirstStart();
 
-        refreshAdapter();
-
+        refresh();
     }
 
     private void checkFirstStart(){
@@ -106,11 +103,7 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     public void onResume() {
         super.onResume();
 
-        int count= workouts.length;
-        loadData();
-        if(count != workouts.length){
-            refreshAdapter();
-        }
+        refresh();
     }
 
     @Override
@@ -123,9 +116,13 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
     public void onItemLongClick(int pos, Workout workout) {
         DialogUtils.showDeleteWorkoutDialog(this, () -> {
             Instance.getInstance(ListWorkoutsActivity.this).db.workoutDao().deleteWorkout(workout);
-            loadData();
-            adapter.notifyItemRemoved(pos);
+            refresh();
         });
+    }
+
+    private void refresh() {
+        loadData();
+        refreshAdapter();
     }
 
     private void loadData(){
