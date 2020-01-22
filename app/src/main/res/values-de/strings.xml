@@ -124,4 +124,9 @@
     <string name="timeMinuteSingular">Minute</string>
     <string name="voiceAnnouncementsTitle">Sprachansagen</string>
     <string name="action_edit_comment">Kommentar bearbeiten</string>
+    <string name="pref_announcement_mode">Modus der Ansagen</string>
+    <string name="save">Speichern</string>
+    <string name="savedToDownloads">Im Downloadordner gespeichert</string>
+    <string name="savingFailed">Speichern fehlgeschlagen</string>
+    <string name="share">Teilen</string>
 </resources>
