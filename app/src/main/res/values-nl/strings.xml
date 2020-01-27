@@ -1,0 +1,158 @@
+<!--
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
+  ~
+  ~ This file is part of FitoTrack
+  ~
+  ~ FitoTrack is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     FitoTrack is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">FitoTrack</string>
+    <string name="workout_add">Toevoegen</string>
+    <string name="stop">Stop</string>
+    <string name="delete">Verwijderen</string>
+    <string name="exporting">Exporteren</string>
+
+    <string name="error">Fout</string>
+    <string name="errorGpxExportFailed">De GPX export is mislukt.</string>
+    <string name="errorExportFailed">Data export is mislukt.</string>
+    <string name="errorImportFailed">Data import is mislukt.</string>
+    <string name="shareFile">Bestand delen</string>
+    <string name="initialising">Initialiseren</string>
+    <string name="preferences">Voorkeuren</string>
+    <string name="workouts">Trainingen</string>
+    <string name="locationData">Locatie data</string>
+    <string name="converting">Converteren</string>
+    <string name="finished">Gereed</string>
+    <string name="loadingFile">Bestand laden</string>
+    <string name="chooseBackupFile">Kies back-up bestand</string>
+
+    <string name="importBackupMessage">WAARSCHUWING: Al je huidige gegevens in de app worden verwijderd. Als je deze niet wilt verliezen, maak dan vooraf een back-up. Weet je zeker dat je de back-up wilt herstellen?</string>
+    <string name="restore">Herstellen</string>
+    <string name="backup">Back-up</string>
+
+    <string name="pref_ringtone_silent">Stil</string>
+
+    <string name="setPreferencesTitle">Voorkeuren opgeven</string>
+    <string name="setPreferencesMessage">Geef je voorkeur voor het eenheidssysteem en je gewicht op bij instellingen.</string>
+
+    <string name="timeMinuteSingular">Minuut</string>
+    <string name="timeMinutePlural">Minuten</string>
+    <string name="timeHourSingular">Uur</string>
+    <string name="timeHourPlural">Uren</string>
+    <string name="and">en</string>
+
+    <string name="announcementGPSStatus">GPS status</string>
+
+    <string name="voiceAnnouncementsTitle">Gesproken aanwijzingen</string>
+
+    <string name="pref_voice_announcements_summary">Configureer de stembesturing voor tijdens de training</string>
+
+    <string name="pref_announcements_config_title">Trigger voor gesproken aanwijzingen</string>
+    <string name="pref_announcements_config_summary">Kies de tijd en afstand tussen de gesproken aanwijzingen</string>
+
+    <string name="pref_announcements_content">Inhoud van de gesproken aanwijzingen</string>
+
+    <string name="gpsLost">GPS signaal verloren</string>
+    <string name="gpsFound">GPS signaal gevonden</string>
+
+    <string name="workoutTime">Tijd</string>
+    <string name="workoutDate">Datum</string>
+    <string name="workoutDuration">Tijdsduur</string>
+    <string name="workoutPauseDuration">Pauze tijd</string>
+    <string name="workoutStartTime">Start Tijd</string>
+    <string name="workoutEndTime">Eind Tijd</string>
+    <string name="workoutDistance">Afstand</string>
+    <string name="workoutPace">Tempo</string>
+    <string name="workoutRoute">Route</string>
+    <string name="workoutSpeed">Snelheid</string>
+    <string name="workoutAvgSpeedShort">Gem. Snelheid</string>
+    <string name="workoutAvgSpeedLong">Gemiddelde Snelheid</string>
+    <string name="workoutTopSpeed">Topsnelheid</string>
+    <string name="workoutBurnedEnergy">Energieverbranding</string>
+    <string name="workoutTotalEnergy">Totale Energie</string>
+    <string name="workoutEnergyConsumption">Energieverbruik</string>
+    <string name="uploading">Uploaden</string>
+    <string name="enterVerificationCode">Verificatiecode invoeren</string>
+    <string name="authenticationFailed">Authenticatie mislukt.</string>
+    <string name="upload">Uploaden</string>
+    <string name="uploadSuccessful">Uploaden gelukt</string>
+    <string name="uploadFailed">Uploaden mislukt</string>
+    <string name="uploadFailedOsmNotAuthorized">Niet geautoriseerd, probeer opnieuw</string>
+
+    <string name="workoutAscent">Oplopend</string>
+    <string name="workoutDescent">Aflopend</string>
+
+    <string name="height">Hoogte</string>
+
+
+    <string name="workoutTypeRunning">Rennen</string>
+    <string name="workoutTypeWalking">Lopen</string>
+    <string name="workoutTypeJogging">Joggen</string>
+    <string name="workoutTypeCycling">Fietsen</string>
+    <string name="workoutTypeHiking">Hiking</string>
+    <string name="workoutTypeUnknown">Onbekend</string>
+
+    <string name="recordWorkout">Training opnemen</string>
+
+    <string name="noGpsTitle">GPS uitgeschakeld</string>
+    <string name="noGpsMessage">Schakel GPS in om je training op te nemen.</string>
+    <string name="enable">Inschakelen</string>
+
+    <string name="comment">Opmerking</string>
+    <string name="enterComment">Opmerking invoeren</string>
+    <string name="okay">Okay</string>
+
+    <string name="stopRecordingQuestion">Stop Opname?</string>
+    <string name="stopRecordingQuestionMessage">Weet je zeker dat je de opname wilt stoppen?</string>
+
+    <!-- leave the underscore because "continue" is a java command -->
+    <string name="continue_">Doorgaan</string>
+
+    <string name="deleteWorkout">Training verwijderen</string>
+    <string name="deleteWorkoutMessage">Weet je zeker dat je de training wilt verwijderen?</string>
+
+    <string name="trackerRunning">Tracker loopt</string>
+    <string name="trackerRunningMessage">Je training wordt opgenomen</string>
+
+    <string name="trackingInfo">Tracking info</string>
+    <string name="trackingInfoDescription">Info over de lopende opname</string>
+
+    <string name="cancel">Annuleren</string>
+    <string name="exportAsGpxFile">Exporteren als GPX bestand</string>
+    <string name="pref_weight">Je gewicht</string>
+    <string name="pref_weight_summary">Je gewicht is nodig om de juiste calorieverbranding te berekening</string>
+    <string name="pref_unit_system">Voorkeur van eenheden</string>
+    <string name="settings">Instellingen</string>
+    <string name="exportData">Exporteer Data</string>
+    <string name="exportDataSummary">Maakt een back-up van alle trainingsdata</string>
+    <string name="importBackup">Importeer data back-up</string>
+    <string name="importBackupSummary">Herstel een gemaakte back-up</string>
+    <string name="gps">GPS</string>
+    <string name="data">Data</string>
+    <string name="mapStyle">Kaartstijl</string>
+    <string name="waiting_gps">Wacht op GPS</string>
+    <string name="actionUploadToOSM">Upload naar OSM</string>
+    <string name="cut">Knip de eerste/laatste 300 meter</string>
+    <string name="trackVisibilityPref">Zichtbaarheid opname</string>
+    <string name="description">Beschrijving</string>
+    <string name="ttsNotAvailable">Tekst-naar-spraak is niet beschikbaar</string>
+    <string name="action_edit_comment">Bewerk opmerking</string>
+    <string name="pref_announcement_mode">Aankondigingsmodus</string>
+
+    <string name="save">Opslaan</string>
+    <string name="share">Delen</string>
+    <string name="savedToDownloads">Opgeslagen in Downloads</string>
+    <string name="savingFailed">Opslaan mislukt</string>
+</resources>
