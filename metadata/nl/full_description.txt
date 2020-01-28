@@ -1,0 +1,6 @@
+FitoTrack is een mobiele app voor het opnemen en bekijken van trainingen. Voor zowel voor hardlopen, fietsen als wandelen toont FitoTrack belangrijke informatie met gedetailleerde grafieken en statistieken. Dit is een open source app zonder advertenties.
+
+Eigenschappen:
+* Trainingen opnemen. Kies het type sport die je wilt vastleggen en start met hardlopen, fietsen of wandelen. Je kunt de algemene informatie zien onder de kaart op het opnamescherm.
+* Trainingen bekijken. Bekijk je trainingsinformatie zoals datum, tijd, tijdsduur, afstand, snelheid en tempo. Bekijk de route op de kaart. Onderzoek je prestatieniveau vanaf het snelheidsdiagram.
+* Open Source. Geen advertenties of tracking. En de broncode is open onder de GPLv3 licentie.
