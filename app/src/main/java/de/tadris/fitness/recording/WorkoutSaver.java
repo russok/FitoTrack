@@ -152,11 +152,11 @@ class WorkoutSaver {
         workout.descent = 0;
 
         // First calculate a floating average to eliminate pressure noise to influence our ascent/descent
-        int range= 3;
+        int range = 7;
         for(int i= 0; i < samples.size(); i++){
-            int min= Math.max(i-range, 0);
-            int max= Math.min(i+range, samples.size()-1);
-            samples.get(i).tmpElevation= getAverageElevation(samples.subList(min, max));
+            int minIndex = Math.max(i - range, 0);
+            int maxIndex = Math.min(i + range, samples.size() - 1);
+            samples.get(i).tmpElevation = getAverageElevation(samples.subList(minIndex, maxIndex));
         }
 
         // Now sum up the ascent/descent
