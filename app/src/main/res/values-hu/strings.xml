@@ -1,0 +1,159 @@
+<!--
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
+  ~ Copyright (c) 2020 Balázs Úr <balazs@urbalazs.hu>
+  ~
+  ~ This file is part of FitoTrack
+  ~
+  ~ FitoTrack is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     FitoTrack is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">FitoTrack</string>
+    <string name="workout_add">Hozzáadás</string>
+    <string name="stop">Leállítás</string>
+    <string name="delete">Törlés</string>
+    <string name="exporting">Exportálás</string>
+
+    <string name="error">Hiba</string>
+    <string name="errorGpxExportFailed">A GPX exportálása nem sikerült.</string>
+    <string name="errorExportFailed">Az adatok exportálása nem sikerült.</string>
+    <string name="errorImportFailed">Az adatok importálása nem sikerült.</string>
+    <string name="shareFile">Fájl megosztása</string>
+    <string name="initialising">Előkészítés</string>
+    <string name="preferences">Beállítások</string>
+    <string name="workouts">Edzések</string>
+    <string name="locationData">Hely adatai</string>
+    <string name="converting">Átalakítás</string>
+    <string name="finished">Befejeződött</string>
+    <string name="loadingFile">Fájl betöltése</string>
+    <string name="chooseBackupFile">Biztonsági mentés fájl kiválasztása</string>
+
+    <string name="importBackupMessage">FIGYELMEZTETÉS: Az alkalmazásban található összes meglévő adat törölve lesz. Ha nem szeretné elveszíteni azokat, akkor először készítsen egy másik biztonsági mentést. Biztosan vissza szeretné állítani ezt a biztonsági mentést?</string>
+    <string name="restore">Visszaállítás</string>
+    <string name="backup">Biztonsági mentés</string>
+
+    <string name="pref_ringtone_silent">Csendes</string>
+
+    <string name="setPreferencesTitle">Beállítások megadása</string>
+    <string name="setPreferencesMessage">Beállíthatja az előnyben részesített mértékegységrendszert és a súlyát a beállításokban.</string>
+
+    <string name="timeMinuteSingular">Perc</string>
+    <string name="timeMinutePlural">Perc</string>
+    <string name="timeHourSingular">Óra</string>
+    <string name="timeHourPlural">Óra</string>
+    <string name="and">és</string>
+
+    <string name="announcementGPSStatus">GPS állapota</string>
+
+    <string name="voiceAnnouncementsTitle">Hangos közlemények</string>
+
+    <string name="pref_voice_announcements_summary">Hangutasítások beállítása, amely tájékoztatást nyújt az edzés során</string>
+
+    <string name="pref_announcements_config_title">Közlemények aktiválója</string>
+    <string name="pref_announcements_config_summary">A hangos közlemények közti idő és távolság kiválasztása</string>
+
+    <string name="pref_announcements_content">A közlemények tartalma</string>
+
+    <string name="gpsLost">A GPS-jel elveszett</string>
+    <string name="gpsFound">A GPS-jel megjött</string>
+
+    <string name="workoutTime">Idő</string>
+    <string name="workoutDate">Dátum</string>
+    <string name="workoutDuration">Időtartam</string>
+    <string name="workoutPauseDuration">Szünet időtartama</string>
+    <string name="workoutStartTime">Kezdés ideje</string>
+    <string name="workoutEndTime">Befejezés ideje</string>
+    <string name="workoutDistance">Távolság</string>
+    <string name="workoutPace">Gyorsaság</string>
+    <string name="workoutRoute">Útvonal</string>
+    <string name="workoutSpeed">Sebesség</string>
+    <string name="workoutAvgSpeedShort">Átlagsebesség</string>
+    <string name="workoutAvgSpeedLong">Átlagsebesség</string>
+    <string name="workoutTopSpeed">Legnagyobb sebesség</string>
+    <string name="workoutBurnedEnergy">Elégetett energia</string>
+    <string name="workoutTotalEnergy">Összes energia</string>
+    <string name="workoutEnergyConsumption">Energiafogyasztás</string>
+    <string name="uploading">Feltöltés</string>
+    <string name="enterVerificationCode">Hitelesítési kód megadása</string>
+    <string name="authenticationFailed">A hitelesítés sikertelen.</string>
+    <string name="upload">Feltöltés</string>
+    <string name="uploadSuccessful">A feltöltés sikeres</string>
+    <string name="uploadFailed">A feltöltés sikertelen</string>
+    <string name="uploadFailedOsmNotAuthorized">Nincs felhatalmazva, próbálja újra</string>
+
+    <string name="workoutAscent">Emelkedés</string>
+    <string name="workoutDescent">Ereszkedés</string>
+
+    <string name="height">Magasság</string>
+
+
+    <string name="workoutTypeRunning">Futás</string>
+    <string name="workoutTypeWalking">Séta</string>
+    <string name="workoutTypeJogging">Kocogás</string>
+    <string name="workoutTypeCycling">Kerékpározás</string>
+    <string name="workoutTypeHiking">Túrázás</string>
+    <string name="workoutTypeUnknown">Ismeretlen</string>
+
+    <string name="recordWorkout">Edzés rögzítése</string>
+
+    <string name="noGpsTitle">GPS letiltva</string>
+    <string name="noGpsMessage">Engedélyezze a GPS használatát az edzés követéséhez.</string>
+    <string name="enable">Engedélyezés</string>
+
+    <string name="comment">Megjegyzés</string>
+    <string name="enterComment">Megjegyzés megadása</string>
+    <string name="okay">Rendben</string>
+
+    <string name="stopRecordingQuestion">Leállítja a rögzítést?</string>
+    <string name="stopRecordingQuestionMessage">Valóban le szeretné állítani a rögzítést?</string>
+
+    <!-- leave the underscore because "continue" is a java command -->
+    <string name="continue_">Folytatás</string>
+
+    <string name="deleteWorkout">Edzés törlése</string>
+    <string name="deleteWorkoutMessage">Valóban törölni szeretné az edzést?</string>
+
+    <string name="trackerRunning">A követő fut</string>
+    <string name="trackerRunningMessage">Az edzése rögzítés alatt van</string>
+
+    <string name="trackingInfo">Követési információk</string>
+    <string name="trackingInfoDescription">Információk a futó követőről</string>
+
+    <string name="cancel">Mégse</string>
+    <string name="exportAsGpxFile">Exportálás GPX-fájlként</string>
+    <string name="pref_weight">Az Ön súlya</string>
+    <string name="pref_weight_summary">Az Ön súlya az elégetett kalóriák kiszámításához szükséges</string>
+    <string name="pref_unit_system">Előnyben részesített mértékegységrendszer</string>
+    <string name="settings">Beállítások</string>
+    <string name="exportData">Adatok exportálása</string>
+    <string name="exportDataSummary">Ezzel biztonsági mentést készíthet az összes edzésadatról</string>
+    <string name="importBackup">Adatok biztonsági mentésének importálása</string>
+    <string name="importBackupSummary">Egy elkészített biztonsági mentés visszatöltése</string>
+    <string name="gps">GPS</string>
+    <string name="data">Adatok</string>
+    <string name="mapStyle">Térképstílus</string>
+    <string name="waiting_gps">Várakozás a GPS-re</string>
+    <string name="actionUploadToOSM">Feltöltés az OSM-re</string>
+    <string name="cut">Az első és utolsó 300 méter levágása</string>
+    <string name="trackVisibilityPref">Nyomvonal láthatósága</string>
+    <string name="description">Leírás</string>
+    <string name="ttsNotAvailable">A szöveg hanggá alakítása nem érhető el</string>
+    <string name="action_edit_comment">Megjegyzés szerkesztése</string>
+    <string name="pref_announcement_mode">Közlemény módja</string>
+
+    <string name="save">Mentés</string>
+    <string name="share">Megosztás</string>
+    <string name="savedToDownloads">Elmentve a letöltésekbe</string>
+    <string name="savingFailed">A mentés sikertelen</string>
+</resources>
