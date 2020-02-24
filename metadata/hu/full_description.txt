@@ -1,0 +1,6 @@
+A FitoTrack az edzések naplózásához és megtekintéséhez készült mobilalkalmazás. Mindegy, hogy fut, kerékpározik vagy túrázik, a FitoTrack részletes grafikonokkal és statisztikákkal jeleníti meg a legfontosabb információkat. Ez egy nyílt forráskódú és teljesen reklámmentes alkalmazás.
+
+Funkciók:
+* Edzések követése. Válassza ki a követni kívánt sporttípust, és kezdjen el futni, kerékpározni vagy túrázni. Az általános információkat közvetlenül a követő képernyőn lévő térkép alatt láthatja.
+* Edzések megtekintése. Nézze meg az általános információkat, mint például dátum, idő, időtartam, távolság, sebesség és gyorsaság. Nézze meg az útvonalat egy térképen. Dolgozza ki a teljesítményszintjét a sebességdiagramból.
+* Nyílt forráskódú. Nincs benne se hirdetés, se felhasználó-követés. Az alkalmazás forráskódja nyílt és a GPLv3 alapján licencelt.
