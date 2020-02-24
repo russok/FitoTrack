@@ -24,9 +24,4 @@
         <item>Alleen met koptelefoon</item>
     </string-array>
 
-    <string-array name="pref_announcement_mode_values">
-        <item>altijd</item>
-        <item>koptelefoon</item>
-    </string-array>
-
 </resources>

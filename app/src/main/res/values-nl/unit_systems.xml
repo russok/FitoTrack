@@ -26,11 +26,4 @@
         <item>Imperial in meters</item>
     </string-array>
 
-    <string-array name="pref_unit_system_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
-
 </resources>
