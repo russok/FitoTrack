@@ -1,0 +1,5 @@
+**4.2:**
+
+Localisation:
+- Dutch translation
+- Hungarian translation
