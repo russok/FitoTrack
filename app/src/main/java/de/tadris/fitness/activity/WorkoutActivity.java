@@ -297,9 +297,15 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         return getWindowManager().getDefaultDisplay().getWidth()*3/4;
     }
 
+    protected boolean hasSamples() {
+        return samples.size() > 1;
+    }
+
     @Override
     protected void onDestroy() {
-        map.destroyAll();
+        if (map != null) {
+            map.destroyAll();
+        }
         AndroidGraphicFactory.clearResourceMemoryCache();
         super.onDestroy();
     }
@@ -307,12 +313,16 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
     @Override
     public void onPause(){
         super.onPause();
-        downloadLayer.onPause();
+        if (downloadLayer != null) {
+            downloadLayer.onPause();
+        }
     }
 
     public void onResume(){
         super.onResume();
-        downloadLayer.onResume();
+        if (downloadLayer != null) {
+            downloadLayer.onResume();
+        }
     }
 
     @Override

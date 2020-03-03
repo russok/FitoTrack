@@ -82,34 +82,43 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
         addKeyValue(getString(R.string.workoutDistance), UnitUtils.getDistance(workout.length), getString(R.string.workoutPace), UnitUtils.getPace(workout.avgPace));
 
-        addTitle(getString(R.string.workoutRoute));
+        if (hasSamples()) {
+            addTitle(getString(R.string.workoutRoute));
 
-        addMap();
+            addMap();
 
-        map.setClickable(false);
-        mapRoot.setOnClickListener(v -> startActivity(new Intent(ShowWorkoutActivity.this, ShowWorkoutMapActivity.class)));
+            map.setClickable(false);
+            mapRoot.setOnClickListener(v -> startActivity(new Intent(ShowWorkoutActivity.this, ShowWorkoutMapActivity.class)));
+
+        }
+
 
         addTitle(getString(R.string.workoutSpeed));
 
         addKeyValue(getString(R.string.workoutAvgSpeedShort), UnitUtils.getSpeed(workout.avgSpeed),
                 getString(R.string.workoutTopSpeed), UnitUtils.getSpeed(workout.topSpeed));
 
-        addSpeedDiagram();
+        if (hasSamples()) {
 
-        speedDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_SPEED));
+            addSpeedDiagram();
+
+            speedDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_SPEED));
+        }
 
         addTitle(getString(R.string.workoutBurnedEnergy));
         addKeyValue(getString(R.string.workoutTotalEnergy), workout.calorie + " kcal",
                 getString(R.string.workoutEnergyConsumption), UnitUtils.getRelativeEnergyConsumption((double)workout.calorie / ((double)workout.length / 1000)));
 
-        addTitle(getString(R.string.height));
+        if (hasSamples()) {
+            addTitle(getString(R.string.height));
 
-        addKeyValue(getString(R.string.workoutAscent), UnitUtils.getDistance((int)workout.ascent),
-                getString(R.string.workoutDescent), UnitUtils.getDistance((int)workout.descent));
+            addKeyValue(getString(R.string.workoutAscent), UnitUtils.getDistance((int) workout.ascent),
+                    getString(R.string.workoutDescent), UnitUtils.getDistance((int) workout.descent));
 
-        addHeightDiagram();
+            addHeightDiagram();
 
-        heightDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_HEIGHT));
+            heightDiagram.setOnClickListener(v -> startDiagramActivity(ShowWorkoutMapDiagramActivity.DIAGRAM_TYPE_HEIGHT));
+        }
 
 
     }
