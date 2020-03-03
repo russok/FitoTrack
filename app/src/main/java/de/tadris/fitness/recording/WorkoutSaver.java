@@ -84,9 +84,7 @@ class WorkoutSaver {
         double length= 0;
         for(int i= 1; i < samples.size(); i++){
             double sampleLength= samples.get(i - 1).toLatLong().sphericalDistance(samples.get(i).toLatLong());
-            long timeDiff= (samples.get(i).relativeTime - samples.get(i - 1).relativeTime) / 1000;
             length+= sampleLength;
-            samples.get(i).speed= Math.abs(sampleLength / timeDiff);
         }
         workout.length= (int)length;
         workout.avgSpeed= ((double) workout.length) / ((double) workout.duration / 1000);
