@@ -19,6 +19,8 @@
 
 package de.tadris.fitness.announcement;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
@@ -115,12 +117,20 @@ public class VoiceAnnouncements {
             // Cannot speak
             return;
         }
-        if (currentMode == AnnouncementMode.HEADPHONES && !audioManager.isWiredHeadsetOn()) {
+        if (currentMode == AnnouncementMode.HEADPHONES && !isHeadsetOn()) {
             // Not allowed to speak
             return;
         }
         Log.d("Recorder", "TTS speaks: " + text);
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, "announcement" + (++speakId));
+    }
+
+    private boolean isHeadsetOn() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        boolean bluetoothHeadsetConnected = mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()
+                && mBluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
+
+        return audioManager.isWiredHeadsetOn() || bluetoothHeadsetConnected;
     }
 
     public void destroy() {
