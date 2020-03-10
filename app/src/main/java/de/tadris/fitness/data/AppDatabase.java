@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -22,7 +22,7 @@ package de.tadris.fitness.data;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(version = 2, entities = {Workout.class,  WorkoutSample.class})
+@Database(version = 3, entities = {Workout.class, WorkoutSample.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WorkoutDao workoutDao();
 }

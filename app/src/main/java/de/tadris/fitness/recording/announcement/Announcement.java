@@ -17,17 +17,35 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.map.tilesource;
+package de.tadris.fitness.recording.announcement;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
 
-public class TileSources {
+import androidx.annotation.StringRes;
 
-    public static FitoTrackTileSource[] tileSources= new FitoTrackTileSource[]{
-            MapnikTileSource.INSTANCE, HumanitarianTileSource.INSTANCE, ThunderforestTileSource.OUTDOORS, ThunderforestTileSource.CYCLE_MAP
-    };
+import de.tadris.fitness.recording.WorkoutRecorder;
 
-    public enum Purpose{
-        DEFAULT, OUTDOOR, CYCLING
+public abstract class Announcement {
+
+    private Context context;
+
+    Announcement(Context context) {
+        this.context = context;
     }
+
+    public boolean isEnabled() {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("announcement_" + getId(), isEnabledByDefault());
+    }
+
+    protected String getString(@StringRes int resId) {
+        return context.getString(resId);
+    }
+
+    public abstract String getId();
+
+    abstract boolean isEnabledByDefault();
+
+    abstract String getSpoken(WorkoutRecorder recorder);
 
 }

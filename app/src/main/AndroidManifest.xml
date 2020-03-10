@@ -39,7 +39,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.VoiceAnnouncementsSettingsActivity"></activity>
+        <activity android:name=".activity.EnterWorkoutActivity"></activity>
+        <activity android:name=".activity.VoiceAnnouncementsSettingsActivity" />
         <activity
             android:name=".activity.ShowWorkoutMapActivity"
             android:screenOrientation="portrait" />

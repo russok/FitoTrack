@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -19,6 +19,7 @@
 
 package de.tadris.fitness.data;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -30,10 +31,6 @@ import java.util.Date;
 @Entity(tableName = "workout")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Workout{
-
-    public static final String WORKOUT_TYPE_RUNNING= "running";
-    public static final String WORKOUT_TYPE_HIKING=  "hiking";
-    public static final String WORKOUT_TYPE_CYCLING= "cycling";
 
     @PrimaryKey
     public long id;
@@ -63,18 +60,20 @@ public class Workout{
     public double topSpeed;
 
     /**
-     * Average pace of workout in km/min
+     * Average pace of workout in min/km
      */
     public double avgPace;
 
-    public String workoutType;
-
+    @ColumnInfo(name = "workoutType")
+    public String workoutTypeId;
 
     public float ascent;
 
     public float descent;
 
     public int calorie;
+
+    public boolean edited;
 
     public String toString(){
         if(comment.length() > 2){
@@ -86,6 +85,14 @@ public class Workout{
 
     public String getDateString(){
         return SimpleDateFormat.getDateTimeInstance().format(new Date(start));
+    }
+
+    public WorkoutType getWorkoutType() {
+        return WorkoutType.getTypeById(workoutTypeId);
+    }
+
+    public void setWorkoutType(WorkoutType workoutType) {
+        this.workoutTypeId = workoutType.id;
     }
 
 

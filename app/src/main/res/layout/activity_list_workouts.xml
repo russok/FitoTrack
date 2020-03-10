@@ -72,6 +72,16 @@
             app:fab_label="@string/workoutTypeCycling"
             app:fab_size="normal" />
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/workoutListEnter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryDark"
+            app:fab_label="@string/enterWorkout"
+            app:fab_size="normal" />
+
     </com.github.clans.fab.FloatingActionMenu>
 
 

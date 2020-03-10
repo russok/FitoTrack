@@ -21,13 +21,10 @@ package de.tadris.fitness.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -66,11 +63,15 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         initBeforeContent();
 
         setContentView(R.layout.activity_show_workout);
-        root= findViewById(R.id.showWorkoutRoot);
+        initRoot();
 
         initAfterContent();
 
-        commentView = addText(getString(R.string.comment) + ": " + workout.comment);
+        String commentStr = getString(R.string.comment) + ": " + workout.comment;
+        if (workout.edited) {
+            commentStr = getString(R.string.workoutEdited) + "\n" + commentStr;
+        }
+        commentView = addText(commentStr, true);
         commentView.setOnClickListener(v -> openEditCommentDialog());
 
         addTitle(getString(R.string.workoutTime));
@@ -147,51 +148,6 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
     private String getDate() {
         return SimpleDateFormat.getDateInstance().format(new Date(workout.start));
-    }
-
-
-    private void addTitle(String title) {
-        TextView textView= new TextView(this);
-        textView.setText(title);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        textView.setTextColor(getThemePrimaryColor());
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        textView.setAllCaps(true);
-        textView.setPadding(0, 20, 0, 0);
-
-        root.addView(textView);
-    }
-
-    private TextView addText(String text) {
-        TextView textView= new TextView(this);
-        textView.setText(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        textView.setTextColor(getThemePrimaryColor());
-        textView.setPadding(0, 20, 0, 0);
-
-        root.addView(textView);
-
-        return textView;
-    }
-
-    private void addKeyValue(String key1, String value1) {
-        addKeyValue(key1, value1, "", "");
-    }
-
-    private void addKeyValue(String key1, String value1, String key2, String value2) {
-        View v= getLayoutInflater().inflate(R.layout.show_entry, root, false);
-
-        TextView title1= v.findViewById(R.id.v1title);
-        TextView title2= v.findViewById(R.id.v2title);
-        TextView v1= v.findViewById(R.id.v1value);
-        TextView v2= v.findViewById(R.id.v2value);
-
-        title1.setText(key1);
-        title2.setText(key2);
-        v1.setText(value1);
-        v2.setText(value2);
-
-        root.addView(v);
     }
 
 
@@ -308,4 +264,8 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    void initRoot() {
+        root = findViewById(R.id.showWorkoutRoot);
+    }
 }

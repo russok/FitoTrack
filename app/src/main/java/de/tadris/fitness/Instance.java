@@ -60,7 +60,7 @@ public class Instance {
                 .addMigrations(new Migration(1, 2) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase database) {
-                        try{
+                        try {
                             database.beginTransaction();
 
                             database.execSQL("ALTER table workout add descent REAL NOT NULL DEFAULT 0;");
@@ -85,7 +85,20 @@ public class Instance {
                             database.execSQL("DROP TABLE workout_sample2");
 
                             database.setTransactionSuccessful();
-                        }finally {
+                        } finally {
+                            database.endTransaction();
+                        }
+                    }
+                }, new Migration(2, 3) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase database) {
+                        try {
+                            database.beginTransaction();
+
+                            database.execSQL("ALTER table workout add COLUMN edited INTEGER not null default 0");
+
+                            database.setTransactionSuccessful();
+                        } finally {
                             database.endTransaction();
                         }
                     }

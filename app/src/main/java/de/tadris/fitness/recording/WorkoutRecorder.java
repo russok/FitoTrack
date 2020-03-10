@@ -32,20 +32,10 @@ import java.util.List;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.data.WorkoutSample;
+import de.tadris.fitness.data.WorkoutType;
 import de.tadris.fitness.util.CalorieCalculator;
 
 public class WorkoutRecorder implements LocationListener.LocationChangeListener {
-
-    private static int getMinDistance(String workoutType){
-        switch (workoutType){
-            case Workout.WORKOUT_TYPE_HIKING:
-            case Workout.WORKOUT_TYPE_RUNNING:
-                return 8;
-            case Workout.WORKOUT_TYPE_CYCLING:
-                return 15;
-            default: return 10;
-        }
-    }
 
     private static final int PAUSE_TIME= 10000;
 
@@ -72,17 +62,18 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
     private final WorkoutRecorderListener workoutRecorderListener;
     private GpsState gpsState= GpsState.SIGNAL_LOST;
 
-    public WorkoutRecorder(Context context, String workoutType, WorkoutRecorderListener workoutRecorderListener) {
+    public WorkoutRecorder(Context context, WorkoutType workoutType, WorkoutRecorderListener workoutRecorderListener) {
         this.context= context;
         this.state= RecordingState.IDLE;
         this.workoutRecorderListener = workoutRecorderListener;
 
         this.workout= new Workout();
+        workout.edited = false;
 
         // Default values
         this.workout.comment= "";
 
-        this.workout.workoutType= workoutType;
+        this.workout.setWorkoutType(workoutType);
     }
 
     public void start(){
@@ -214,7 +205,7 @@ public class WorkoutRecorder implements LocationListener.LocationChangeListener 
                     WorkoutSample lastSample= samples.get(samples.size() - 1);
                     distance= LocationListener.locationToLatLong(location).sphericalDistance(new LatLong(lastSample.lat, lastSample.lon));
                     long timediff= lastSample.absoluteTime - location.getTime();
-                    if(distance < getMinDistance(workout.workoutType) && timediff < 500){
+                    if (distance < workout.getWorkoutType().minDistance && timediff < 500) {
                         return;
                     }
                 }

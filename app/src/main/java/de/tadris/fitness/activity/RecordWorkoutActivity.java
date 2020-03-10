@@ -53,20 +53,18 @@ import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
-import de.tadris.fitness.announcement.AnnouncementGPSStatus;
-import de.tadris.fitness.announcement.VoiceAnnouncements;
-import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.data.WorkoutType;
 import de.tadris.fitness.map.MapManager;
-import de.tadris.fitness.map.tilesource.TileSources;
 import de.tadris.fitness.recording.LocationListener;
 import de.tadris.fitness.recording.PressureService;
 import de.tadris.fitness.recording.WorkoutRecorder;
-import de.tadris.fitness.util.ThemeManager;
+import de.tadris.fitness.recording.announcement.AnnouncementGPSStatus;
+import de.tadris.fitness.recording.announcement.VoiceAnnouncements;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public class RecordWorkoutActivity extends FitoTrackActivity implements LocationListener.LocationChangeListener, WorkoutRecorder.WorkoutRecorderListener, VoiceAnnouncements.VoiceAnnouncementCallback {
 
-    public static String ACTIVITY= Workout.WORKOUT_TYPE_RUNNING;
+    public static WorkoutType ACTIVITY = WorkoutType.OTHER;
 
     private MapView mapView;
     private TileDownloadLayer downloadLayer;
@@ -90,7 +88,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(ThemeManager.getThemeByWorkoutType(ACTIVITY));
+        setTheme(ACTIVITY.theme);
         setContentView(R.layout.activity_record_workout);
 
         setTitle(R.string.recordWorkout);
@@ -148,13 +146,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
 
     private void setupMap(){
         this.mapView= new MapView(this);
-        TileSources.Purpose purpose;
-        if(ACTIVITY.equals(Workout.WORKOUT_TYPE_CYCLING)){
-            purpose= TileSources.Purpose.CYCLING;
-        }else{
-            purpose= TileSources.Purpose.OUTDOOR;
-        }
-        downloadLayer= MapManager.setupMap(mapView, purpose);
+        downloadLayer = MapManager.setupMap(mapView);
     }
 
     private void updateLine(){

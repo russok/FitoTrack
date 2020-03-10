@@ -20,6 +20,7 @@
 package de.tadris.fitness.util;
 
 import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.data.WorkoutType;
 
 public class CalorieCalculator {
 
@@ -47,12 +48,11 @@ public class CalorieCalculator {
      */
     private static double getMET(Workout workout) {
         double speedInKmh= workout.avgSpeed * 3.6;
-        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_RUNNING) || workout.workoutType.equals(Workout.WORKOUT_TYPE_HIKING)){
-            // This is a linear graph based on the website linked above
+        WorkoutType type = workout.getWorkoutType();
+        if (type == WorkoutType.RUNNING || type == WorkoutType.HIKING) {
             return Math.max(1.5, speedInKmh*1.117 - 2.1906);
         }
-        if(workout.workoutType.equals(Workout.WORKOUT_TYPE_CYCLING)){
-            // This is a linear graph based on the website linked above
+        if (type == WorkoutType.CYCLING) {
             return Math.max(3, (speedInKmh-10) / 1.5);
         }
         return -1;

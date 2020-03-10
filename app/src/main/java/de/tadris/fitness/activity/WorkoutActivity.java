@@ -55,18 +55,14 @@ import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.WorkoutLayer;
-import de.tadris.fitness.map.tilesource.TileSources;
-import de.tadris.fitness.util.ThemeManager;
-import de.tadris.fitness.util.WorkoutTypeCalculator;
 import de.tadris.fitness.util.unit.UnitUtils;
 
-public abstract class WorkoutActivity extends FitoTrackActivity {
+public abstract class WorkoutActivity extends InformationActivity {
 
     public static Workout selectedWorkout;
 
     List<WorkoutSample> samples;
     Workout workout;
-    ViewGroup root;
     private Resources.Theme theme;
     MapView map;
     private TileDownloadLayer downloadLayer;
@@ -79,14 +75,14 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
     void initBeforeContent() {
         workout= selectedWorkout;
         samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
-        setTheme(ThemeManager.getThemeByWorkout(workout));
+        setTheme(workout.getWorkoutType().theme);
     }
 
     void initAfterContent() {
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setTitle(WorkoutTypeCalculator.getType(workout));
+        setTitle(workout.getWorkoutType().title);
 
         theme= getTheme();
     }
@@ -259,7 +255,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
 
     void addMap(){
         map= new MapView(this);
-        downloadLayer= MapManager.setupMap(map, TileSources.Purpose.DEFAULT);
+        downloadLayer = MapManager.setupMap(map);
 
         WorkoutLayer workoutLayer= new WorkoutLayer(samples, getThemePrimaryColor());
         map.addLayer(workoutLayer);
