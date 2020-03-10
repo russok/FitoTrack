@@ -171,4 +171,5 @@
     <string name="savedToDownloads">Saved to Downloads</string>
     <string name="savingFailed">Saving failed</string>
     <string name="info">Info</string>
+    <string name="OpenStreetMapAttribution">© OpenStreetMap contributors</string>
 </resources>

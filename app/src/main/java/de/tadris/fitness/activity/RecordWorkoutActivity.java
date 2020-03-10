@@ -75,6 +75,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     private final InfoViewHolder[] infoViews = new InfoViewHolder[4];
     private TextView timeView;
     private TextView gpsStatusView;
+    private TextView attribution;
     private View waitingForGPSOverlay;
     private boolean gpsFound = false;
     private boolean isResumed = false;
@@ -99,6 +100,8 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         ((ViewGroup) findViewById(R.id.recordMapViewerRoot)).addView(mapView);
         waitingForGPSOverlay= findViewById(R.id.recorderWaitingOverlay);
         waitingForGPSOverlay.setVisibility(View.VISIBLE);
+
+        attribution = findViewById(R.id.recordMapAttribution);
 
         checkPermissions();
 
@@ -135,7 +138,9 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
         waitingForGPSOverlay.clearAnimation();
         waitingForGPSOverlay.animate().alpha(0f).setDuration(1000).setListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animator) { }
+
             @Override public void onAnimationCancel(Animator animator) { }
+
             @Override public void onAnimationRepeat(Animator animator) { }
 
             @Override
@@ -143,6 +148,11 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
                 waitingForGPSOverlay.setVisibility(View.GONE);
             }
         }).start();
+        hideOSMAttribution();
+    }
+
+    private void hideOSMAttribution() {
+        attribution.animate().alpha(0f).setDuration(1000).setStartDelay(5000).start();
     }
 
     private void setupMap(){
