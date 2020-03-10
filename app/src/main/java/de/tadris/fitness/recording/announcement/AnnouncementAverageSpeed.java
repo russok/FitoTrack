@@ -17,35 +17,33 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.announcement;
+package de.tadris.fitness.recording.announcement;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
-import androidx.annotation.StringRes;
-
+import de.tadris.fitness.R;
 import de.tadris.fitness.recording.WorkoutRecorder;
+import de.tadris.fitness.util.unit.UnitUtils;
 
-public abstract class Announcement {
+public class AnnouncementAverageSpeed extends Announcement {
 
-    private Context context;
-
-    Announcement(Context context) {
-        this.context = context;
+    public AnnouncementAverageSpeed(Context context) {
+        super(context);
     }
 
-    public boolean isEnabled() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("announcement_" + getId(), isEnabledByDefault());
+    @Override
+    public String getId() {
+        return "avgSpeed";
     }
 
-    protected String getString(@StringRes int resId) {
-        return context.getString(resId);
+    @Override
+    boolean isEnabledByDefault() {
+        return true;
     }
 
-    public abstract String getId();
-
-    abstract boolean isEnabledByDefault();
-
-    abstract String getSpoken(WorkoutRecorder recorder);
-
+    @Override
+    String getSpoken(WorkoutRecorder recorder) {
+        String avgSpeed = UnitUtils.getSpeed(recorder.getAvgSpeed());
+        return getString(R.string.workoutAvgSpeedLong) + ": " + avgSpeed + ".";
+    }
 }

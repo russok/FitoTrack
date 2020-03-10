@@ -17,22 +17,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.announcement;
+package de.tadris.fitness.recording.announcement;
 
 import android.content.Context;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.recording.WorkoutRecorder;
+import de.tadris.fitness.util.unit.UnitUtils;
 
-public class AnnouncementGPSStatus extends Announcement {
+public class AnnouncementDistance extends Announcement {
 
-    public AnnouncementGPSStatus(Context context) {
+    public AnnouncementDistance(Context context) {
         super(context);
     }
 
     @Override
     public String getId() {
-        return "gps-lost";
+        return "distance";
     }
 
     @Override
@@ -42,14 +43,7 @@ public class AnnouncementGPSStatus extends Announcement {
 
     @Override
     String getSpoken(WorkoutRecorder recorder) {
-        return "";
-    }
-
-    public String getSpokenGPSLost() {
-        return getString(R.string.gpsLost);
-    }
-
-    public String getSpokenGPSFound() {
-        return getString(R.string.gpsFound);
+        final String distance = UnitUtils.getDistance(recorder.getDistanceInMeters());
+        return getString(R.string.workoutDistance) + ": " + distance + ".";
     }
 }

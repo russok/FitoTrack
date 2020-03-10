@@ -42,6 +42,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity.VoiceAnnouncementsSettingsActivity" />
         <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.EnterWorkoutActivity"/>
         <activity
             android:name=".activity.ShowWorkoutMapActivity"
             android:screenOrientation="portrait" />

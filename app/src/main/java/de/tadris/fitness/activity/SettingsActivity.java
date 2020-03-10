@@ -40,9 +40,9 @@ import java.io.File;
 import java.io.IOException;
 
 import de.tadris.fitness.R;
-import de.tadris.fitness.announcement.VoiceAnnouncements;
 import de.tadris.fitness.export.BackupController;
 import de.tadris.fitness.export.RestoreController;
+import de.tadris.fitness.recording.announcement.VoiceAnnouncements;
 import de.tadris.fitness.util.FileUtils;
 import de.tadris.fitness.util.unit.UnitUtils;
 import de.tadris.fitness.view.ProgressDialogController;

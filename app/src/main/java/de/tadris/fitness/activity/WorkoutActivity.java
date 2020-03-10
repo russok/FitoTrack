@@ -55,18 +55,14 @@ import de.tadris.fitness.data.WorkoutManager;
 import de.tadris.fitness.data.WorkoutSample;
 import de.tadris.fitness.map.MapManager;
 import de.tadris.fitness.map.WorkoutLayer;
-import de.tadris.fitness.map.tilesource.TileSources;
-import de.tadris.fitness.util.ThemeManager;
-import de.tadris.fitness.util.WorkoutTypeCalculator;
 import de.tadris.fitness.util.unit.UnitUtils;
 
-public abstract class WorkoutActivity extends FitoTrackActivity {
+public abstract class WorkoutActivity extends InformationActivity {
 
     public static Workout selectedWorkout;
 
     List<WorkoutSample> samples;
     Workout workout;
-    ViewGroup root;
     private Resources.Theme theme;
     MapView map;
     private TileDownloadLayer downloadLayer;
@@ -79,14 +75,14 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
     void initBeforeContent() {
         workout= selectedWorkout;
         samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
-        setTheme(ThemeManager.getThemeByWorkout(workout));
+        setTheme(workout.getWorkoutType().theme);
     }
 
     void initAfterContent() {
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setTitle(WorkoutTypeCalculator.getType(workout));
+        setTitle(workout.getWorkoutType().title);
 
         theme= getTheme();
     }
@@ -259,7 +255,7 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
 
     void addMap(){
         map= new MapView(this);
-        downloadLayer= MapManager.setupMap(map, TileSources.Purpose.DEFAULT);
+        downloadLayer = MapManager.setupMap(map);
 
         WorkoutLayer workoutLayer= new WorkoutLayer(samples, getThemePrimaryColor());
         map.addLayer(workoutLayer);
@@ -297,9 +293,15 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
         return getWindowManager().getDefaultDisplay().getWidth()*3/4;
     }
 
+    protected boolean hasSamples() {
+        return samples.size() > 1;
+    }
+
     @Override
     protected void onDestroy() {
-        map.destroyAll();
+        if (map != null) {
+            map.destroyAll();
+        }
         AndroidGraphicFactory.clearResourceMemoryCache();
         super.onDestroy();
     }
@@ -307,12 +309,16 @@ public abstract class WorkoutActivity extends FitoTrackActivity {
     @Override
     public void onPause(){
         super.onPause();
-        downloadLayer.onPause();
+        if (downloadLayer != null) {
+            downloadLayer.onPause();
+        }
     }
 
     public void onResume(){
         super.onResume();
-        downloadLayer.onResume();
+        if (downloadLayer != null) {
+            downloadLayer.onResume();
+        }
     }
 
     @Override

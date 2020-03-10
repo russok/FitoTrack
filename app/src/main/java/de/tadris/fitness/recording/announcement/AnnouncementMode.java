@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -17,25 +17,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.util;
+package de.tadris.fitness.recording.announcement;
 
-import de.tadris.fitness.R;
-import de.tadris.fitness.data.Workout;
+import android.content.Context;
+import android.preference.PreferenceManager;
 
-public class ThemeManager {
+public enum AnnouncementMode {
 
-    public static int getThemeByWorkoutType(String type){
-        switch (type){
-            case Workout.WORKOUT_TYPE_RUNNING: return R.style.Running;
-            case Workout.WORKOUT_TYPE_CYCLING: return R.style.Bicycling;
-            case Workout.WORKOUT_TYPE_HIKING:  return R.style.Hiking;
-            default: return R.style.AppTheme;
+    ALWAYS,
+    HEADPHONES;
+
+    static AnnouncementMode getCurrentMode(Context context) {
+        String mode = PreferenceManager.getDefaultSharedPreferences(context).getString("announcementMode", "headphones");
+        assert mode != null;
+        switch (mode) {
+            case "always":
+                return ALWAYS;
+            default:
+            case "headphones":
+                return HEADPHONES;
         }
     }
 
-    public static int getThemeByWorkout(Workout workout){
-        return getThemeByWorkoutType(workout.workoutType);
-    }
-
 }
-

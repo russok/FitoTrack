@@ -30,11 +30,10 @@ import de.tadris.fitness.map.tilesource.FitoTrackTileSource;
 import de.tadris.fitness.map.tilesource.HumanitarianTileSource;
 import de.tadris.fitness.map.tilesource.MapnikTileSource;
 import de.tadris.fitness.map.tilesource.ThunderforestTileSource;
-import de.tadris.fitness.map.tilesource.TileSources;
 
 public class MapManager {
 
-    public static TileDownloadLayer setupMap(MapView mapView, TileSources.Purpose purpose){
+    public static TileDownloadLayer setupMap(MapView mapView) {
         FitoTrackTileSource tileSource;
 
         String chosenTileLayer= Instance.getInstance(mapView.getContext()).userPreferences.getMapStyle();

@@ -49,9 +49,15 @@
 
     <string name="timeMinuteSingular">Minute</string>
     <string name="timeMinutePlural">Minutes</string>
+    <string name="timeMinuteShort">min</string>
     <string name="timeHourSingular">Hour</string>
     <string name="timeHourPlural">Hours</string>
+    <string name="timeHourShort">h</string>
     <string name="and">and</string>
+
+    <string name="errorEnterValidNumber">Enter a valid number</string>
+    <string name="errorWorkoutAddFuture">The workout cannot be in the future</string>
+    <string name="errorEnterValidDuration">Enter a valid duration</string>
 
     <string name="announcementGPSStatus">GPS Status</string>
 
@@ -83,6 +89,7 @@
     <string name="workoutBurnedEnergy">Burned Energy</string>
     <string name="workoutTotalEnergy">Total Energy</string>
     <string name="workoutEnergyConsumption">Energy Consumption</string>
+    <string name="workoutEdited">This workout has been edited.</string>
     <string name="uploading">Uploading</string>
     <string name="enterVerificationCode">Enter Verification Code</string>
     <string name="authenticationFailed">Authentication failed.</string>
@@ -102,7 +109,15 @@
     <string name="workoutTypeJogging">Jogging</string>
     <string name="workoutTypeCycling">Cycling</string>
     <string name="workoutTypeHiking">Hiking</string>
+    <string name="workoutTypeOther">Other</string>
     <string name="workoutTypeUnknown">Unknown</string>
+    <string name="type">Type</string>
+
+    <string name="custom">Custom</string>
+    <string name="enterWorkout">Enter Workout</string>
+
+    <string name="setDuration">Set Duration</string>
+
 
     <string name="recordWorkout">Record Workout</string>
 
@@ -155,4 +170,5 @@
     <string name="share">Share</string>
     <string name="savedToDownloads">Saved to Downloads</string>
     <string name="savingFailed">Saving failed</string>
+    <string name="info">Info</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+ * Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
  *
  * This file is part of FitoTrack
  *
@@ -36,7 +36,7 @@ public class ShowWorkoutMapDiagramActivity extends WorkoutActivity {
         initBeforeContent();
 
         setContentView(R.layout.activity_show_workout_map_diagram);
-        root= findViewById(R.id.showWorkoutMapParent);
+        initRoot();
 
         initAfterContent();
 
@@ -54,4 +54,8 @@ public class ShowWorkoutMapDiagramActivity extends WorkoutActivity {
     }
 
 
+    @Override
+    void initRoot() {
+        root = findViewById(R.id.showWorkoutMapParent);
+    }
 }

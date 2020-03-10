@@ -61,7 +61,7 @@ public class GpxExporter {
         track.cmt= workout.comment;
         track.desc= workout.comment;
         track.src= "FitoTrack";
-        track.type= workout.workoutType;
+        track.type = workout.getWorkoutType().id;
         track.trkseg= new ArrayList<>();
 
         TrackSegment segment= new TrackSegment();

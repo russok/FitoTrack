@@ -17,23 +17,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.tadris.fitness.announcement;
+package de.tadris.fitness.recording.announcement;
 
 import android.content.Context;
 
 import de.tadris.fitness.R;
 import de.tadris.fitness.recording.WorkoutRecorder;
-import de.tadris.fitness.util.unit.UnitUtils;
 
-public class AnnouncementAverageSpeed extends Announcement {
+public class AnnouncementDuration extends Announcement {
 
-    public AnnouncementAverageSpeed(Context context) {
+    public AnnouncementDuration(Context context) {
         super(context);
     }
 
     @Override
     public String getId() {
-        return "avgSpeed";
+        return "duration";
     }
 
     @Override
@@ -43,7 +42,26 @@ public class AnnouncementAverageSpeed extends Announcement {
 
     @Override
     String getSpoken(WorkoutRecorder recorder) {
-        String avgSpeed = UnitUtils.getSpeed(recorder.getAvgSpeed());
-        return getString(R.string.workoutAvgSpeedLong) + ": " + avgSpeed + ".";
+        return getString(R.string.workoutDuration) + ": " + getSpokenTime(recorder.getDuration()) + ".";
+    }
+
+    private String getSpokenTime(long duration) {
+        final long minute = 1000L * 60;
+        final long hour = minute * 60;
+
+        StringBuilder spokenTime = new StringBuilder();
+
+        if (duration > hour) {
+            long hours = duration / hour;
+            duration = duration % hour; // Set duration to the rest
+            spokenTime.append(hours).append(" ");
+            spokenTime.append(getString(hours == 1 ? R.string.timeHourSingular : R.string.timeHourPlural)).append(" ")
+                    .append(getString(R.string.and)).append(" ");
+        }
+        long minutes = duration / minute;
+        spokenTime.append(minutes).append(" ");
+        spokenTime.append(getString(minutes == 1 ? R.string.timeMinuteSingular : R.string.timeMinutePlural));
+
+        return spokenTime.toString();
     }
 }

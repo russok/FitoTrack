@@ -37,6 +37,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.data.Workout;
+import de.tadris.fitness.data.WorkoutType;
 import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.view.WorkoutAdapter;
 
@@ -63,16 +64,17 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         menu= findViewById(R.id.workoutListMenu);
         menu.setOnMenuButtonLongClickListener(v -> {
             if(workouts.length > 0){
-                startRecording(workouts[0].workoutType);
+                startRecording(workouts[0].getWorkoutType());
                 return true;
             }else{
                 return false;
             }
         });
 
-        findViewById(R.id.workoutListRecordRunning).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_RUNNING));
-        findViewById(R.id.workoutListRecordHiking) .setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_HIKING));
-        findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(Workout.WORKOUT_TYPE_CYCLING));
+        findViewById(R.id.workoutListRecordRunning).setOnClickListener(v -> startRecording(WorkoutType.RUNNING));
+        findViewById(R.id.workoutListRecordHiking).setOnClickListener(v -> startRecording(WorkoutType.HIKING));
+        findViewById(R.id.workoutListRecordCycling).setOnClickListener(v -> startRecording(WorkoutType.CYCLING));
+        findViewById(R.id.workoutListEnter).setOnClickListener(v -> startEnterWorkoutActivity());
 
         checkFirstStart();
 
@@ -92,7 +94,13 @@ public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.Wor
         }
     }
 
-    private void startRecording(String activity) {
+    private void startEnterWorkoutActivity() {
+        menu.close(true);
+        final Intent intent = new Intent(this, EnterWorkoutActivity.class);
+        new Handler().postDelayed(() -> startActivity(intent), 300);
+    }
+
+    private void startRecording(WorkoutType activity) {
         menu.close(true);
         RecordWorkoutActivity.ACTIVITY= activity;
         final Intent intent= new Intent(this, RecordWorkoutActivity.class);
