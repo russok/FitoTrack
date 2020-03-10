@@ -97,11 +97,11 @@
     <string name="height">Hoogte</string>
 
 
-    <string name="workoutTypeRunning">Rennen</string>
-    <string name="workoutTypeWalking">Lopen</string>
+    <string name="workoutTypeRunning">Hardlopen</string>
+    <string name="workoutTypeWalking">Wandelen</string>
     <string name="workoutTypeJogging">Joggen</string>
     <string name="workoutTypeCycling">Fietsen</string>
-    <string name="workoutTypeHiking">Hiking</string>
+    <string name="workoutTypeHiking">Bergwandelen</string>
     <string name="workoutTypeUnknown">Onbekend</string>
 
     <string name="recordWorkout">Training opnemen</string>
