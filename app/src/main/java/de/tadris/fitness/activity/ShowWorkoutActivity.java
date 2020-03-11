@@ -144,11 +144,20 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
     }
 
     private void updateCommentText() {
-        String commentStr = getString(R.string.comment) + ": " + workout.comment;
+        String str = "";
         if (workout.edited) {
-            commentStr = getString(R.string.workoutEdited) + "\n" + commentStr;
+            str += getString(R.string.workoutEdited);
         }
-        commentView.setText(commentStr);
+        if (workout.comment != null && workout.comment.length() > 0) {
+            if (str.length() > 0) {
+                str += "\n";
+            }
+            str += getString(R.string.comment) + ": " + workout.comment;
+        }
+        if (str.length() == 0) {
+            str = getString(R.string.noComment);
+        }
+        commentView.setText(str);
     }
 
     private String getDate() {

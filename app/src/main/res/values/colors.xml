@@ -27,6 +27,9 @@
     <color name="colorPrimaryBicycling">#523220</color>
     <color name="colorPrimaryDarkBicycling">#462A1D</color>
 
+    <color name="colorPrimaryBicyclingLighter">#6E422A</color>
+    <color name="colorPrimaryDarkBicyclingLighter">#5A3625</color>
+
     <color name="colorAccent">#4CAF50</color>
     <color name="colorAccentDark">#2E7D32</color>
 

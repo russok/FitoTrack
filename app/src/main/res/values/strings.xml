@@ -174,4 +174,5 @@
     <string name="OpenStreetMapAttribution">© OpenStreetMap contributors</string>
     <string name="theme">Theme</string>
     <string name="hintRestart">Please restart the app to apply changes</string>
+    <string name="noComment">No comment</string>
 </resources>
