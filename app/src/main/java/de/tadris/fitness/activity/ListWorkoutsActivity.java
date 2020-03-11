@@ -19,7 +19,6 @@
 
 package de.tadris.fitness.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +40,7 @@ import de.tadris.fitness.data.WorkoutType;
 import de.tadris.fitness.util.DialogUtils;
 import de.tadris.fitness.view.WorkoutAdapter;
 
-public class ListWorkoutsActivity extends Activity implements WorkoutAdapter.WorkoutAdapterListener {
+public class ListWorkoutsActivity extends FitoTrackActivity implements WorkoutAdapter.WorkoutAdapterListener {
 
     private RecyclerView listView;
     private RecyclerView.Adapter adapter;

@@ -26,25 +26,26 @@ import de.tadris.fitness.R;
 
 public enum WorkoutType {
 
-    RUNNING("running", R.string.workoutTypeRunning, 7, true, R.style.Running),
-    HIKING("hiking", R.string.workoutTypeHiking, 7, true, R.style.Hiking),
-    CYCLING("cycling", R.string.workoutTypeCycling, 12, true, R.style.Bicycling),
-    OTHER("other", R.string.workoutTypeOther, 7, true, R.style.AppTheme);
+    RUNNING("running", R.string.workoutTypeRunning, 7, true, R.style.Running, R.style.RunningDark),
+    HIKING("hiking", R.string.workoutTypeHiking, 7, true, R.style.Hiking, R.style.HikingDark),
+    CYCLING("cycling", R.string.workoutTypeCycling, 12, true, R.style.Bicycling, R.style.BicyclingDark),
+    OTHER("other", R.string.workoutTypeOther, 7, true, R.style.AppTheme, R.style.AppThemeDark);
 
     public String id;
-    public @StringRes
-    int title;
+    @StringRes
+    public int title;
     public int minDistance; // Minimum distance between samples
     public boolean hasGPS;
-    public @StyleRes
-    int theme;
+    @StyleRes
+    public int lightTheme, darkTheme;
 
-    WorkoutType(String id, int title, int minDistance, boolean hasGPS, int theme) {
+    WorkoutType(String id, int title, int minDistance, boolean hasGPS, int lightTheme, int darkTheme) {
         this.id = id;
         this.title = title;
         this.minDistance = minDistance;
         this.hasGPS = hasGPS;
-        this.theme = theme;
+        this.lightTheme = lightTheme;
+        this.darkTheme = darkTheme;
     }
 
     public static WorkoutType getTypeById(String id) {

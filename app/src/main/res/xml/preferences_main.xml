@@ -34,6 +34,13 @@
         android:title="@string/pref_weight" />
 
     <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/pref_theme_setting"
+        android:entryValues="@array/pref_theme_setting_values"
+        android:key="themeSetting"
+        android:title="@string/theme" />
+
+    <ListPreference
         android:defaultValue="osm.mapnik"
         android:entries="@array/pref_map_layers"
         android:entryValues="@array/pref_map_layers_values"

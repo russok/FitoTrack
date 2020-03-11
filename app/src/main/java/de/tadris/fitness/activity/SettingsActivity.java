@@ -62,6 +62,7 @@ public class SettingsActivity extends FitoTrackSettingsActivity {
 
         bindPreferenceSummaryToValue(findPreference("unitSystem"));
         bindPreferenceSummaryToValue(findPreference("mapStyle"));
+        bindPreferenceSummaryToValue(findPreference("themeSetting"));
 
         findPreference("weight").setOnPreferenceClickListener(preference -> {
             showWeightPicker();

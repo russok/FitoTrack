@@ -32,7 +32,7 @@ public class LauncherActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppThemeNoActionbar);
+        setTheme(android.R.style.Theme_Material_Light_NoActionBar);
         setContentView(R.layout.activity_main);
     }
 

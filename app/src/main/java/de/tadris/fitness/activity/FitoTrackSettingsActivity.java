@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -31,12 +32,20 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public abstract class FitoTrackSettingsActivity extends PreferenceActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(Instance.getInstance(this).themes.getDefaultTheme());
+        super.onCreate(savedInstanceState);
+    }
 
     protected void showErrorDialog(Exception e, @StringRes int title, @StringRes int message) {
         new AlertDialog.Builder(this)

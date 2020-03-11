@@ -55,7 +55,7 @@ public class CalorieCalculator {
         if (type == WorkoutType.CYCLING) {
             return Math.max(3, (speedInKmh-10) / 1.5);
         }
-        return -1;
+        return 0;
     }
 
 }

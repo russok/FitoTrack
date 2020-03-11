@@ -75,7 +75,7 @@ public abstract class WorkoutActivity extends InformationActivity {
     void initBeforeContent() {
         workout= selectedWorkout;
         samples= Arrays.asList(Instance.getInstance(this).db.workoutDao().getAllSamplesOfWorkout(workout.id));
-        setTheme(workout.getWorkoutType().theme);
+        setTheme(Instance.getInstance(this).themes.getWorkoutTypeTheme(workout.getWorkoutType()));
     }
 
     void initAfterContent() {

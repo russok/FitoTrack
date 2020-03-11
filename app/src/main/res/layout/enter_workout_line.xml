@@ -38,8 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:textColor="@color/textLighterBlack" />
+            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <LinearLayout
             android:id="@+id/lineViewRoot"
@@ -58,10 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textSize="20sp"
-            android:textColor="@color/textLighterBlack"
             android:layout_centerVertical="true"
-            android:textAlignment="textEnd" />
+            android:textAlignment="textEnd"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     </RelativeLayout>
 

@@ -23,15 +23,23 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.TypedValue;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 
+import de.tadris.fitness.Instance;
 import de.tadris.fitness.R;
 
 abstract public class FitoTrackActivity extends Activity {
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTheme(Instance.getInstance(this).themes.getDefaultTheme());
+    }
 
     int getThemePrimaryColor() {
         final TypedValue value = new TypedValue ();

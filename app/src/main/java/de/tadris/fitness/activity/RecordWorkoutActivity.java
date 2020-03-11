@@ -90,7 +90,7 @@ public class RecordWorkoutActivity extends FitoTrackActivity implements Location
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(ACTIVITY.theme);
+        setTheme(Instance.getInstance(this).themes.getWorkoutTypeTheme(ACTIVITY));
         setContentView(R.layout.activity_record_workout);
 
         setTitle(R.string.recordWorkout);

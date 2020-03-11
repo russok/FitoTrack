@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2019 Jannis Scheibe <jannis@tadris.de>
+  ~ Copyright (c) 2020 Jannis Scheibe <jannis@tadris.de>
   ~
   ~ This file is part of FitoTrack
   ~
@@ -19,43 +19,65 @@
 
 <resources>
 
-    <style name="AppThemeNoActionbar" parent="android:Theme.Material.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
 
-    </style>
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <!-- Custom<color name="colorPrimaryBicycling">#523220</color>
-    <color name="colorPrimaryDarkBicycling">#462A1D</color>ize your theme here. -->
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
 
+        <item name="android:textAppearanceMedium">@style/MediumTextLight</item>
     </style>
 
-    <!-- Base application theme. -->
     <style name="Running" parent="AppTheme">
-        <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/colorPrimaryRunning</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDarkRunning</item>
     </style>
 
-    <!-- Base application theme. -->
     <style name="Bicycling" parent="AppTheme">
-        <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/colorPrimaryBicycling</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDarkBicycling</item>
     </style>
 
-    <!-- Base application theme. -->
     <style name="Hiking" parent="AppTheme">
-        <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/colorPrimaryHiking</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDarkHiking</item>
     </style>
+
+
+    <style name="AppThemeDark" parent="android:Theme.Material">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@android:color/black</item>
+
+        <item name="android:textAppearanceMedium">@style/MediumTextDark</item>
+    </style>
+
+    <style name="RunningDark" parent="AppThemeDark">
+        <item name="android:colorPrimary">@color/colorPrimaryRunning</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDarkRunning</item>
+    </style>
+
+    <style name="BicyclingDark" parent="AppThemeDark">
+        <item name="android:colorPrimary">@color/colorPrimaryBicycling</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDarkBicycling</item>
+    </style>
+
+    <style name="HikingDark" parent="AppThemeDark">
+        <item name="android:colorPrimary">@color/colorPrimaryHiking</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDarkHiking</item>
+    </style>
+
+
+    <style name="MediumTextLight" parent="android:TextAppearance.Material.Medium">
+        <item name="android:textColor">@color/textLighterBlack</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="MediumTextDark" parent="android:TextAppearance.Material.Medium.Inverse">
+        <item name="android:textColor">@color/textDarkerWhite</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
 
 </resources>

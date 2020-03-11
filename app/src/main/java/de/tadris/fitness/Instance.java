@@ -32,6 +32,7 @@ import java.util.List;
 import de.tadris.fitness.data.AppDatabase;
 import de.tadris.fitness.data.UserPreferences;
 import de.tadris.fitness.recording.LocationListener;
+import de.tadris.fitness.util.FitoTrackThemes;
 import de.tadris.fitness.util.unit.UnitUtils;
 
 public class Instance {
@@ -50,12 +51,14 @@ public class Instance {
     public final AppDatabase db;
     public final List<LocationListener.LocationChangeListener> locationChangeListeners = new ArrayList<>();
     public final UserPreferences userPreferences;
+    public final FitoTrackThemes themes;
 
     public boolean pressureAvailable= false;
     public float lastPressure= 0;
 
     private Instance(Context context) {
         userPreferences= new UserPreferences(context);
+        themes = new FitoTrackThemes(context);
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 .addMigrations(new Migration(1, 2) {
                     @Override

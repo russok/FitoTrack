@@ -41,7 +41,7 @@
             android:fontFamily="sans-serif-black"
             android:text=""
             android:textAllCaps="true"
-            android:textColor="@color/textColorLight"
+            android:textColor="?android:textColorSecondary"
             android:textStyle="bold" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:fontFamily="sans-serif-black"
             android:text=""
             android:textAllCaps="false"
-            android:textColor="@color/textLighterBlack"
+            android:textColor="?android:textColorPrimary"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -73,7 +73,7 @@
             android:fontFamily="sans-serif-black"
             android:text=""
             android:textAllCaps="true"
-            android:textColor="@color/textColorLight"
+            android:textColor="?android:textColorSecondary"
             android:textStyle="bold" />
 
         <TextView
@@ -83,7 +83,7 @@
             android:fontFamily="sans-serif-black"
             android:text=""
             android:textAllCaps="false"
-            android:textColor="@color/textLighterBlack"
+            android:textColor="?android:textColorPrimary"
             android:textSize="24sp"
             android:textStyle="bold" />
 

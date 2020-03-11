@@ -172,4 +172,5 @@
     <string name="savingFailed">Saving failed</string>
     <string name="info">Info</string>
     <string name="OpenStreetMapAttribution">© OpenStreetMap contributors</string>
+    <string name="theme">Theme</string>
 </resources>
