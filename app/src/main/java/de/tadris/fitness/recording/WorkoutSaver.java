@@ -23,12 +23,14 @@ import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.tadris.fitness.Instance;
 import de.tadris.fitness.data.AppDatabase;
 import de.tadris.fitness.data.Workout;
 import de.tadris.fitness.data.WorkoutSample;
+import de.tadris.fitness.util.AltitudeCorrection;
 import de.tadris.fitness.util.CalorieCalculator;
 
 class WorkoutSaver {
@@ -51,7 +53,7 @@ class WorkoutSaver {
         setSimpleValues();
         setTopSpeed();
 
-        setRealElevation();
+        setElevation();
         setAscentAndDescent();
 
         setCalories();
@@ -101,7 +103,27 @@ class WorkoutSaver {
         workout.topSpeed= topSpeed;
     }
 
-    private void setRealElevation(){
+    private void setElevation() {
+        setCorrectedElevation();
+        setPressureElevation();
+    }
+
+    private void setCorrectedElevation() {
+        // Please see the AltitudeCorrection.java for the reason of this
+        try {
+            int lat = (int) Math.round(samples.get(0).lat);
+            int lon = (int) Math.round(samples.get(0).lon);
+            AltitudeCorrection correction = new AltitudeCorrection(context, lat, lon);
+            for (WorkoutSample sample : samples) {
+                sample.elevation = correction.getHeightOverSeaLevel(sample.elevation);
+            }
+        } catch (IOException e) {
+            // If we can't read the file, we cannot correct the values
+            e.printStackTrace();
+        }
+    }
+
+    private void setPressureElevation() {
         boolean pressureDataAvailable= samples.get(0).tmpPressure != -1;
 
         if(!pressureDataAvailable){
