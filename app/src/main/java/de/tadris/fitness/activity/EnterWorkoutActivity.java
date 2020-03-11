@@ -96,7 +96,7 @@ public class EnterWorkoutActivity extends InformationActivity implements SelectW
         durationLine.lineRoot.setOnClickListener(v -> showDurationSelection());
         durationTextView = durationLine.value;
 
-        addTitle(getString(R.string.custom));
+        addTitle(getString(R.string.comment));
 
         commentEditText = new EditText(this);
         commentEditText.setSingleLine(true);

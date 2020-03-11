@@ -50,13 +50,11 @@ public class WorkoutBuilder {
 
         // Calculate values
         workout.start = start.getTimeInMillis();
+        workout.duration = duration;
         workout.end = workout.start + workout.duration;
 
         workout.id = workout.start;
         workout.setWorkoutType(workoutType);
-
-        workout.duration = duration;
-        workout.pauseDuration = 0;
 
         workout.length = length;
 
@@ -64,6 +62,7 @@ public class WorkoutBuilder {
         workout.topSpeed = 0;
         workout.avgPace = ((double) workout.duration / 1000 / 60) / ((double) workout.length / 1000);
 
+        workout.pauseDuration = 0;
         workout.ascent = 0;
         workout.descent = 0;
 
