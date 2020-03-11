@@ -129,4 +129,20 @@
     <string name="savedToDownloads">Im Downloadordner gespeichert</string>
     <string name="savingFailed">Speichern fehlgeschlagen</string>
     <string name="share">Teilen</string>
+    <string name="timeMinuteShort">min</string>
+    <string name="timeHourShort">h</string>
+    <string name="timeSecondsShort">s</string>
+    <string name="errorEnterValidNumber">Gebe eine gültige Zahl ein</string>
+    <string name="errorWorkoutAddFuture">Das Workout kann sich nicht in der Zukunft befinden</string>
+    <string name="errorEnterValidDuration">Gebe eine gültige Dauer ein</string>
+    <string name="workoutEdited">Dieses Workout wurde bearbeitet.</string>
+    <string name="workoutTypeOther">Anderes</string>
+    <string name="type">Typ</string>
+    <string name="enterWorkout">Workout eingeben</string>
+    <string name="setDuration">Dauer setzen</string>
+    <string name="info">Info</string>
+    <string name="OpenStreetMapAttribution">© OpenStreetMap Mitwirkende</string>
+    <string name="theme">Thema</string>
+    <string name="hintRestart">Bitte die App neustarten, damit die Änderungen wirksam werden</string>
+    <string name="noComment">Kein Kommentar</string>
 </resources>
