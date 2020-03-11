@@ -67,12 +67,9 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
 
         initAfterContent();
 
-        String commentStr = getString(R.string.comment) + ": " + workout.comment;
-        if (workout.edited) {
-            commentStr = getString(R.string.workoutEdited) + "\n" + commentStr;
-        }
-        commentView = addText(commentStr, true);
+        commentView = addText("", true);
         commentView.setOnClickListener(v -> openEditCommentDialog());
+        updateCommentText();
 
         addTitle(getString(R.string.workoutTime));
         addKeyValue(getString(R.string.workoutDate), getDate());
@@ -136,14 +133,22 @@ public class ShowWorkoutActivity extends WorkoutActivity implements DialogUtils.
         editText.setSingleLine(true);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.enterComment)
-                .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString(), commentView))
+                .setPositiveButton(R.string.okay, (dialog, which) -> changeComment(editText.getText().toString()))
                 .setView(editText).create().show();
     }
 
-    private void changeComment(String comment, TextView onChange) {
+    private void changeComment(String comment) {
         workout.comment= comment;
         Instance.getInstance(this).db.workoutDao().updateWorkout(workout);
-        onChange.setText(getString(R.string.comment) + ": " + workout.comment);
+        updateCommentText();
+    }
+
+    private void updateCommentText() {
+        String commentStr = getString(R.string.comment) + ": " + workout.comment;
+        if (workout.edited) {
+            commentStr = getString(R.string.workoutEdited) + "\n" + commentStr;
+        }
+        commentView.setText(commentStr);
     }
 
     private String getDate() {
