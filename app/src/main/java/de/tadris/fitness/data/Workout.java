@@ -23,7 +23,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,6 +67,7 @@ public class Workout{
     public double avgPace;
 
     @ColumnInfo(name = "workoutType")
+    @JsonProperty(value = "workoutType")
     public String workoutTypeId;
 
     public float ascent;
@@ -83,14 +86,17 @@ public class Workout{
         }
     }
 
+    @JsonIgnore
     public String getDateString(){
         return SimpleDateFormat.getDateTimeInstance().format(new Date(start));
     }
 
+    @JsonIgnore
     public WorkoutType getWorkoutType() {
         return WorkoutType.getTypeById(workoutTypeId);
     }
 
+    @JsonIgnore
     public void setWorkoutType(WorkoutType workoutType) {
         this.workoutTypeId = workoutType.id;
     }
