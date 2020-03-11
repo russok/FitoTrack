@@ -20,7 +20,6 @@
 package de.tadris.fitness.util;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.StyleRes;
@@ -30,9 +29,8 @@ import de.tadris.fitness.data.WorkoutType;
 
 public class FitoTrackThemes {
 
-    private static final int THEME_SETTING_AUTO = 0;
-    private static final int THEME_SETTING_LIGHT = 1;
-    private static final int THEME_SETTING_DARK = 2;
+    private static final int THEME_SETTING_LIGHT = 0;
+    private static final int THEME_SETTING_DARK = 1;
 
     private Context context;
 
@@ -61,8 +59,6 @@ public class FitoTrackThemes {
     private boolean shouldUseLightMode() {
         switch (getThemeSetting()) {
             default:
-            case THEME_SETTING_AUTO:
-                return !isSystemNightModeEnabled();
             case THEME_SETTING_LIGHT:
                 return true;
             case THEME_SETTING_DARK:
@@ -71,14 +67,9 @@ public class FitoTrackThemes {
     }
 
     private int getThemeSetting() {
-        String setting = PreferenceManager.getDefaultSharedPreferences(context).getString("themeSetting", String.valueOf(THEME_SETTING_AUTO));
+        String setting = PreferenceManager.getDefaultSharedPreferences(context).getString("themeSetting", String.valueOf(THEME_SETTING_LIGHT));
         assert setting != null;
         return Integer.parseInt(setting);
-    }
-
-    private boolean isSystemNightModeEnabled() {
-        int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
     }
 
 }

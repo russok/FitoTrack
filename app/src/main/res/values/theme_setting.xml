@@ -20,7 +20,6 @@
 <resources>
 
     <string-array name="pref_theme_setting">
-        <item>System</item>
         <item>Light</item>
         <item>Dark</item>
     </string-array>
@@ -28,7 +27,6 @@
     <string-array name="pref_theme_setting_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
 
 </resources>
