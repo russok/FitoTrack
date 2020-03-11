@@ -40,4 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":" />
+
+    <NumberPicker
+        android:id="@+id/durationPickerSeconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp" />
+
 </LinearLayout>

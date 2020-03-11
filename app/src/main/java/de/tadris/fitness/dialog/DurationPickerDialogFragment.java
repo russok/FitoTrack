@@ -46,7 +46,7 @@ public class DurationPickerDialogFragment {
         NumberPicker hours = v.findViewById(R.id.durationPickerHours);
         hours.setFormatter(value -> value + " " + context.getString(R.string.timeHourShort));
         hours.setMinValue(0);
-        hours.setMaxValue(60);
+        hours.setMaxValue(24);
         hours.setValue(getInitialHours());
 
         NumberPicker minutes = v.findViewById(R.id.durationPickerMinutes);
@@ -55,11 +55,17 @@ public class DurationPickerDialogFragment {
         minutes.setMaxValue(60);
         minutes.setValue(getInitialMinutes());
 
+        NumberPicker seconds = v.findViewById(R.id.durationPickerSeconds);
+        seconds.setFormatter(value -> value + " " + context.getString(R.string.timeSecondsShort));
+        seconds.setMinValue(0);
+        seconds.setMaxValue(60);
+        seconds.setValue(getInitialSeconds());
+
         d.setView(v);
 
         d.setNegativeButton(R.string.cancel, null);
         d.setPositiveButton(R.string.okay, (dialog, which) -> {
-            listener.onDurationPick(getMillisFromPick(hours.getValue(), minutes.getValue()));
+            listener.onDurationPick(getMillisFromPick(hours.getValue(), minutes.getValue(), seconds.getValue()));
         });
 
         d.create().show();
@@ -73,10 +79,15 @@ public class DurationPickerDialogFragment {
         return (int) (initialDuration / 1000 / 60 % 60);
     }
 
-    private static long getMillisFromPick(int hours, int minutes) {
-        long minuteInMillis = 1000L * 60;
+    private int getInitialSeconds() {
+        return (int) (initialDuration / 1000 % 60);
+    }
+
+    private static long getMillisFromPick(int hours, int minutes, int seconds) {
+        long secondInMillis = 1000L;
+        long minuteInMillis = secondInMillis * 60;
         long hourInMillis = minuteInMillis * 60;
-        return hours * hourInMillis + minutes * minuteInMillis;
+        return hours * hourInMillis + minutes * minuteInMillis + seconds * secondInMillis;
     }
 
     public interface DurationPickListener {

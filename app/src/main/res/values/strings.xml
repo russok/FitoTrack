@@ -53,6 +53,7 @@
     <string name="timeHourSingular">Hour</string>
     <string name="timeHourPlural">Hours</string>
     <string name="timeHourShort">h</string>
+    <string name="timeSecondsShort">s</string>
     <string name="and">and</string>
 
     <string name="errorEnterValidNumber">Enter a valid number</string>

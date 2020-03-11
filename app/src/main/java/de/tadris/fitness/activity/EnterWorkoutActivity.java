@@ -131,7 +131,7 @@ public class EnterWorkoutActivity extends InformationActivity implements SelectW
         typeTextView.setText(getString(workoutBuilder.getWorkoutType().title));
         dateTextView.setText(SimpleDateFormat.getDateInstance().format(workoutBuilder.getStart().getTime()));
         timeTextView.setText(SimpleDateFormat.getTimeInstance().format(workoutBuilder.getStart().getTime()));
-        durationTextView.setText(UnitUtils.getHourMinuteTime(workoutBuilder.getDuration()));
+        durationTextView.setText(UnitUtils.getHourMinuteSecondTime(workoutBuilder.getDuration()));
     }
 
     private void showTypeSelection() {
