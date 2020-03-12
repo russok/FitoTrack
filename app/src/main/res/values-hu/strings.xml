@@ -50,9 +50,16 @@
 
     <string name="timeMinuteSingular">Perc</string>
     <string name="timeMinutePlural">Perc</string>
+    <string name="timeMinuteShort">p</string>
     <string name="timeHourSingular">Óra</string>
     <string name="timeHourPlural">Óra</string>
+    <string name="timeHourShort">ó</string>
+    <string name="timeSecondsShort">mp</string>
     <string name="and">és</string>
+
+    <string name="errorEnterValidNumber">Adjon meg egy érvényes számot</string>
+    <string name="errorWorkoutAddFuture">Az edzés nem lehet a jövőben</string>
+    <string name="errorEnterValidDuration">Adjon meg egy érvényes időtartamot</string>
 
     <string name="announcementGPSStatus">GPS állapota</string>
 
@@ -84,6 +91,7 @@
     <string name="workoutBurnedEnergy">Elégetett energia</string>
     <string name="workoutTotalEnergy">Összes energia</string>
     <string name="workoutEnergyConsumption">Energiafogyasztás</string>
+    <string name="workoutEdited">Ez az edzés szerkesztve lett.</string>
     <string name="uploading">Feltöltés</string>
     <string name="enterVerificationCode">Hitelesítési kód megadása</string>
     <string name="authenticationFailed">A hitelesítés sikertelen.</string>
@@ -103,7 +111,14 @@
     <string name="workoutTypeJogging">Kocogás</string>
     <string name="workoutTypeCycling">Kerékpározás</string>
     <string name="workoutTypeHiking">Túrázás</string>
+    <string name="workoutTypeOther">Egyéb</string>
     <string name="workoutTypeUnknown">Ismeretlen</string>
+    <string name="type">Típus</string>
+
+    <string name="enterWorkout">Edzés megadása</string>
+
+    <string name="setDuration">Időtartam beállítása</string>
+
 
     <string name="recordWorkout">Edzés rögzítése</string>
 
@@ -156,4 +171,9 @@
     <string name="share">Megosztás</string>
     <string name="savedToDownloads">Elmentve a letöltésekbe</string>
     <string name="savingFailed">A mentés sikertelen</string>
+    <string name="info">Információ</string>
+    <string name="OpenStreetMapAttribution">© OpenStreetMap közreműködők</string>
+    <string name="theme">Téma</string>
+    <string name="hintRestart">Indítsa újra az alkalmazást a változtatások alkalmazásához</string>
+    <string name="noComment">Nincs megjegyzés</string>
 </resources>
