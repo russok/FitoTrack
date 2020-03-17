@@ -13,3 +13,4 @@ Bug-Fixes:
 
 Localisation:
 - update Dutch thanks to albertheres and didierm (#57, #58)
+- update Hungarian thanks to urbalazs (#59)
