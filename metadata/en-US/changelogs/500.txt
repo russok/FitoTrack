@@ -1,0 +1,15 @@
+New features:
+- Manually add workouts (#53)
+- Dark Mode (#48)
+
+Improvements:
+- Altitude correction
+- Detect bluetooth headsets (#51)
+- Show recording on lock screen (#45)
+- OpenStreetMap attribution in the record screen (#52)
+
+Bug-Fixes:
+- Wrong speed values after GPS-signal was lost for some time (#47)
+
+Localisation:
+- update Dutch thanks to albertheres and didierm (#57, #58)
